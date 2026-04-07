@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Emergency Preparedness Tools — Survival Storehouse Australia</title>
+<meta name="description" content="Free interactive emergency preparedness tools for Australians. 72-hour checklist, kit finder, live emergency dashboard, disaster history and location-based preparedness planner.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gd: #0d2318; --gm: #1a3a2a; --gb: #52b788;
+  --or: #c85a00; --orl: #e07020;
+  --mu: rgba(255,255,255,0.5);
+  --tr: all 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+html { scroll-behavior: smooth; }
+body { font-family:'Barlow',sans-serif; background:var(--gd); color:#fff; min-height:100vh; overflow-x:hidden; }
+body::before { content:''; position:fixed; inset:0; background:
+  radial-gradient(ellipse 500px 300px at 10% 15%, rgba(42,55,28,.4) 0%, transparent 100%),
+  radial-gradient(ellipse 300px 500px at 90% 70%, rgba(28,38,18,.3) 0%, transparent 100%),
+  radial-gradient(ellipse 400px 200px at 50% 90%, rgba(38,50,22,.3) 0%, transparent 100%);
+  pointer-events:none; z-index:0; }
+
+.wrap { max-width:980px; margin:0 auto; padding:0 24px 80px; position:relative; z-index:1; }
+
+/* NAV */
+.nav { display:flex; align-items:center; justify-content:space-between; padding:24px 0; border-bottom:1px solid rgba(255,255,255,.06); margin-bottom:60px; }
+.nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
+.nav-logo-text { font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:#fff; line-height:1; }
+.nav-logo-sub { font-size:10px; font-weight:300; color:var(--mu); letter-spacing:.12em; text-transform:uppercase; }
+.nav-link { font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); text-decoration:none; transition:var(--tr); }
+.nav-link:hover { color:#fff; }
+
+/* HERO */
+.hero { text-align:center; padding:0 0 72px; }
+.hero-eyebrow { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.25em; text-transform:uppercase; color:var(--gb); margin-bottom:20px; display:flex; align-items:center; justify-content:center; gap:12px; }
+.hero-eyebrow::before, .hero-eyebrow::after { content:''; flex:1; max-width:60px; height:1px; background:rgba(82,183,136,.3); }
+.hero-title { font-family:'Barlow Condensed',sans-serif; font-size:clamp(52px,9vw,96px); font-weight:900; line-height:.88; text-transform:uppercase; margin-bottom:24px; }
+.hero-title .line2 { color:var(--or); }
+.hero-sub { font-size:17px; font-weight:300; color:var(--mu); line-height:1.7; max-width:560px; margin:0 auto 36px; }
+.hero-badges { display:flex; align-items:center; justify-content:center; gap:20px; flex-wrap:wrap; }
+.badge { display:flex; align-items:center; gap:7px; font-size:13px; color:rgba(255,255,255,.6); }
+.badge-dot { width:6px; height:6px; border-radius:50%; background:var(--gb); flex-shrink:0; }
+
+/* TOOLS GRID */
+.tools-title { font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--mu); text-align:center; margin-bottom:32px; }
+.tools-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+.tools-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:60px; }
+@media(max-width:640px) { .tools-grid, .tools-grid-3 { grid-template-columns:1fr; } }
+
+/* TOOL CARD */
+.tool-card { background:rgba(255,255,255,.04); border:1.5px solid rgba(255,255,255,.08); border-radius:12px; padding:28px; text-decoration:none; display:block; transition:var(--tr); position:relative; overflow:hidden; }
+.tool-card::before { content:''; position:absolute; inset:0; opacity:0; transition:opacity .25s; }
+.tool-card:hover { border-color:rgba(255,255,255,.18); transform:translateY(-3px); }
+.tool-card.featured { border-color:rgba(200,90,0,.35); background:rgba(200,90,0,.06); }
+.tool-card.featured:hover { border-color:rgba(200,90,0,.6); }
+.tool-card.featured::before { background:radial-gradient(ellipse 200px 100px at 0% 0%, rgba(200,90,0,.08), transparent); opacity:1; }
+.card-tag { display:inline-flex; align-items:center; gap:6px; font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:16px; padding:4px 10px; border-radius:100px; }
+.tag-new { background:rgba(200,90,0,.15); border:1px solid rgba(200,90,0,.35); color:var(--or); }
+.tag-live { background:rgba(82,183,136,.12); border:1px solid rgba(82,183,136,.3); color:var(--gb); }
+.tag-live::before { content:''; display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--gb); animation:pulse 1.5s ease infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.tag-free { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); color:rgba(255,255,255,.6); }
+.card-icon { font-size:32px; margin-bottom:14px; }
+.card-title { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:900; text-transform:uppercase; letter-spacing:.02em; line-height:1; margin-bottom:10px; color:#fff; }
+.tool-card.featured .card-title { color:#fff; }
+.card-desc { font-size:14px; font-weight:300; color:rgba(255,255,255,.65); line-height:1.6; margin-bottom:18px; }
+.card-features { display:flex; flex-direction:column; gap:5px; margin-bottom:20px; }
+.card-feature { font-size:12px; color:rgba(255,255,255,.5); display:flex; align-items:center; gap:7px; }
+.card-feature::before { content:'→'; color:var(--gb); font-weight:600; }
+.card-cta { display:inline-flex; align-items:center; gap:8px; font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--or); transition:var(--tr); }
+.tool-card:hover .card-cta { gap:12px; }
+.card-cta-arrow { font-size:16px; transition:var(--tr); }
+
+/* STRIP */
+.strip { background:rgba(82,183,136,.06); border:1.5px solid rgba(82,183,136,.18); border-radius:12px; padding:32px 36px; margin-bottom:60px; display:grid; grid-template-columns:1fr auto; gap:24px; align-items:center; }
+@media(max-width:600px) { .strip { grid-template-columns:1fr; } }
+.strip-title { font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:900; text-transform:uppercase; letter-spacing:.02em; margin-bottom:8px; }
+.strip-title span { color:var(--gb); }
+.strip-desc { font-size:14px; font-weight:300; color:rgba(255,255,255,.65); line-height:1.6; max-width:480px; }
+.strip-links { display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+@media(max-width:600px) { .strip-links { flex-direction:row; align-items:flex-start; } }
+.strip-link { padding:11px 22px; background:var(--gm); border:1.5px solid var(--gb); border-radius:6px; font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--gb); text-decoration:none; transition:var(--tr); white-space:nowrap; }
+.strip-link:hover { background:rgba(82,183,136,.15); }
+
+/* ABOUT */
+.about { text-align:center; padding:0 0 60px; }
+.about-title { font-family:'Barlow Condensed',sans-serif; font-size:clamp(32px,5vw,52px); font-weight:900; text-transform:uppercase; margin-bottom:16px; }
+.about-title span { color:var(--or); }
+.about-desc { font-size:15px; font-weight:300; color:var(--mu); line-height:1.7; max-width:580px; margin:0 auto 32px; }
+.about-stats { display:flex; gap:0; justify-content:center; border:1.5px solid rgba(255,255,255,.08); border-radius:10px; overflow:hidden; max-width:600px; margin:0 auto; }
+.about-stat { flex:1; padding:20px 16px; text-align:center; border-right:1px solid rgba(255,255,255,.08); }
+.about-stat:last-child { border-right:none; }
+.about-stat-num { font-family:'Barlow Condensed',sans-serif; font-size:32px; font-weight:900; color:var(--or); line-height:1; margin-bottom:4px; }
+.about-stat-label { font-size:11px; color:var(--mu); font-weight:300; line-height:1.3; }
+
+/* FOOTER */
+.footer { border-top:1px solid rgba(255,255,255,.07); padding-top:32px; display:flex; align-items:flex-start; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+.footer-brand { font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:#fff; margin-bottom:6px; }
+.footer-detail { font-size:12px; color:var(--mu); line-height:1.8; }
+.footer-detail a { color:var(--gb); text-decoration:none; }
+.footer-links { display:flex; flex-direction:column; gap:6px; align-items:flex-end; }
+.footer-link { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--mu); text-decoration:none; transition:var(--tr); }
+.footer-link:hover { color:#fff; }
+.footer-note { font-size:11px; color:rgba(255,255,255,.2); margin-top:6px; text-align:right; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="https://survivalstorehouse.com" class="nav-logo">
+      <div>
+        <div class="nav-logo-text">Survival Storehouse</div>
+        <div class="nav-logo-sub">Australian Emergency Preparedness · Est. 2009</div>
+      </div>
+    </a>
+    <a href="https://survivalstorehouse.com/shop-1" class="nav-link">Shop →</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Free Tools for Australians</div>
+    <h1 class="hero-title">
+      Prepare.<br>
+      <span class="line2">Not panic.</span>
+    </h1>
+    <p class="hero-sub">Five free interactive tools to help ordinary Australians understand their risk, check their readiness and plan ahead. No account. No email. No purchase required.</p>
+    <div class="hero-badges">
+      <div class="badge"><div class="badge-dot"></div>100% free</div>
+      <div class="badge"><div class="badge-dot"></div>No sign-up required</div>
+      <div class="badge"><div class="badge-dot"></div>Built for Australian conditions</div>
+      <div class="badge"><div class="badge-dot"></div>Live data</div>
+    </div>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="tools-title">The Tools</div>
+
+  <!-- Featured — location tool top full width -->
+  <div class="tools-grid" style="margin-bottom:16px">
+
+    <a href="index.html" class="tool-card featured">
+      <div class="card-tag tag-new">⭐ New — Live Data</div>
+      <div class="card-icon">📍</div>
+      <div class="card-title">My Area Dashboard</div>
+      <div class="card-desc">Enter your suburb or postcode and instantly see live weather, UV index, air quality, fuel prices and your local hazard risk profile — all in one place.</div>
+      <div class="card-features">
+        <div class="card-feature">Live weather and 7-day forecast</div>
+        <div class="card-feature">UV index and air quality with health advice</div>
+        <div class="card-feature">Local fuel prices by state</div>
+        <div class="card-feature">Hazard risk — cyclone, flood, bushfire, heat</div>
+        <div class="card-feature">Travel planner with historical weather averages</div>
+      </div>
+      <div class="card-cta">Open tool <span class="card-cta-arrow">→</span></div>
+    </a>
+
+    <a href="checklist.html" class="tool-card">
+      <div class="card-tag tag-free">Free</div>
+      <div class="card-icon">✅</div>
+      <div class="card-title">72-Hour Kit Checklist</div>
+      <div class="card-desc">Tick off what you already have across 9 categories, see your preparedness score instantly, and print a personalised gap report for your household.</div>
+      <div class="card-features">
+        <div class="card-feature">9 categories — water, food, first aid and more</div>
+        <div class="card-feature">Live score as you tick items</div>
+        <div class="card-feature">Gaps highlighted — what's still missing</div>
+        <div class="card-feature">Print to PDF — clean branded report</div>
+      </div>
+      <div class="card-cta">Start checklist <span class="card-cta-arrow">→</span></div>
+    </a>
+
+  </div>
+
+  <div class="tools-grid-3">
+
+    <a href="kit_builder.html" class="tool-card">
+      <div class="card-tag tag-free">Free</div>
+      <div class="card-icon">🎯</div>
+      <div class="card-title">Kit Finder</div>
+      <div class="card-desc">Answer 4 questions about your household and get a personalised kit recommendation in 60 seconds.</div>
+      <div class="card-features">
+        <div class="card-feature">Household size and location</div>
+        <div class="card-feature">Personalised recommendation</div>
+        <div class="card-feature">60 seconds to complete</div>
+      </div>
+      <div class="card-cta">Find my kit <span class="card-cta-arrow">→</span></div>
+    </a>
+
+    <a href="timeline.html" class="tool-card">
+      <div class="card-tag tag-free">Free</div>
+      <div class="card-icon">📅</div>
+      <div class="card-title">Disaster History</div>
+      <div class="card-desc">Every major Australian emergency since 2000 — what happened, what it cost, and what each one teaches us about preparedness.</div>
+      <div class="card-features">
+        <div class="card-feature">14 events from 2000 to 2026</div>
+        <div class="card-feature">Filter by disaster type</div>
+        <div class="card-feature">Lessons from each event</div>
+      </div>
+      <div class="card-cta">Explore timeline <span class="card-cta-arrow">→</span></div>
+    </a>
+
+    <a href="emergency_dashboard.html" class="tool-card">
+      <div class="card-tag tag-live"><span></span>Live Links</div>
+      <div class="card-icon">🚨</div>
+      <div class="card-title">Emergency Dashboard</div>
+      <div class="card-desc">Every official Australian emergency warning source in one place — filter by state, bookmark for the next emergency.</div>
+      <div class="card-features">
+        <div class="card-feature">BOM, RFS, VicEmergency, DFES and more</div>
+        <div class="card-feature">Filter by state</div>
+        <div class="card-feature">Fuel availability sources</div>
+      </div>
+      <div class="card-cta">Open dashboard <span class="card-cta-arrow">→</span></div>
+    </a>
+
+  </div>
+
+  <!-- APP STRIP -->
+  <div class="strip">
+    <div>
+      <div class="strip-title">No signal?<br><span>The app works offline.</span></div>
+      <p class="strip-desc">The Survival Storehouse App caches survival guides, checklists and emergency plans to your phone — accessible without internet or mobile signal. When emergencies happen, networks fail first. Download before you need it.</p>
+    </div>
+    <div class="strip-links">
+      <a href="https://apps.apple.com/us/app/survival-storehouse/id6744917490" class="strip-link" target="_blank">App Store →</a>
+      <a href="https://play.google.com/store/apps/details?id=com.mycompany.survivalstorehouse" class="strip-link" target="_blank">Google Play →</a>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="about">
+    <h2 class="about-title">Australian owned.<br><span>Since 2009.</span></h2>
+    <p class="about-desc">We've been helping ordinary Australians prepare for emergencies since 2009. Not doom and gloom — just practical preparedness for Australian conditions. These tools are free because being prepared shouldn't cost anything to start.</p>
+    <div class="about-stats">
+      <div class="about-stat">
+        <div class="about-stat-num">15+</div>
+        <div class="about-stat-label">Years helping<br>Australians prepare</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">170+</div>
+        <div class="about-stat-label">Free survival<br>wiki guides</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">5</div>
+        <div class="about-stat-label">Free interactive<br>tools</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">000</div>
+        <div class="about-stat-label">Always call in<br>an emergency</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div>
+      <div class="footer-brand">Survival Storehouse Australia</div>
+      <div class="footer-detail">
+        Australian owned since 2009 · Erina, NSW Central Coast<br>
+        <a href="https://survivalstorehouse.com">survivalstorehouse.com</a> ·
+        <a href="mailto:sales@survivalstorehouse.com">sales@survivalstorehouse.com</a> ·
+        +61 403 517 622<br>
+        <a href="https://wiki.survivalstorehouse.com">wiki.survivalstorehouse.com</a> — 170+ free survival guides
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="https://survivalstorehouse.com/shop-1" class="footer-link">Shop</a>
+      <a href="https://wiki.survivalstorehouse.com" class="footer-link">Wiki</a>
+      <a href="https://survivalstorehouse.com/blog" class="footer-link">Blog</a>
+      <a href="https://survivalstorehouse.com/about-us" class="footer-link">About</a>
+      <a href="https://survivalstorehouse.com/contact-us" class="footer-link">Contact</a>
+      <div class="footer-note">In an emergency call 000</div>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
