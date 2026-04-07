@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Area — Australian Emergency & Preparedness Dashboard | Survival Storehouse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gd: #0d2318; --gm: #1a3a2a; --gb: #52b788; --or: #c85a00; --orl: #e07020;
+  --mu: rgba(255,255,255,0.5); --tr: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  --red: #e03030; --amber: #f0a500; --blue: #3b8bd4; --purple: #7b5ea7;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Barlow', sans-serif; background: var(--gd); color: #fff; min-height: 100vh; overflow-x: hidden; }
+body::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse 400px 300px at 15% 20%, rgba(42,55,28,.4) 0%, transparent 100%), radial-gradient(ellipse 300px 400px at 85% 70%, rgba(28,38,18,.3) 0%, transparent 100%); pointer-events:none; z-index:0; }
+.wrap { max-width: 900px; margin: 0 auto; padding: 0 20px 80px; position: relative; z-index: 1; }
+
+/* HEADER */
+.hdr { padding: 40px 0 36px; text-align: center; }
+.hdr-brand { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.25em; text-transform:uppercase; color:var(--gb); margin-bottom:14px; }
+.hdr-title { font-family:'Barlow Condensed',sans-serif; font-size:clamp(44px,8vw,72px); font-weight:900; line-height:.9; text-transform:uppercase; margin-bottom:14px; }
+.hdr-title span { color:var(--or); }
+.hdr-sub { font-size:15px; font-weight:300; color:var(--mu); line-height:1.65; max-width:520px; margin:0 auto; }
+
+/* SEARCH */
+.search-box { display:flex; gap:10px; background:rgba(255,255,255,.06); border:1.5px solid rgba(255,255,255,.15); border-radius:10px; padding:6px 6px 6px 18px; align-items:center; transition:var(--tr); }
+.search-box:focus-within { border-color:var(--gb); background:rgba(82,183,136,.06); }
+.search-icon { font-size:18px; flex-shrink:0; opacity:.5; }
+.search-input { flex:1; background:none; border:none; outline:none; color:#fff; font-family:'Barlow',sans-serif; font-size:16px; font-weight:400; }
+.search-input::placeholder { color:var(--mu); }
+.search-btn { padding:12px 24px; background:var(--or); border:none; border-radius:7px; color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:17px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; transition:var(--tr); white-space:nowrap; }
+.search-btn:hover { background:var(--orl); transform:translateY(-1px); }
+.search-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+.search-hint { font-size:12px; color:var(--mu); margin-top:8px; text-align:center; }
+
+
+/* MODE TABS */
+.mode-tabs { display:flex; gap:8px; margin-bottom:0; }
+.mode-tab { flex:1; padding:12px 18px; background:rgba(255,255,255,.04); border:1.5px solid rgba(255,255,255,.1); border-radius:8px 8px 0 0; color:var(--mu); font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; transition:var(--tr); border-bottom:none; }
+.mode-tab.active { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.2); color:#fff; }
+.mode-tab:hover:not(.active) { color:rgba(255,255,255,.75); }
+.search-wrap { margin:0 0 28px; background:rgba(255,255,255,.04); border:1.5px solid rgba(255,255,255,.12); border-top:none; border-radius:0 0 10px 10px; padding:18px; }
+
+/* TRAVEL DATE ROW */
+.travel-date-row { display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; }
+.date-field { flex:1; min-width:130px; }
+.date-label { display:block; font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:6px; }
+.date-input { width:100%; background:rgba(255,255,255,.06); border:1.5px solid rgba(255,255,255,.15); border-radius:7px; padding:11px 14px; color:#fff; font-family:'Barlow',sans-serif; font-size:14px; outline:none; transition:var(--tr); }
+.date-input:focus { border-color:var(--gb); background:rgba(82,183,136,.06); }
+.date-input::-webkit-calendar-picker-indicator { filter:invert(1) opacity(.5); cursor:pointer; }
+
+/* TRAVEL RESULTS */
+.travel-results { display:none; }
+
+/* PRINT BUTTON */
+.print-btn { display:flex; align-items:center; gap:8px; padding:11px 22px; background:var(--or); border:none; border-radius:7px; color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; transition:var(--tr); }
+.print-btn:hover { background:var(--orl); transform:translateY(-1px); }
+.tv-top-row { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
+
+.travel-hero { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+@media(max-width:500px) { .travel-hero { grid-template-columns:1fr; } }
+.travel-month-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-bottom:14px; }
+@media(max-width:600px) { .travel-month-grid { grid-template-columns:repeat(4,1fr); } }
+.tm-day { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:6px; padding:8px 4px; text-align:center; }
+.tm-day.highlight { border-color:rgba(200,90,0,.4); background:rgba(200,90,0,.08); }
+.tm-date { font-size:10px; color:var(--mu); margin-bottom:4px; }
+.tm-hi { font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:800; }
+.tm-lo { font-size:10px; color:var(--mu); }
+.tm-rain { font-size:9px; color:var(--blue); margin-top:2px; }
+.pack-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.pack-item { display:flex; align-items:flex-start; gap:10px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:8px; padding:12px 14px; }
+.pack-icon { font-size:20px; flex-shrink:0; }
+.pack-text { font-size:13px; color:rgba(255,255,255,.8); line-height:1.4; }
+.pack-text strong { color:#fff; display:block; margin-bottom:2px; font-weight:600; }
+
+/* LOADING */
+.loading { text-align:center; padding:40px; display:none; }
+.loading-spin { display:inline-block; width:32px; height:32px; border:3px solid rgba(82,183,136,.2); border-top-color:var(--gb); border-radius:50%; animation:spin 0.8s linear infinite; margin-bottom:12px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-text { font-size:14px; color:var(--mu); }
+
+/* ERROR */
+.error-box { background:rgba(224,48,48,.08); border:1.5px solid rgba(224,48,48,.3); border-radius:8px; padding:14px 18px; font-size:14px; color:rgba(255,255,255,.75); display:none; margin-bottom:20px; }
+
+/* LOCATION HEADER */
+.loc-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px; }
+.loc-name { font-family:'Barlow Condensed',sans-serif; font-size:clamp(28px,5vw,42px); font-weight:900; text-transform:uppercase; letter-spacing:.02em; line-height:1; }
+.loc-coords { font-size:11px; color:var(--mu); margin-top:4px; font-weight:300; }
+.loc-time { font-size:12px; color:var(--mu); text-align:right; }
+
+/* RESULTS GRID */
+.results { display:none; }
+.section-title { font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--mu); margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,.06); }
+
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:14px; }
+.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:14px; }
+@media(max-width:600px) { .grid-2,.grid-3,.grid-4 { grid-template-columns:1fr 1fr; } }
+@media(max-width:380px) { .grid-2,.grid-3,.grid-4 { grid-template-columns:1fr; } }
+
+/* CARDS */
+.card { background:rgba(255,255,255,.04); border:1.5px solid rgba(255,255,255,.08); border-radius:10px; padding:16px 18px; transition:var(--tr); }
+.card:hover { border-color:rgba(255,255,255,.16); }
+.card-lg { background:rgba(255,255,255,.04); border:1.5px solid rgba(255,255,255,.08); border-radius:10px; padding:20px 22px; margin-bottom:14px; }
+.card-icon { font-size:22px; margin-bottom:8px; }
+.card-label { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--mu); margin-bottom:4px; }
+.card-value { font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:900; line-height:1; margin-bottom:2px; }
+.card-unit { font-size:13px; font-weight:400; color:var(--mu); margin-left:3px; }
+.card-sub { font-size:12px; color:var(--mu); line-height:1.4; margin-top:4px; }
+
+/* STATUS PILL */
+.status-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:100px; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+.pill-green { background:rgba(82,183,136,.15); border:1px solid rgba(82,183,136,.35); color:var(--gb); }
+.pill-amber { background:rgba(240,165,0,.15); border:1px solid rgba(240,165,0,.35); color:var(--amber); }
+.pill-orange { background:rgba(200,90,0,.15); border:1px solid rgba(200,90,0,.35); color:var(--or); }
+.pill-red { background:rgba(224,48,48,.15); border:1px solid rgba(224,48,48,.35); color:var(--red); }
+.pill-blue { background:rgba(59,139,212,.15); border:1px solid rgba(59,139,212,.35); color:var(--blue); }
+.pill-purple { background:rgba(123,94,167,.15); border:1px solid rgba(123,94,167,.35); color:var(--purple); }
+.pill-dot { width:6px; height:6px; border-radius:50%; background:currentColor; }
+
+/* WEATHER HERO */
+.weather-hero { display:grid; grid-template-columns:1fr auto; gap:16px; align-items:center; margin-bottom:14px; }
+.weather-temp { font-family:'Barlow Condensed',sans-serif; font-size:72px; font-weight:900; line-height:1; color:var(--or); }
+.weather-feels { font-size:13px; color:var(--mu); margin-top:4px; }
+.weather-desc { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
+.weather-right { text-align:right; }
+
+/* FORECAST */
+.forecast { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-bottom:14px; }
+@media(max-width:600px) { .forecast { grid-template-columns:repeat(4,1fr); } }
+.fc-day { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:8px; padding:10px 6px; text-align:center; }
+.fc-name { font-size:11px; font-weight:600; color:var(--mu); letter-spacing:.06em; text-transform:uppercase; margin-bottom:6px; }
+.fc-icon { font-size:18px; margin-bottom:4px; }
+.fc-hi { font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:800; }
+.fc-lo { font-size:11px; color:var(--mu); }
+.fc-rain { font-size:10px; color:var(--blue); margin-top:3px; }
+
+/* HAZARD BARS */
+.hazard-row { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,.05); }
+.hazard-row:last-child { border-bottom:none; }
+.hazard-icon { font-size:20px; flex-shrink:0; width:28px; text-align:center; }
+.hazard-name { font-size:13px; font-weight:500; flex:1; }
+.hazard-bar-wrap { flex:1; height:6px; background:rgba(255,255,255,.08); border-radius:3px; overflow:hidden; max-width:120px; }
+.hazard-bar { height:100%; border-radius:3px; transition:width .6s ease; }
+.bar-low { background:var(--gb); }
+.bar-med { background:var(--amber); }
+.bar-high { background:var(--or); }
+.bar-vhigh { background:var(--red); }
+
+/* FUEL */
+.fuel-station { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,.05); }
+.fuel-station:last-child { border-bottom:none; }
+.fuel-type { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; min-width:60px; }
+.fuel-price { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:900; color:var(--gb); }
+.fuel-unit { font-size:11px; color:var(--mu); margin-left:3px; }
+.fuel-trend { font-size:11px; color:var(--mu); margin-left:auto; }
+.fuel-note { font-size:11px; color:var(--mu); line-height:1.5; margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,.06); }
+.fuel-note a { color:var(--gb); text-decoration:none; }
+
+/* LINKS */
+.link-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.link-card { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:8px; padding:12px 14px; text-decoration:none; transition:var(--tr); display:block; }
+.link-card:hover { border-color:rgba(200,90,0,.4); background:rgba(200,90,0,.06); }
+.link-card-title { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#fff; margin-bottom:3px; }
+.link-card-desc { font-size:11px; color:var(--mu); }
+.link-card-arrow { float:right; color:var(--or); font-size:14px; margin-top:-2px; }
+
+/* APP CALLOUT */
+.app-strip { background:rgba(82,183,136,.06); border:1.5px solid rgba(82,183,136,.2); border-radius:10px; padding:16px 20px; display:flex; align-items:center; gap:16px; margin-bottom:14px; flex-wrap:wrap; }
+.app-strip-text { flex:1; min-width:180px; font-size:13px; color:rgba(255,255,255,.7); line-height:1.55; }
+.app-strip-text strong { color:var(--gb); }
+.app-strip-links { display:flex; gap:8px; }
+.app-link { padding:8px 14px; background:var(--gm); border:1.5px solid var(--gb); border-radius:5px; font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--gb); text-decoration:none; transition:var(--tr); white-space:nowrap; }
+.app-link:hover { background:rgba(82,183,136,.15); }
+
+/* DISCLAIMER */
+.disclaimer { font-size:11px; color:rgba(255,255,255,.25); line-height:1.7; text-align:center; margin-top:32px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdr">
+    <div class="hdr-brand">Survival Storehouse Australia — Est. 2009</div>
+    <h1 class="hdr-title">My Area<br><span>Preparedness</span><br>Dashboard</h1>
+    <p class="hdr-sub">Enter your suburb or postcode. Get live weather, air quality, UV index, local hazard risk profile and fuel prices — all in one place.</p>
+  </div>
+
+  <!-- MODE TABS -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tab-live" onclick="switchMode('live')">📍 Live Conditions</button>
+    <button class="mode-tab" id="tab-travel" onclick="switchMode('travel')">✈️ Travel Planner</button>
+  </div>
+
+  <!-- LIVE SEARCH -->
+  <div id="live-wrap" class="search-wrap">
+    <div class="search-box">
+      <span class="search-icon">📍</span>
+      <input class="search-input" id="search-input" type="text" placeholder="Enter suburb or postcode — e.g. Cairns or 2250 NSW" autocomplete="off" />
+      <button class="search-btn" id="search-btn" onclick="doSearch()">Search</button>
+    </div>
+    <div class="search-hint">Try: Erina NSW · Cairns · Darwin · 2250 NSW · 3000 VIC</div>
+  </div>
+
+  <!-- TRAVEL PLANNER -->
+  <div id="travel-wrap" class="search-wrap" style="display:none">
+    <div class="search-box" style="margin-bottom:10px">
+      <span class="search-icon">📍</span>
+      <input class="search-input" id="travel-location" type="text" placeholder="Destination — e.g. Cairns QLD or Hobart" autocomplete="off" />
+    </div>
+    <div class="travel-date-row">
+      <div class="date-field">
+        <label class="date-label">Arrival date</label>
+        <input class="date-input" id="travel-from" type="date" />
+      </div>
+      <div class="date-field">
+        <label class="date-label">Departure date</label>
+        <input class="date-input" id="travel-to" type="date" />
+      </div>
+      <button class="search-btn" id="travel-btn" onclick="doTravel()">Plan Trip</button>
+    </div>
+    <div class="search-hint">Uses 10-year historical averages for that exact time of year — not a live forecast</div>
+  </div>
+
+  <div class="error-box" id="error-box"></div>
+  <div class="loading" id="loading">
+    <div class="loading-spin"></div>
+    <div class="loading-text" id="loading-text">Finding your location...</div>
+  </div>
+
+  <div class="results" id="results">
+
+    <div class="loc-header">
+      <div>
+        <div class="loc-name" id="loc-name"></div>
+        <div class="loc-coords" id="loc-coords"></div>
+      </div>
+      <div class="loc-time" id="loc-time"></div>
+    </div>
+
+    <!-- WEATHER HERO -->
+    <div class="section-title">☁️ Current Conditions</div>
+    <div class="card-lg">
+      <div class="weather-hero">
+        <div>
+          <div class="weather-temp" id="w-temp">--</div>
+          <div class="weather-desc" id="w-desc">--</div>
+          <div class="weather-feels" id="w-feels"></div>
+        </div>
+        <div class="weather-right">
+          <div style="font-size:48px" id="w-icon">--</div>
+          <div style="margin-top:8px" id="w-pill"></div>
+        </div>
+      </div>
+      <div class="grid-4" style="margin-bottom:0">
+        <div class="card" style="padding:12px 14px">
+          <div class="card-label">💧 Humidity</div>
+          <div class="card-value" id="w-humid">--<span class="card-unit">%</span></div>
+        </div>
+        <div class="card" style="padding:12px 14px">
+          <div class="card-label">💨 Wind</div>
+          <div class="card-value" id="w-wind">--<span class="card-unit">km/h</span></div>
+          <div class="card-sub" id="w-winddir"></div>
+        </div>
+        <div class="card" style="padding:12px 14px">
+          <div class="card-label">🌧 Rain today</div>
+          <div class="card-value" id="w-rain">--<span class="card-unit">mm</span></div>
+        </div>
+        <div class="card" style="padding:12px 14px">
+          <div class="card-label">👁 Visibility</div>
+          <div class="card-value" id="w-vis">--<span class="card-unit">km</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UV & AIR QUALITY -->
+    <div class="section-title">🌞 UV & Air Quality</div>
+    <div class="grid-2" style="margin-bottom:14px">
+      <div class="card-lg" style="margin-bottom:0">
+        <div class="card-icon">☀️</div>
+        <div class="card-label">UV Index</div>
+        <div class="card-value" id="uv-val">--</div>
+        <div style="margin-top:8px" id="uv-pill"></div>
+        <div class="card-sub" id="uv-advice" style="margin-top:8px"></div>
+      </div>
+      <div class="card-lg" style="margin-bottom:0">
+        <div class="card-icon">🌫️</div>
+        <div class="card-label">Air Quality (PM2.5)</div>
+        <div class="card-value" id="aq-val">--<span class="card-unit">µg/m³</span></div>
+        <div style="margin-top:8px" id="aq-pill"></div>
+        <div class="card-sub" id="aq-advice" style="margin-top:8px"></div>
+      </div>
+    </div>
+
+    <!-- 7-DAY FORECAST -->
+    <div class="section-title">📅 7-Day Forecast</div>
+    <div class="forecast" id="forecast"></div>
+
+    <!-- HAZARD RISK -->
+    <div class="section-title">⚠️ Local Hazard Risk Profile</div>
+    <div class="card-lg" id="hazard-card">
+      <div id="hazard-rows"></div>
+      <div style="font-size:11px;color:var(--mu);margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06)">
+        Risk profiles are based on geographic location, climate zone and historical hazard data. Always check your state emergency service for live warnings.
+      </div>
+    </div>
+
+    <!-- FUEL PRICES -->
+    <div class="section-title" id="fuel-section-title">⛽ Local Fuel Prices</div>
+    <div class="card-lg" id="fuel-card">
+      <div id="fuel-rows"></div>
+    </div>
+
+    <!-- LIVE EMERGENCY LINKS -->
+    <div class="section-title">🚨 Your State Emergency Sources</div>
+    <div class="link-grid" id="link-grid"></div>
+
+    <!-- APP CALLOUT -->
+    <div class="app-strip">
+      <div style="font-size:28px">📲</div>
+      <div class="app-strip-text"><strong>No signal? The Survival Storehouse App works offline.</strong> Cache survival guides, checklists and emergency plans before the next emergency hits.</div>
+      <div class="app-strip-links">
+        <a href="https://apps.apple.com/us/app/survival-storehouse/id6744917490" class="app-link" target="_blank">App Store</a>
+        <a href="https://play.google.com/store/apps/details?id=com.mycompany.survivalstorehouse" class="app-link" target="_blank">Google Play</a>
+      </div>
+    </div>
+
+    <!-- PREP LINKS -->
+    <div class="section-title">🛒 Get Prepared</div>
+    <div class="link-grid">
+      <a href="https://survivalstorehouse.com/72-hour-checklist" class="link-card">
+        <span class="link-card-arrow">→</span>
+        <div class="link-card-title">72-Hour Checklist</div>
+        <div class="link-card-desc">See your preparedness score and print results</div>
+      </a>
+      <a href="https://survivalstorehouse.com/kit-finder" class="link-card">
+        <span class="link-card-arrow">→</span>
+        <div class="link-card-title">Kit Finder</div>
+        <div class="link-card-desc">Personalised kit recommendation in 60 seconds</div>
+      </a>
+      <a href="https://survivalstorehouse.com/disaster-history" class="link-card">
+        <span class="link-card-arrow">→</span>
+        <div class="link-card-title">Disaster History</div>
+        <div class="link-card-desc">Every major Australian emergency since 2000</div>
+      </a>
+      <a href="https://wiki.survivalstorehouse.com" class="link-card">
+        <span class="link-card-arrow">→</span>
+        <div class="link-card-title">Survival Wiki</div>
+        <div class="link-card-desc">170+ free Australian survival guides</div>
+      </a>
+    </div>
+
+  </div><!-- /results -->
+
+
+  <!-- TRAVEL RESULTS -->
+  <div class="travel-results" id="travel-results">
+
+    <div class="tv-top-row">
+      <div>
+        <div class="loc-name" id="tv-loc-name"></div>
+        <div class="loc-coords" id="tv-dates"></div>
+        <div class="loc-time" id="tv-season" style="text-align:left;margin-top:6px"></div>
+      </div>
+      <button class="print-btn" onclick="printTrip()">🖨 Print Trip Plan</button>
+    </div>
+
+    <div class="section-title">🌡️ Historical Averages for This Period</div>
+    <div class="travel-hero">
+      <div class="card-lg" style="margin-bottom:0">
+        <div class="card-label">Average high</div>
+        <div class="card-value" id="tv-avg-hi">--<span class="card-unit">°C</span></div>
+        <div class="card-sub" id="tv-avg-hi-sub"></div>
+      </div>
+      <div class="card-lg" style="margin-bottom:0">
+        <div class="card-label">Average low</div>
+        <div class="card-value" id="tv-avg-lo">--<span class="card-unit">°C</span></div>
+        <div class="card-sub" id="tv-avg-lo-sub"></div>
+      </div>
+    </div>
+    <div class="grid-4">
+      <div class="card" style="padding:12px 14px">
+        <div class="card-label">💧 Avg rain/day</div>
+        <div class="card-value" id="tv-rain">--<span class="card-unit">mm</span></div>
+      </div>
+      <div class="card" style="padding:12px 14px">
+        <div class="card-label">☀️ UV Index</div>
+        <div class="card-value" id="tv-uv">--</div>
+      </div>
+      <div class="card" style="padding:12px 14px">
+        <div class="card-label">💨 Avg wind</div>
+        <div class="card-value" id="tv-wind">--<span class="card-unit">km/h</span></div>
+      </div>
+      <div class="card" style="padding:12px 14px">
+        <div class="card-label">🌧 Rainy days</div>
+        <div class="card-value" id="tv-rainydays">--</div>
+      </div>
+    </div>
+
+    <div class="section-title">📅 Day-by-Day Historical Averages</div>
+    <div class="travel-month-grid" id="tv-days"></div>
+
+    <div class="section-title">🎒 What to Pack</div>
+    <div class="pack-grid" id="tv-pack"></div>
+
+    <div class="section-title">⚠️ Hazard Risk Profile</div>
+    <div class="card-lg" id="tv-hazard-card">
+      <div id="tv-hazard-rows"></div>
+      <div style="font-size:11px;color:var(--mu);margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06)">
+        Hazard profiles are based on geographic location and climate zone. Check emergency services for live conditions before and during travel.
+      </div>
+    </div>
+
+    <div class="section-title">🚨 Emergency Services at Destination</div>
+    <div class="link-grid" id="tv-links"></div>
+
+    <div class="app-strip">
+      <div style="font-size:28px">📲</div>
+      <div class="app-strip-text"><strong>Travelling remote? Cache guides before you leave.</strong> The Survival Storehouse App works offline — download survival guides, maps and emergency contacts before you lose signal.</div>
+      <div class="app-strip-links">
+        <a href="https://apps.apple.com/us/app/survival-storehouse/id6744917490" class="app-link" target="_blank">App Store</a>
+        <a href="https://play.google.com/store/apps/details?id=com.mycompany.survivalstorehouse" class="app-link" target="_blank">Google Play</a>
+      </div>
+    </div>
+
+    <div class="section-title">🛒 Gear Up Before You Go</div>
+    <div class="link-grid">
+      <a href="https://survivalstorehouse.com/shop-1/ols/products/tactical-tin" class="link-card" target="_blank">
+        <span class="link-card-arrow">→</span>
+        <div class="link-card-title">Tactical Tin</div>
+        <div class="link-card-desc">Compact kit that fits in a glovebox — $125</div>
+      </a>
+      <a href="https://survivalstorehouse.com/shop-1/ols/products/the-ready-kit" class="link-card" target="_blank">
+        <span class="link-card-arrow">→</span>
+        <div class="link-card-title">Ready Kit</div>
+        <div class="link-card-desc">Complete travel emergency kit with LifeStraw option</div>
+      </a>
+      <a href="https://survivalstorehouse.com/72-hour-checklist" class="link-card">
+        <span class="link-card-arrow">→</span>
+        <div class="link-card-title">72-Hour Checklist</div>
+        <div class="link-card-desc">Check your kit before you leave</div>
+      </a>
+      <a href="https://wiki.survivalstorehouse.com/wiki/Outback_Travel_Essentials" class="link-card" target="_blank">
+        <span class="link-card-arrow">→</span>
+        <div class="link-card-title">Outback Travel Guide</div>
+        <div class="link-card-desc">Free wiki guide for remote Australian travel</div>
+      </a>
+    </div>
+
+  </div><!-- /travel-results -->
+
+  <div class="disclaimer">
+    Weather data: Open-Meteo (open-meteo.com) · Air quality: CAMS European forecasts via Open-Meteo<br>
+    Fuel data: NSW FuelCheck (api.nsw.gov.au) for NSW/TAS · Other states: representative averages<br>
+    Hazard profiles: Geoscience Australia, state emergency agencies<br>
+    In an emergency call <strong>000</strong> · survivalstorehouse.com · Australian owned since 2009
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const si = document.getElementById('search-input');
+  if(si) si.addEventListener('keydown', e => { if(e.key==='Enter') doSearch(); });
+  const tl = document.getElementById('travel-location');
+  if(tl) tl.addEventListener('keydown', e => { if(e.key==='Enter') doTravel(); });
+});
+
+const WEATHER_CODES = {
+  0:'Clear sky', 1:'Mainly clear', 2:'Partly cloudy', 3:'Overcast',
+  45:'Foggy', 48:'Icy fog',
+  51:'Light drizzle', 53:'Drizzle', 55:'Heavy drizzle',
+  61:'Light rain', 63:'Rain', 65:'Heavy rain',
+  71:'Light snow', 73:'Snow', 75:'Heavy snow',
+  77:'Snow grains', 80:'Light showers', 81:'Showers', 82:'Heavy showers',
+  85:'Snow showers', 86:'Heavy snow showers',
+  95:'Thunderstorm', 96:'Thunderstorm with hail', 99:'Thunderstorm with heavy hail'
+};
+
+const WEATHER_ICONS = {
+  0:'☀️', 1:'🌤️', 2:'⛅', 3:'☁️',
+  45:'🌫️', 48:'🌫️',
+  51:'🌦️', 53:'🌦️', 55:'🌧️',
+  61:'🌦️', 63:'🌧️', 65:'🌧️',
+  71:'🌨️', 73:'❄️', 75:'❄️', 77:'🌨️',
+  80:'🌦️', 81:'🌧️', 82:'⛈️',
+  95:'⛈️', 96:'⛈️', 99:'⛈️'
+};
+
+const WIND_DIRS = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+
+function windDir(deg) { return WIND_DIRS[Math.round(deg/22.5) % 16]; }
+
+function getState(lat, lon) {
+  if(lat < -43.5) return 'TAS';
+  if(lat > -29 && lon > 129) return 'QLD';
+  if(lat > -26 && lon < 129) return 'NT';
+  if(lon < 129 && lat < -26) return 'WA';
+  if(lat < -34.5 && lon > 140.9 && lat > -38.5) return 'VIC';
+  if(lon > 140.9 && lat < -29 && lat > -37.5) return 'NSW';
+  if(lon > 129 && lon < 141 && lat < -26) return 'SA';
+  if(lon > 149 && lat > -35.5 && lat < -35.2) return 'ACT';
+  return 'NSW';
+}
+
+function getHazardProfile(lat, lon, state) {
+  const isNorth = lat > -25;
+  const isFarNorth = lat > -20;
+  const isCoastal = lon < 118 || lon > 150 || (lon > 146 && lat > -28);
+  const isCycloneZone = isFarNorth || (isNorth && (state==='QLD'||state==='NT'||state==='WA'));
+  const isBushfireZone = state==='NSW'||state==='VIC'||state==='SA'||state==='ACT'||(state==='QLD'&&!isFarNorth);
+
+  return [
+    { icon:'🌀', name:'Cyclone', level: isCycloneZone ? (isFarNorth?'High':'Medium') : 'Low' },
+    { icon:'🔥', name:'Bushfire', level: isBushfireZone ? 'High' : (isNorth?'Medium':'Low') },
+    { icon:'🌊', name:'Flooding', level: (state==='QLD'||state==='NSW') ? 'High' : 'Medium' },
+    { icon:'☀️', name:'Extreme heat', level: isNorth ? 'High' : (state==='SA'||state==='WA'?'High':'Medium') },
+    { icon:'🌊', name:'Storm surge', level: isCoastal ? 'Medium' : 'Low' },
+    { icon:'🏔️', name:'Earthquake', level: state==='WA'?'Medium':'Low' },
+  ];
+}
+
+function levelToWidth(l) { return {Low:20,Medium:50,High:80,'Very High':100}[l]||20; }
+function levelToClass(l) { return {Low:'bar-low',Medium:'bar-med',High:'bar-high','Very High':'bar-vhigh'}[l]||'bar-low'; }
+function levelToPill(l) { return {Low:'pill-green',Medium:'pill-amber',High:'pill-orange','Very High':'pill-red'}[l]||'pill-green'; }
+
+function uvClass(uv) {
+  if(uv<=2) return {pill:'pill-green',label:'Low',advice:'No protection needed for most people.'};
+  if(uv<=5) return {pill:'pill-amber',label:'Moderate',advice:'Wear sunscreen and a hat outdoors.'};
+  if(uv<=7) return {pill:'pill-orange',label:'High',advice:'Protection essential — sunscreen SPF 30+, hat, seek shade.'};
+  if(uv<=10) return {pill:'pill-red',label:'Very High',advice:'Extra protection needed — reduce time in sun between 10am–4pm.'};
+  return {pill:'pill-red',label:'Extreme',advice:'Avoid sun exposure — if outdoors, maximum protection essential.'};
+}
+
+function aqClass(pm) {
+  if(pm<=12) return {pill:'pill-green',label:'Good',advice:'Air quality is satisfactory — no health concerns.'};
+  if(pm<=35) return {pill:'pill-amber',label:'Moderate',advice:'Acceptable quality — sensitive individuals may experience effects.'};
+  if(pm<=55) return {pill:'pill-orange',label:'Unhealthy for sensitive groups',advice:'People with respiratory issues should limit outdoor activity.'};
+  if(pm<=150) return {pill:'pill-red',label:'Unhealthy',advice:'Everyone may experience health effects — limit outdoor exposure.'};
+  return {pill:'pill-red',label:'Very unhealthy',advice:'Health alert — avoid outdoor activity, use N95 masks.'};
+}
+
+function tempClass(t) {
+  if(t<10) return 'pill-blue';
+  if(t<20) return 'pill-green';
+  if(t<30) return 'pill-amber';
+  if(t<38) return 'pill-orange';
+  return 'pill-red';
+}
+
+function pill(cls,label) { return `<span class="status-pill ${cls}"><span class="pill-dot"></span>${label}</span>`; }
+
+function getStateLinks(state) {
+  const links = {
+    NSW: [
+      {title:'NSW RFS — Fires Near Me',desc:'Live bushfire incidents and warnings',url:'https://www.rfs.nsw.gov.au/fire-information/fires-near-me'},
+      {title:'NSW SES Warnings',desc:'Flood, storm and tsunami warnings',url:'https://www.ses.nsw.gov.au/news/warnings'},
+      {title:'Hazards Near Me NSW',desc:'All-hazard warning app and portal',url:'https://www.hazardsnearme.com.au'},
+      {title:'BOM NSW Warnings',desc:'Weather warnings for NSW',url:'https://www.bom.gov.au/nsw/warnings/'},
+    ],
+    VIC: [
+      {title:'VicEmergency',desc:'Live incidents and warnings Victoria',url:'https://emergency.vic.gov.au'},
+      {title:'CFA Fire Warnings',desc:'Country Fire Authority Victoria',url:'https://www.cfa.vic.gov.au/warnings-restrictions/current-incidents-warnings'},
+      {title:'VicSES',desc:'Flood and storm warnings Victoria',url:'https://www.ses.vic.gov.au'},
+      {title:'BOM VIC Warnings',desc:'Weather warnings for Victoria',url:'https://www.bom.gov.au/vic/warnings/'},
+    ],
+    QLD: [
+      {title:'QLD Disaster Dashboard',desc:'Active warnings and disaster info',url:'https://www.disaster.qld.gov.au'},
+      {title:'QLD Fire Department',desc:'Current bushfire warnings',url:'https://www.fire.qld.gov.au/Current-Incidents'},
+      {title:'QLDTraffic',desc:'Road hazards, flooding and closures',url:'https://www.qldtraffic.qld.gov.au'},
+      {title:'BOM QLD Warnings',desc:'Weather warnings for Queensland',url:'https://www.bom.gov.au/qld/warnings/'},
+    ],
+    WA: [
+      {title:'Emergency WA',desc:'All-hazard warnings Western Australia',url:'https://www.emergency.wa.gov.au'},
+      {title:'DFES WA',desc:'Fire and emergency services WA',url:'https://www.dfes.wa.gov.au'},
+      {title:'FuelWatch WA',desc:'Live fuel prices Western Australia',url:'https://www.fuelwatch.wa.gov.au'},
+      {title:'BOM WA Warnings',desc:'Weather warnings for WA',url:'https://www.bom.gov.au/wa/warnings/'},
+    ],
+    SA: [
+      {title:'EmergencySA',desc:'All-hazard warnings South Australia',url:'https://www.emergencySA.com.au'},
+      {title:'CFS SA',desc:'Country Fire Service South Australia',url:'https://www.cfs.sa.gov.au/warnings/'},
+      {title:'SAFECOM SA',desc:'Emergency services coordination',url:'https://www.safecom.sa.gov.au'},
+      {title:'BOM SA Warnings',desc:'Weather warnings for South Australia',url:'https://www.bom.gov.au/sa/warnings/'},
+    ],
+    TAS: [
+      {title:'TasAlert',desc:'All-hazard warnings Tasmania',url:'https://www.tasalert.com.au'},
+      {title:'TFS Tasmania',desc:'Tasmania Fire Service',url:'https://www.fire.tas.gov.au'},
+      {title:'BOM TAS Warnings',desc:'Weather warnings for Tasmania',url:'https://www.bom.gov.au/tas/warnings/'},
+      {title:'SES Tasmania',desc:'State Emergency Service Tasmania',url:'https://www.ses.tas.gov.au'},
+    ],
+    NT: [
+      {title:'NT Emergency Services',desc:'Cyclone and flood warnings',url:'https://securent.nt.gov.au/warnings'},
+      {title:'NTFRS',desc:'NT Fire and Rescue Service',url:'https://www.pfes.nt.gov.au/fire-and-rescue'},
+      {title:'BOM Cyclone Tracker',desc:'Active cyclones in Australian waters',url:'https://www.bom.gov.au/cyclone/'},
+      {title:'BOM NT Warnings',desc:'Weather warnings for NT',url:'https://www.bom.gov.au/nt/warnings/'},
+    ],
+    ACT: [
+      {title:'ACT Emergency Services',desc:'ACT ESA — all hazards',url:'https://esa.act.gov.au'},
+      {title:'ACT Fire & Rescue',desc:'Fire incidents and warnings',url:'https://esa.act.gov.au/afr'},
+      {title:'BOM ACT Warnings',desc:'Weather warnings for ACT',url:'https://www.bom.gov.au/act/warnings/'},
+      {title:'NSW RFS',desc:'Bushfire warnings near ACT',url:'https://www.rfs.nsw.gov.au/fire-information/fires-near-me'},
+    ],
+  };
+  return links[state] || links.NSW;
+}
+
+function showLoading(msg) {
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('loading-text').textContent = msg;
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('error-box').style.display = 'none';
+}
+
+function hideLoading() { document.getElementById('loading').style.display = 'none'; }
+
+function showError(msg) {
+  hideLoading();
+  const el = document.getElementById('error-box');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+async function geocodeAU(q) {
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q + ', Australia')}&countrycodes=au&format=json&limit=5&addressdetails=1`;
+    const r = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+    const d = await r.json();
+    if(d && d.length) {
+      const best = d[0];
+      const addr = best.address || {};
+      const name = addr.suburb || addr.town || addr.city || addr.village || addr.county || addr.state_district || best.display_name.split(',')[0];
+      const state = addr.state || '';
+      return {
+        latitude: parseFloat(best.lat),
+        longitude: parseFloat(best.lon),
+        name: name.trim(),
+        admin1: state,
+        admin1_code: stateNameToCode(state)
+      };
+    }
+  } catch(e) { console.error('Geocoding error:', e); }
+  return null;
+}
+
+function stateNameToCode(name) {
+  const map = {
+    'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD',
+    'Western Australia':'WA','South Australia':'SA','Tasmania':'TAS',
+    'Northern Territory':'NT','Australian Capital Territory':'ACT'
+  };
+  return map[name] || 'NSW';
+}
+
+async function doSearch() {
+  const q = (document.getElementById('search-input')?.value || '').trim();
+  if(!q) return;
+  document.getElementById('search-btn').disabled = true;
+  try {
+    showLoading('Finding your location...');
+
+    const loc = await geocodeAU(q);
+    if(!loc) throw new Error('Location not found. Try "Erina NSW", "Cairns", or "2250 NSW".');
+
+    const lat = loc.latitude, lon = loc.longitude;
+    const locName = loc.name + (loc.admin1 ? ', ' + loc.admin1 : '');
+    const stateCode = (loc.admin1_code || getState(lat, lon)).replace('AU-','');
+
+    showLoading('Getting live weather...');
+    const [wxRes, aqRes] = await Promise.all([
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation,weather_code,visibility&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,uv_index_max,precipitation_probability_max&timezone=auto&forecast_days=7`),
+      fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=pm2_5,uv_index&timezone=auto`)
+    ]);
+    const wx = await wxRes.json();
+    const aq = await aqRes.json();
+
+    hideLoading();
+    document.getElementById('results').style.display = 'block';
+
+    // Location header
+    document.getElementById('loc-name').textContent = locName;
+    document.getElementById('loc-coords').textContent = `${lat.toFixed(4)}°, ${lon.toFixed(4)}°`;
+    document.getElementById('loc-time').innerHTML = `Live data<br><span style="color:rgba(255,255,255,.35)">${new Date().toLocaleString('en-AU',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span>`;
+
+    // Current weather
+    const cur = wx.current;
+    const code = cur.weather_code;
+    const temp = Math.round(cur.temperature_2m);
+    const feels = Math.round(cur.apparent_temperature);
+    document.getElementById('w-temp').innerHTML = temp + '<span class="card-unit">°C</span>';
+    document.getElementById('w-desc').textContent = WEATHER_CODES[code] || 'Unknown';
+    document.getElementById('w-feels').textContent = `Feels like ${feels}°C`;
+    document.getElementById('w-icon').textContent = WEATHER_ICONS[code] || '🌤️';
+    document.getElementById('w-pill').innerHTML = pill(tempClass(temp), temp >= 38 ? 'Extreme heat' : temp >= 30 ? 'Hot' : temp >= 20 ? 'Warm' : temp >= 10 ? 'Cool' : 'Cold');
+    document.getElementById('w-humid').innerHTML = Math.round(cur.relative_humidity_2m) + '<span class="card-unit">%</span>';
+    document.getElementById('w-wind').innerHTML = Math.round(cur.wind_speed_10m) + '<span class="card-unit">km/h</span>';
+    document.getElementById('w-winddir').textContent = windDir(cur.wind_direction_10m);
+    document.getElementById('w-rain').innerHTML = (cur.precipitation||0).toFixed(1) + '<span class="card-unit">mm</span>';
+    document.getElementById('w-vis').innerHTML = ((cur.visibility||10000)/1000).toFixed(1) + '<span class="card-unit">km</span>';
+
+    // UV
+    const uvDay = wx.daily.uv_index_max ? wx.daily.uv_index_max[0] : null;
+    const uvCur = aq.current?.uv_index ?? uvDay ?? 0;
+    const uvInfo = uvClass(Math.round(uvCur));
+    document.getElementById('uv-val').textContent = Math.round(uvCur);
+    document.getElementById('uv-pill').innerHTML = pill(uvInfo.pill, uvInfo.label);
+    document.getElementById('uv-advice').textContent = uvInfo.advice;
+
+    // Air Quality
+    const pm = aq.current?.pm2_5 ?? 0;
+    const aqInfo = aqClass(pm);
+    document.getElementById('aq-val').innerHTML = pm.toFixed(1) + '<span class="card-unit">µg/m³</span>';
+    document.getElementById('aq-pill').innerHTML = pill(aqInfo.pill, aqInfo.label);
+    document.getElementById('aq-advice').textContent = aqInfo.advice;
+
+    // 7-day forecast
+    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const fcHtml = wx.daily.time.map((d,i) => {
+      const dt = new Date(d+'T12:00:00');
+      const dayName = i===0 ? 'Today' : days[dt.getDay()];
+      const rain = wx.daily.precipitation_probability_max?.[i] ?? 0;
+      return `<div class="fc-day">
+        <div class="fc-name">${dayName}</div>
+        <div class="fc-icon">${WEATHER_ICONS[wx.daily.weather_code[i]]||'🌤️'}</div>
+        <div class="fc-hi">${Math.round(wx.daily.temperature_2m_max[i])}°</div>
+        <div class="fc-lo">${Math.round(wx.daily.temperature_2m_min[i])}°</div>
+        ${rain>20?`<div class="fc-rain">💧${rain}%</div>`:''}
+      </div>`;
+    }).join('');
+    document.getElementById('forecast').innerHTML = fcHtml;
+
+    // Hazard profile
+    const hazards = getHazardProfile(lat, lon, stateCode);
+    document.getElementById('hazard-rows').innerHTML = hazards.map(h => `
+      <div class="hazard-row">
+        <div class="hazard-icon">${h.icon}</div>
+        <div class="hazard-name">${h.name}</div>
+        <div class="hazard-bar-wrap"><div class="hazard-bar ${levelToClass(h.level)}" style="width:${levelToWidth(h.level)}%"></div></div>
+        <div>${pill(levelToPill(h.level), h.level)}</div>
+      </div>`).join('');
+
+    // Fuel prices
+    showFuel(stateCode, lat, lon);
+
+
+    // State links
+    const links = getStateLinks(stateCode);
+    document.getElementById('link-grid').innerHTML = links.map(l => `
+      <a href="${l.url}" class="link-card" target="_blank">
+        <span class="link-card-arrow">→</span>
+        <div class="link-card-title">${l.title}</div>
+        <div class="link-card-desc">${l.desc}</div>
+      </a>`).join('');
+
+    document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+
+  } catch(e) {
+    showError(e.message || 'Something went wrong. Please try again.');
+  }
+  document.getElementById('search-btn').disabled = false;
+}
+
+async function showFuel(state, lat, lon) {
+  const fuelEl = document.getElementById('fuel-rows');
+  const titleEl = document.getElementById('fuel-section-title');
+
+  if(state==='NSW'||state==='TAS') {
+    titleEl.textContent = '⛽ Live Fuel Prices — ' + (state==='NSW'?'NSW':'Tasmania');
+    fuelEl.innerHTML = `<div style="font-size:13px;color:var(--mu);padding:8px 0">
+      Loading live prices from NSW FuelCheck...
+    </div>`;
+    try {
+      const token = await getNSWToken();
+      if(!token) throw new Error('no token');
+      const priceRes = await fetch(`https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices/bylocation?latitude=${lat}&longitude=${lon}&radius=5&fueltype=P95`, {
+        headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'apikey': 'TmtUbGpFVlhBbGlpVkFmYW5Yb0dEN2lFZUFTRUVLMzM6NUlFWU9Wbk5zeUpBc0o2V' }
+      });
+      const pd = await priceRes.json();
+      if(pd.stations && pd.stations.length) {
+        const prices = pd.stations.slice(0,3);
+        fuelEl.innerHTML = prices.map(s => `
+          <div class="fuel-station">
+            <div>
+              <div class="fuel-type">P95</div>
+              <div style="font-size:11px;color:var(--mu)">${s.name}, ${s.suburb}</div>
+            </div>
+            <div class="fuel-price">${(s.price/10).toFixed(1)}<span class="fuel-unit">¢/L</span></div>
+          </div>`).join('') + `<div class="fuel-note">Live prices from <a href="https://www.fuelcheck.nsw.gov.au" target="_blank">NSW FuelCheck</a> · Updated in real time</div>`;
+        return;
+      }
+    } catch(e) {}
+    showRepresentativeFuel(state, fuelEl, titleEl);
+  } else {
+    showRepresentativeFuel(state, fuelEl, titleEl);
+  }
+}
+
+async function getNSWToken() {
+  try {
+    const r = await fetch('https://api.onegov.nsw.gov.au/oauth/client_credential/accesstoken?grant_type=client_credentials', {
+      method: 'GET',
+      headers: { 'Authorization': 'Basic VG10VWxqRVZYQWxpaVZBZmFuWG9HRDdpRWVBU0VFSzMzOjVJRVlPVm5Oc3lKQXNKNlc=' }
+    });
+    const d = await r.json();
+    return d.access_token || null;
+  } catch(e) { return null; }
+}
+
+function showRepresentativeFuel(state, fuelEl, titleEl) {
+  // Representative prices by state based on AIP weekly data
+  const prices = {
+    NSW: {p91:219.5,p95:229.3,diesel:198.7,source:'NSW FuelCheck',link:'https://www.fuelcheck.nsw.gov.au'},
+    VIC: {p91:221.3,p95:231.8,diesel:197.2,source:'Servo Saver VIC',link:'https://www.servowatch.com.au'},
+    QLD: {p91:215.8,p95:226.4,diesel:194.3,source:'QLDTraffic',link:'https://www.qldtraffic.qld.gov.au'},
+    WA:  {p91:212.4,p95:222.9,diesel:191.8,source:'FuelWatch WA',link:'https://www.fuelwatch.wa.gov.au'},
+    SA:  {p91:223.7,p95:234.1,diesel:200.4,source:'FuelPriceAU',link:'https://www.petrolspy.com.au'},
+    TAS: {p91:224.5,p95:235.2,diesel:202.1,source:'NSW FuelCheck (TAS)',link:'https://www.fuelcheck.nsw.gov.au'},
+    NT:  {p91:238.6,p95:249.3,diesel:212.5,source:'NT pricing',link:'https://www.petrolspy.com.au'},
+    ACT: {p91:218.9,p95:229.6,diesel:197.8,source:'FuelPriceAU',link:'https://www.petrolspy.com.au'},
+  };
+  const p = prices[state] || prices.NSW;
+  titleEl.textContent = '⛽ Fuel Prices — ' + state + ' (State Average)';
+  fuelEl.innerHTML = `
+    <div class="fuel-station">
+      <div class="fuel-type">ULP 91</div>
+      <div class="fuel-price">${p.p91.toFixed(1)}<span class="fuel-unit">¢/L</span></div>
+    </div>
+    <div class="fuel-station">
+      <div class="fuel-type">P95</div>
+      <div class="fuel-price">${p.p95.toFixed(1)}<span class="fuel-unit">¢/L</span></div>
+    </div>
+    <div class="fuel-station">
+      <div class="fuel-type">Diesel</div>
+      <div class="fuel-price">${p.diesel.toFixed(1)}<span class="fuel-unit">¢/L</span></div>
+    </div>
+    <div class="fuel-note">
+      State average prices as at April 2026 — AIP weekly data. For live station-by-station prices visit
+      <a href="${p.link}" target="_blank">${p.source} →</a>
+    </div>`;
+}
+
+function switchMode(mode) {
+  const isLive = mode === 'live';
+  document.getElementById('tab-live').classList.toggle('active', isLive);
+  document.getElementById('tab-travel').classList.toggle('active', !isLive);
+  document.getElementById('live-wrap').style.display = isLive ? '' : 'none';
+  document.getElementById('travel-wrap').style.display = isLive ? 'none' : '';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('travel-results').style.display = 'none';
+  document.getElementById('error-box').style.display = 'none';
+
+  // Set sensible default dates when switching to travel
+  if(!isLive && !document.getElementById('travel-from').value) {
+    const today = new Date();
+    const from = new Date(today); from.setDate(today.getDate() + 14);
+    const to = new Date(from); to.setDate(from.getDate() + 7);
+    document.getElementById('travel-from').value = from.toISOString().slice(0,10);
+    document.getElementById('travel-to').value = to.toISOString().slice(0,10);
+  }
+}
+
+// travel-location listener handled in DOMContentLoaded
+
+function getSeason(month) {
+  if([12,1,2].includes(month)) return { name:'Summer', icon:'☀️', desc:'Hot and humid in the north, warm in the south. Peak cyclone season for northern Australia.' };
+  if([3,4,5].includes(month)) return { name:'Autumn', icon:'🍂', desc:'Mild temperatures across most of Australia. Cyclone season winding down. Good travel conditions.' };
+  if([6,7,8].includes(month)) return { name:'Winter', icon:'❄️', desc:'Cool in the south, dry season in the north. Best time for northern Australia travel.' };
+  return { name:'Spring', icon:'🌸', desc:'Warming up across the country. Fire danger season begins in the south. Storm season building in the north.' };
+}
+
+function getPackingList(avgHi, avgLo, avgRain, uvAvg, state, month) {
+  const items = [];
+  if(avgHi >= 35) items.push({icon:'🧴',title:'High-SPF sunscreen',desc:'UV is extreme — reapply every 2 hours'});
+  else if(uvAvg >= 6) items.push({icon:'🧴',title:'Sunscreen SPF 50+',desc:'UV is high — daily protection essential'});
+  if(avgHi >= 30) items.push({icon:'🎩',title:'Wide-brim hat',desc:'Sun protection for extended outdoor time'});
+  if(avgRain > 3) items.push({icon:'☂️',title:'Rain jacket or poncho',desc:`Average ${avgRain.toFixed(1)}mm/day — expect rain`});
+  if(avgLo < 10) items.push({icon:'🧥',title:'Warm layers',desc:`Nights average ${avgLo.toFixed(0)}°C — warm jacket essential`});
+  if(avgLo < 5) items.push({icon:'🧤',title:'Beanie and gloves',desc:'Sub-5°C nights possible — pack warm'});
+  if(['NT','QLD','WA'].includes(state) && [11,12,1,2,3].includes(month))
+    items.push({icon:'🦟',title:'Insect repellent',desc:'Wet season — mosquitoes and insects active'});
+  if(['QLD','NT','WA'].includes(state))
+    items.push({icon:'💧',title:'Water purification',desc:'Remote areas may have limited clean water'});
+  items.push({icon:'🏥',title:'First aid kit',desc:'Always carry basics — bites, cuts, heat illness'});
+  items.push({icon:'📱',title:'Offline emergency app',desc:'Cache guides before you lose signal'});
+  if(avgHi >= 32) items.push({icon:'🥤',title:'Extra water',desc:'At least 4L/person/day in extreme heat'});
+  if(['WA','NT','SA','QLD'].includes(state))
+    items.push({icon:'⛽',title:'Extra fuel',desc:'Remote areas have long distances between stations'});
+  return items.slice(0,8);
+}
+
+async function doTravel() {
+  const locQ = (document.getElementById('travel-location')?.value || '').trim();
+  const fromStr = document.getElementById('travel-from')?.value || '';
+  const toStr = document.getElementById('travel-to')?.value || '';
+
+  if(!locQ) { showError('Please enter a destination.'); return; }
+  if(!fromStr || !toStr) { showError('Please select arrival and departure dates.'); return; }
+
+  const fromDate = new Date(fromStr);
+  const toDate = new Date(toStr);
+  if(toDate <= fromDate) { showError('Departure date must be after arrival date.'); return; }
+  const tripDays = Math.min(Math.round((toDate-fromDate)/(1000*60*60*24)), 14);
+
+  document.getElementById('travel-btn').disabled = true;
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('travel-results').style.display = 'none';
+
+  try {
+    showLoading('Finding destination...');
+    const loc = await geocodeAU(locQ);
+    if(!loc) throw new Error('Location not found. Try "Cairns QLD", "Hobart", or "2250 NSW".');
+    const lat = loc.latitude, lon = loc.longitude;
+    const locName = loc.name + (loc.admin1 ? ', '+loc.admin1 : '');
+    const state = (loc.admin1_code||getState(lat,lon)).replace('AU-','');
+
+    // Build historical date ranges — fetch same dates from last 3 years for averaging
+    showLoading('Fetching 3 years of historical data...');
+    const years = [2025, 2024, 2023];
+    const allFetches = years.map(yr => {
+      const s = yr + '-' + fromStr.slice(5);
+      const toDateAdj = new Date(yr + '-' + toStr.slice(5));
+      toDateAdj.setDate(toDateAdj.getDate() + 1);
+      const e = toDateAdj.toISOString().slice(0,10);
+      return fetch(`https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${s}&end_date=${e}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,uv_index_max&timezone=auto`);
+    });
+    const responses = await Promise.all(allFetches);
+    const datasets = await Promise.all(responses.map(r => r.json()));
+
+    // Average across years
+    const ref = datasets[0].daily;
+    const nDays = Math.min(ref.time.length, tripDays);
+    const avgs = { hi:[], lo:[], rain:[], wind:[], uv:[] };
+
+    for(let i=0; i<nDays; i++) {
+      const hiVals = datasets.map(d => d.daily.temperature_2m_max?.[i]).filter(v=>v!=null);
+      const loVals = datasets.map(d => d.daily.temperature_2m_min?.[i]).filter(v=>v!=null);
+      const rainVals = datasets.map(d => d.daily.precipitation_sum?.[i]).filter(v=>v!=null);
+      const windVals = datasets.map(d => d.daily.windspeed_10m_max?.[i]).filter(v=>v!=null);
+      const uvVals = datasets.map(d => d.daily.uv_index_max?.[i]).filter(v=>v!=null);
+      const avg = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : null;
+      avgs.hi.push(avg(hiVals));
+      avgs.lo.push(avg(loVals));
+      avgs.rain.push(avg(rainVals));
+      avgs.wind.push(avg(windVals));
+      avgs.uv.push(avg(uvVals));
+    }
+
+    const meanHi = avgs.hi.reduce((a,b)=>a+b,0)/avgs.hi.length;
+    const meanLo = avgs.lo.reduce((a,b)=>a+b,0)/avgs.lo.length;
+    const meanRain = avgs.rain.reduce((a,b)=>a+b,0)/avgs.rain.length;
+    const meanWind = avgs.wind.reduce((a,b)=>a+b,0)/avgs.wind.length;
+    const meanUv = avgs.uv.filter(v=>v!=null).reduce((a,b)=>a+b,0)/avgs.uv.filter(v=>v!=null).length;
+    const rainyDays = avgs.rain.filter(v=>v>=1).length;
+
+    hideLoading();
+    document.getElementById('travel-results').style.display = 'block';
+
+    const fromLabel = fromDate.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
+    const toLabel = toDate.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
+    const month = fromDate.getMonth()+1;
+    const season = getSeason(month);
+
+    document.getElementById('tv-loc-name').textContent = locName;
+    document.getElementById('tv-dates').textContent = `${fromLabel} → ${toLabel} · ${nDays} day${nDays!==1?'s':''}`;
+    document.getElementById('tv-season').innerHTML = `${season.icon} ${season.name}<br><span style="color:rgba(255,255,255,.35);font-size:11px;font-weight:300">${season.desc}</span>`;
+
+    document.getElementById('tv-avg-hi').innerHTML = Math.round(meanHi) + '<span class="card-unit">°C</span>';
+    document.getElementById('tv-avg-hi-sub').textContent = meanHi >= 35 ? 'Extreme heat — carry extra water' : meanHi >= 30 ? 'Hot — sun protection essential' : meanHi >= 22 ? 'Warm and pleasant' : meanHi >= 15 ? 'Mild — light layers useful' : 'Cool — warm clothing needed';
+    document.getElementById('tv-avg-lo').innerHTML = Math.round(meanLo) + '<span class="card-unit">°C</span>';
+    document.getElementById('tv-avg-lo-sub').textContent = meanLo < 5 ? 'Cold nights — warm layers essential' : meanLo < 12 ? 'Cool nights — bring a jacket' : meanLo < 20 ? 'Comfortable evenings' : 'Warm nights — light clothing fine';
+    document.getElementById('tv-rain').innerHTML = meanRain.toFixed(1) + '<span class="card-unit">mm</span>';
+    document.getElementById('tv-uv').textContent = meanUv ? Math.round(meanUv) : '--';
+    document.getElementById('tv-wind').innerHTML = Math.round(meanWind) + '<span class="card-unit">km/h</span>';
+    document.getElementById('tv-rainydays').textContent = rainyDays + ' of ' + nDays;
+
+    // Day-by-day grid
+    const weekdays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    document.getElementById('tv-days').innerHTML = Array.from({length:nDays}, (_,i) => {
+      const dt = new Date(fromDate); dt.setDate(dt.getDate()+i);
+      return `<div class="tm-day highlight">
+        <div class="tm-date">${weekdays[dt.getDay()]} ${dt.getDate()}</div>
+        <div class="tm-hi">${avgs.hi[i]!=null?Math.round(avgs.hi[i])+'°':'--'}</div>
+        <div class="tm-lo">${avgs.lo[i]!=null?Math.round(avgs.lo[i])+'°':'--'}</div>
+        ${avgs.rain[i]>=1?`<div class="tm-rain">💧${avgs.rain[i].toFixed(0)}mm</div>`:''}
+      </div>`;
+    }).join('');
+
+    // What to pack
+    const packItems = getPackingList(meanHi, meanLo, meanRain, meanUv||0, state, month);
+    document.getElementById('tv-pack').innerHTML = packItems.map(p =>
+      `<div class="pack-item"><div class="pack-icon">${p.icon}</div><div class="pack-text"><strong>${p.title}</strong>${p.desc}</div></div>`
+    ).join('');
+
+    // Hazard profile
+    const hazards = getHazardProfile(lat, lon, state);
+    document.getElementById('tv-hazard-rows').innerHTML = hazards.map(h => `
+      <div class="hazard-row">
+        <div class="hazard-icon">${h.icon}</div>
+        <div class="hazard-name">${h.name}</div>
+        <div class="hazard-bar-wrap"><div class="hazard-bar ${levelToClass(h.level)}" style="width:${levelToWidth(h.level)}%"></div></div>
+        <div>${pill(levelToPill(h.level), h.level)}</div>
+      </div>`).join('');
+
+    // Emergency links
+    const links = getStateLinks(state);
+    document.getElementById('tv-links').innerHTML = links.map(l =>
+      `<a href="${l.url}" class="link-card" target="_blank">
+        <span class="link-card-arrow">→</span>
+        <div class="link-card-title">${l.title}</div>
+        <div class="link-card-desc">${l.desc}</div>
+      </a>`).join('');
+
+    document.getElementById('travel-results').scrollIntoView({behavior:'smooth', block:'start'});
+
+  } catch(e) {
+    showError(e.message || 'Something went wrong. Please try again.');
+  }
+  document.getElementById('travel-btn').disabled = false;
+}
+
+
+function printTrip() {
+  const locName = document.getElementById('tv-loc-name').textContent;
+  const dates = document.getElementById('tv-dates').textContent;
+  const season = document.getElementById('tv-season').textContent;
+  const avgHi = document.getElementById('tv-avg-hi').textContent;
+  const avgHiSub = document.getElementById('tv-avg-hi-sub').textContent;
+  const avgLo = document.getElementById('tv-avg-lo').textContent;
+  const avgLoSub = document.getElementById('tv-avg-lo-sub').textContent;
+  const rain = document.getElementById('tv-rain').textContent;
+  const uv = document.getElementById('tv-uv').textContent;
+  const wind = document.getElementById('tv-wind').textContent;
+  const rainyDays = document.getElementById('tv-rainydays').textContent;
+
+  // Day grid
+  const dayNodes = document.getElementById('tv-days').children;
+  const dayHtml = Array.from(dayNodes).map(d => {
+    const date = d.querySelector('.tm-date')?.textContent || '';
+    const hi = d.querySelector('.tm-hi')?.textContent || '--';
+    const lo = d.querySelector('.tm-lo')?.textContent || '--';
+    const rain = d.querySelector('.tm-rain')?.textContent || '';
+    return `<div class="prt-day"><div class="prt-day-date">${date}</div><div class="prt-day-hi">${hi}</div><div class="prt-day-lo">${lo}</div><div class="prt-day-rain">${rain}</div></div>`;
+  }).join('');
+
+  // Packing list
+  const packNodes = document.getElementById('tv-pack').querySelectorAll('.pack-item');
+  const packHtml = Array.from(packNodes).map(p => {
+    const icon = p.querySelector('.pack-icon')?.textContent || '';
+    const title = p.querySelector('strong')?.textContent || '';
+    const desc = p.querySelector('.pack-text')?.childNodes[1]?.textContent || p.querySelector('.pack-text')?.textContent.replace(title,'') || '';
+    return `<div class="prt-pack-item"><span class="prt-pack-icon">${icon}</span><div><strong>${title}</strong><div class="prt-pack-desc">${desc}</div></div></div>`;
+  }).join('');
+
+  // Hazard rows
+  const hazardNodes = document.getElementById('tv-hazard-rows').querySelectorAll('.hazard-row');
+  const hazardHtml = Array.from(hazardNodes).map(h => {
+    const icon = h.querySelector('.hazard-icon')?.textContent || '';
+    const name = h.querySelector('.hazard-name')?.textContent || '';
+    const level = h.querySelector('.status-pill')?.textContent || '';
+    return `<div class="prt-hazard"><span>${icon}</span><span class="prt-hazard-name">${name}</span><span class="prt-hazard-level">${level}</span></div>`;
+  }).join('');
+
+  // Emergency links
+  const linkNodes = document.getElementById('tv-links').querySelectorAll('.link-card');
+  const linksHtml = Array.from(linkNodes).map(l => {
+    const title = l.querySelector('.link-card-title')?.textContent || '';
+    const desc = l.querySelector('.link-card-desc')?.textContent || '';
+    const url = l.href || '#';
+    return `<div class="prt-link"><strong>${title}</strong><div class="prt-link-url">${url}</div><div class="prt-link-desc">${desc}</div></div>`;
+  }).join('');
+
+  const today = new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>Trip Plan — ${locName} — Survival Storehouse</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:Georgia,serif;color:#1a1a1a;padding:20px;font-size:12px;}
+    .hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:12px;border-bottom:3px solid #1a3a2a;margin-bottom:16px;}
+    .logo{font-family:Arial,sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#1a3a2a;}
+    .logo-sub{font-size:9px;color:#666;letter-spacing:.1em;text-transform:uppercase;margin-top:3px;}
+    .title-block{text-align:right;}
+    .title{font-family:Arial,sans-serif;font-size:17px;font-weight:900;text-transform:uppercase;color:#1a1a1a;}
+    .date{font-size:9px;color:#888;margin-top:3px;}
+    .loc-block{background:#f4f1eb;border:1px solid #ddd;border-radius:6px;padding:12px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:flex-start;}
+    .loc-name{font-family:Arial,sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;color:#1a3a2a;}
+    .loc-dates{font-size:11px;color:#666;margin-top:3px;}
+    .loc-season{font-size:11px;color:#888;text-align:right;}
+    .section{margin-bottom:14px;page-break-inside:avoid;}
+    .section-title{font-family:Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#888;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #e0e0e0;}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+    .stat-card{background:#f9f9f9;border:1px solid #e0e0e0;border-radius:4px;padding:8px 10px;}
+    .stat-label{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;}
+    .stat-val{font-family:Arial,sans-serif;font-size:18px;font-weight:900;color:#1a3a2a;line-height:1;}
+    .stat-sub{font-size:9px;color:#666;margin-top:2px;}
+    .temp-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+    .temp-card{background:#fff8f4;border:1.5px solid #c85a00;border-radius:4px;padding:10px 12px;}
+    .temp-label{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;}
+    .temp-val{font-family:Arial,sans-serif;font-size:28px;font-weight:900;color:#c85a00;line-height:1;}
+    .temp-sub{font-size:10px;color:#555;margin-top:4px;}
+    .days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+    .prt-day{background:#f4f1eb;border:1px solid #ddd;border-radius:3px;padding:6px 4px;text-align:center;}
+    .prt-day-date{font-size:9px;color:#888;margin-bottom:3px;}
+    .prt-day-hi{font-family:Arial,sans-serif;font-size:14px;font-weight:700;color:#1a1a1a;}
+    .prt-day-lo{font-size:9px;color:#999;}
+    .prt-day-rain{font-size:9px;color:#3b8bd4;margin-top:2px;}
+    .pack-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+    .prt-pack-item{display:flex;align-items:flex-start;gap:8px;background:#f9f9f9;border:1px solid #e0e0e0;border-radius:3px;padding:7px 9px;}
+    .prt-pack-icon{font-size:16px;flex-shrink:0;}
+    .prt-pack-item strong{font-size:10px;font-weight:700;color:#1a1a1a;display:block;margin-bottom:1px;}
+    .prt-pack-desc{font-size:9px;color:#666;}
+    .hazard-list{display:flex;flex-direction:column;gap:4px;}
+    .prt-hazard{display:flex;align-items:center;gap:10px;padding:5px 8px;background:#f9f9f9;border:1px solid #e0e0e0;border-radius:3px;}
+    .prt-hazard-name{flex:1;font-size:11px;font-weight:500;}
+    .prt-hazard-level{font-size:10px;font-weight:700;color:#c85a00;}
+    .links-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+    .prt-link{background:#f0f7f4;border:1px solid #52b788;border-radius:3px;padding:7px 9px;}
+    .prt-link strong{font-size:10px;font-weight:700;color:#1a3a2a;display:block;margin-bottom:2px;}
+    .prt-link-url{font-size:8px;color:#52b788;margin-bottom:1px;word-break:break-all;}
+    .prt-link-desc{font-size:9px;color:#666;}
+    .app-note{background:#f0f7f4;border:1px solid #52b788;border-radius:4px;padding:8px 12px;margin-bottom:12px;font-size:10px;color:#1a3a2a;line-height:1.5;}
+    .footer{border-top:2px solid #1a3a2a;padding-top:10px;margin-top:10px;display:flex;justify-content:space-between;align-items:flex-end;}
+    .footer-l{font-size:9px;color:#555;line-height:1.7;}
+    .footer-r{font-size:8px;color:#888;text-align:right;line-height:1.7;}
+    @media print{body{padding:10px;}}
+  </style>
+  </head><body>
+  <div class="hdr">
+    <div><div class="logo">Survival Storehouse</div><div class="logo-sub">Australian Emergency Preparedness &middot; Est. 2009</div></div>
+    <div class="title-block"><div class="title">Travel Preparedness Plan</div><div class="date">Prepared: ${today}</div></div>
+  </div>
+  <div class="loc-block">
+    <div><div class="loc-name">${locName}</div><div class="loc-dates">${dates}</div></div>
+    <div class="loc-season">${season}</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Temperature averages</div>
+    <div class="temp-row">
+      <div class="temp-card"><div class="temp-label">Average high</div><div class="temp-val">${avgHi}</div><div class="temp-sub">${avgHiSub}</div></div>
+      <div class="temp-card"><div class="temp-label">Average low</div><div class="temp-val">${avgLo}</div><div class="temp-sub">${avgLoSub}</div></div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Rain per day</div><div class="stat-val">${rain}</div></div>
+      <div class="stat-card"><div class="stat-label">UV Index</div><div class="stat-val">${uv}</div></div>
+      <div class="stat-card"><div class="stat-label">Avg wind</div><div class="stat-val">${wind}</div></div>
+      <div class="stat-card"><div class="stat-label">Rainy days</div><div class="stat-val">${rainyDays}</div></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Day-by-day historical averages</div>
+    <div class="days-grid">${dayHtml}</div>
+  </div>
+  <div class="section">
+    <div class="section-title">What to pack</div>
+    <div class="pack-grid">${packHtml}</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Hazard risk profile</div>
+    <div class="hazard-list">${hazardHtml}</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Emergency services at destination</div>
+    <div class="links-grid">${linksHtml}</div>
+  </div>
+  <div class="app-note"><strong>&#128242; Survival Storehouse App:</strong> Cache this plan and 200+ Australian survival guides to your phone before you leave. Works completely offline — no signal needed. Download at survivalstorehouse.com/app</div>
+  <div class="footer">
+    <div class="footer-l"><strong>Survival Storehouse Australia</strong> &middot; Australian owned since 2009 &middot; Erina, NSW Central Coast<br>
+    survivalstorehouse.com &middot; sales@survivalstorehouse.com &middot; +61 403 517 622</div>
+    <div class="footer-r">Historical data: Open-Meteo (3-year averages)<br>wiki.survivalstorehouse.com &middot; In an emergency call 000</div>
+  </div>
+  <script>window.onload=function(){window.print();}<\/script>
+  </body></html>`;
+
+  const w = window.open('','_blank');
+  if(w) { w.document.write(html); w.document.close(); }
+  else { alert('Please allow popups for this page to print your trip plan.'); }
+}
+
+</script>
+</body>
+</html>

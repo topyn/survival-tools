@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Australian Emergency Timeline — Survival Storehouse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gd: #0d2318;
+    --gm: #1a3a2a;
+    --gb: #52b788;
+    --or: #c85a00;
+    --orl: #e07020;
+    --mu: rgba(255,255,255,0.5);
+    --tr: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--gd);
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 300px 200px at 15% 25%, rgba(42,55,28,.35) 0%, transparent 100%),
+      radial-gradient(ellipse 200px 300px at 85% 60%, rgba(28,38,18,.25) 0%, transparent 100%),
+      radial-gradient(ellipse 400px 150px at 50% 90%, rgba(38,50,22,.3) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 20px 80px; position: relative; z-index: 1; }
+
+  /* HEADER */
+  .hdr { padding: 44px 0 48px; text-align: center; }
+  .hdr-brand { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; color: var(--gb); margin-bottom: 14px; }
+  .hdr-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(48px,8vw,80px); font-weight: 900; line-height: .88; text-transform: uppercase; margin-bottom: 16px; }
+  .hdr-title span { color: var(--or); }
+  .hdr-sub { font-size: 16px; font-weight: 300; color: var(--mu); line-height: 1.65; max-width: 560px; margin: 0 auto 28px; }
+  .hdr-note { display: inline-flex; align-items: center; gap: 8px; background: rgba(200,90,0,.1); border: 1px solid rgba(200,90,0,.3); border-radius: 6px; padding: 10px 18px; font-size: 13px; color: rgba(255,255,255,.7); }
+
+  /* FILTER BAR */
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 48px; }
+  .filter-btn { padding: 8px 18px; background: transparent; border: 1.5px solid rgba(255,255,255,.15); border-radius: 100px; color: var(--mu); font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: var(--tr); }
+  .filter-btn:hover { border-color: rgba(255,255,255,.35); color: #fff; }
+  .filter-btn.active { border-color: var(--or); color: var(--or); background: rgba(200,90,0,.1); }
+  .filter-btn[data-type="bushfire"].active { border-color: #e05520; color: #e05520; background: rgba(224,85,32,.1); }
+  .filter-btn[data-type="flood"].active { border-color: #3b8bd4; color: #3b8bd4; background: rgba(59,139,212,.1); }
+  .filter-btn[data-type="cyclone"].active { border-color: #7b5ea7; color: #7b5ea7; background: rgba(123,94,167,.1); }
+  .filter-btn[data-type="pandemic"].active { border-color: #52b788; color: #52b788; background: rgba(82,183,136,.1); }
+  .filter-btn[data-type="heatwave"].active { border-color: #f0a500; color: #f0a500; background: rgba(240,165,0,.1); }
+  .filter-btn[data-type="supply"].active { border-color: #c85a00; color: #c85a00; background: rgba(200,90,0,.1); }
+
+  /* TIMELINE */
+  .timeline { position: relative; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,.12) 5%, rgba(255,255,255,.12) 95%, transparent);
+    transform: translateX(-50%);
+  }
+
+  /* YEAR MARKER */
+  .year-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 40px 0 24px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .year-pill {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: .1em;
+    color: var(--gb);
+    background: var(--gd);
+    border: 2px solid rgba(82,183,136,.35);
+    border-radius: 100px;
+    padding: 6px 22px;
+  }
+
+  /* EVENT CARD */
+  .event {
+    display: flex;
+    gap: 0;
+    margin-bottom: 28px;
+    position: relative;
+    animation: fadeIn .4s ease both;
+  }
+
+  @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+  .event.left { flex-direction: row-reverse; }
+
+  .event-spacer { flex: 1; }
+
+  .event-dot-wrap {
+    width: 56px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 20px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .event-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--or);
+    border: 3px solid var(--gd);
+    box-shadow: 0 0 0 2px var(--or);
+    flex-shrink: 0;
+  }
+
+  .event-dot.bushfire { background: #e05520; box-shadow: 0 0 0 2px #e05520; }
+  .event-dot.flood { background: #3b8bd4; box-shadow: 0 0 0 2px #3b8bd4; }
+  .event-dot.cyclone { background: #7b5ea7; box-shadow: 0 0 0 2px #7b5ea7; }
+  .event-dot.pandemic { background: #52b788; box-shadow: 0 0 0 2px #52b788; }
+  .event-dot.heatwave { background: #f0a500; box-shadow: 0 0 0 2px #f0a500; }
+  .event-dot.supply { background: #c85a00; box-shadow: 0 0 0 2px #c85a00; }
+
+  .event-card {
+    flex: 1;
+    background: rgba(255,255,255,.04);
+    border: 1.5px solid rgba(255,255,255,.08);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--tr);
+  }
+
+  .event-card:hover { border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); transform: translateY(-2px); }
+  .event-card.expanded { border-color: rgba(200,90,0,.4); }
+
+  .event-card.bushfire { border-left: 3px solid #e05520; }
+  .event-card.flood { border-left: 3px solid #3b8bd4; }
+  .event-card.cyclone { border-left: 3px solid #7b5ea7; }
+  .event-card.pandemic { border-left: 3px solid #52b788; }
+  .event-card.heatwave { border-left: 3px solid #f0a500; }
+  .event-card.supply { border-left: 3px solid #c85a00; }
+  .event.left .event-card { border-left: none; }
+  .event.left .event-card.bushfire { border-right: 3px solid #e05520; }
+  .event.left .event-card.flood { border-right: 3px solid #3b8bd4; }
+  .event.left .event-card.cyclone { border-right: 3px solid #7b5ea7; }
+  .event.left .event-card.pandemic { border-right: 3px solid #52b788; }
+  .event.left .event-card.heatwave { border-right: 3px solid #f0a500; }
+  .event.left .event-card.supply { border-right: 3px solid #c85a00; }
+
+  .event-header { padding: 16px 18px; }
+
+  .event-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+
+  .event-type {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+
+  .event-type.bushfire { background: rgba(224,85,32,.15); color: #e05520; }
+  .event-type.flood { background: rgba(59,139,212,.15); color: #3b8bd4; }
+  .event-type.cyclone { background: rgba(123,94,167,.15); color: #7b5ea7; }
+  .event-type.pandemic { background: rgba(82,183,136,.15); color: #52b788; }
+  .event-type.heatwave { background: rgba(240,165,0,.15); color: #f0a500; }
+  .event-type.supply { background: rgba(200,90,0,.15); color: #c85a00; }
+
+  .event-date { font-size: 12px; color: var(--mu); font-weight: 300; }
+
+  .event-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .event-tagline { font-size: 13px; font-weight: 300; color: rgba(255,255,255,.65); line-height: 1.5; }
+
+  .event-stats {
+    display: flex;
+    gap: 0;
+    border-top: 1px solid rgba(255,255,255,.06);
+    margin-top: 12px;
+  }
+
+  .stat {
+    flex: 1;
+    padding: 10px 14px;
+    border-right: 1px solid rgba(255,255,255,.06);
+  }
+
+  .stat:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--or);
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .stat-label { font-size: 11px; color: var(--mu); line-height: 1.3; }
+
+  /* EXPANDED CONTENT */
+  .event-body { display: none; padding: 0 18px 18px; border-top: 1px solid rgba(255,255,255,.06); margin-top: 0; }
+  .event-card.expanded .event-body { display: block; }
+
+  .event-desc {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255,255,255,.78);
+    line-height: 1.7;
+    margin: 14px 0;
+  }
+
+  .lessons-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--or);
+    margin-bottom: 10px;
+    margin-top: 16px;
+  }
+
+  .lessons { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+
+  .lesson {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: rgba(255,255,255,.75);
+    line-height: 1.5;
+  }
+
+  .lesson::before {
+    content: '→';
+    color: var(--gb);
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .event-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+
+  .event-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 5px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: var(--tr);
+  }
+
+  .event-link.wiki { background: rgba(82,183,136,.12); border: 1px solid rgba(82,183,136,.3); color: var(--gb); }
+  .event-link.wiki:hover { background: rgba(82,183,136,.2); }
+  .event-link.shop { background: rgba(200,90,0,.12); border: 1px solid rgba(200,90,0,.3); color: var(--or); }
+  .event-link.shop:hover { background: rgba(200,90,0,.2); }
+
+  /* HIDDEN */
+  .event.hidden { display: none; }
+
+  /* FOOTER CTA */
+  .footer-cta {
+    text-align: center;
+    margin-top: 56px;
+    padding: 36px;
+    background: rgba(255,255,255,.03);
+    border: 1.5px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+  }
+
+  .footer-cta-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .footer-cta-title span { color: var(--or); }
+
+  .footer-cta-sub { font-size: 15px; font-weight: 300; color: var(--mu); line-height: 1.6; max-width: 480px; margin: 0 auto 24px; }
+
+  .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  .btn { display: inline-block; padding: 14px 28px; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; transition: var(--tr); }
+  .btn-primary { background: var(--or); color: #fff; }
+  .btn-primary:hover { background: var(--orl); transform: translateY(-1px); }
+  .btn-secondary { background: transparent; border: 1.5px solid var(--gb); color: var(--gb); }
+  .btn-secondary:hover { background: rgba(82,183,136,.1); }
+
+  /* MOBILE */
+  @media (max-width: 600px) {
+    .timeline::before { left: 20px; }
+    .event, .event.left { flex-direction: row; }
+    .event-dot-wrap { width: 40px; }
+    .event-spacer { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdr">
+    <div class="hdr-brand">Survival Storehouse Australia — Est. 2009</div>
+    <h1 class="hdr-title">Australian<br><span>Emergency</span><br>Timeline</h1>
+    <p class="hdr-sub">Every major disaster Australia has faced since 2000. What happened, what it cost, and what each one teaches us about being prepared.</p>
+    <div class="hdr-note">Click any event to see the preparedness lessons — and what you would have needed.</div>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-type="all" onclick="filter('all',this)">All Events</button>
+    <button class="filter-btn" data-type="bushfire" onclick="filter('bushfire',this)">🔥 Bushfire</button>
+    <button class="filter-btn" data-type="flood" onclick="filter('flood',this)">🌊 Flood</button>
+    <button class="filter-btn" data-type="cyclone" onclick="filter('cyclone',this)">🌀 Cyclone</button>
+    <button class="filter-btn" data-type="heatwave" onclick="filter('heatwave',this)">☀️ Heatwave</button>
+    <button class="filter-btn" data-type="pandemic" onclick="filter('pandemic',this)">🦠 Pandemic</button>
+    <button class="filter-btn" data-type="supply" onclick="filter('supply',this)">⛽ Supply Crisis</button>
+  </div>
+
+  <div class="timeline" id="timeline"></div>
+
+  <div class="footer-cta">
+    <div class="footer-cta-title">Australia's next emergency<br><span>is already coming.</span></div>
+    <p class="footer-cta-sub">Every event on this timeline caught most Australians unprepared. Don't wait for the next one.</p>
+    <div class="cta-btns">
+      <a href="https://survivalstorehouse.com/kit-finder" class="btn btn-primary">Find My Kit →</a>
+      <a href="https://survivalstorehouse.com/72-hour-checklist" class="btn btn-secondary">Check My Readiness</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const events = [
+  {
+    year: 2000,
+    type: 'heatwave',
+    date: 'January 2000',
+    title: 'Sydney Heatwave',
+    tagline: 'Record temperatures paralysed Sydney during the Olympics preparation period.',
+    stats: [{ n:'47°C', l:'Peak temperature' }, { n:'500+', l:'Heat-related deaths' }, { n:'3 days', l:'Duration of extreme heat' }],
+    desc: 'A prolonged heatwave struck Sydney and NSW in early 2000, with temperatures reaching record levels. Hospitals were overwhelmed, power grids strained, and elderly Australians bore the heaviest toll. Air conditioning demand caused rolling blackouts across the state.',
+    lessons: ['Heat kills faster than almost any other emergency — have a plan for cooling', 'Power outages during heatwaves are common — never rely solely on electric cooling', 'Store enough water for drinking and cooling — 4L per person per day minimum', 'Know where your nearest cool refuge is before you need it'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Hot_Weather_Survival',
+    shop: 'https://survivalstorehouse.com/shop-1'
+  },
+  {
+    year: 2003,
+    type: 'bushfire',
+    date: 'January 2003',
+    title: 'Canberra Firestorm',
+    tagline: 'A wall of fire destroyed 500 homes in Australia\'s capital in under two hours.',
+    stats: [{ n:'4', l:'Lives lost' }, { n:'500', l:'Homes destroyed' }, { n:'160,000ha', l:'Burnt' }],
+    desc: 'On 18 January 2003, multiple fires merged into a single catastrophic firestorm that struck the western suburbs of Canberra with almost no warning. Residents had minutes to flee. The speed of the fire overwhelmed emergency services and exposed how quickly conditions can become unsurvivable.',
+    lessons: ['Fires can travel faster than you can drive — leave early, never wait and see', 'A grab-and-go bag ready at the door saves lives when you have minutes', 'Know two evacuation routes — the fire may block your usual way out', 'Keep the car facing the street with a full tank during fire danger periods'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Bushfire_Survival',
+    shop: 'https://survivalstorehouse.com/shop-1/ols/products/tactical-tin'
+  },
+  {
+    year: 2006,
+    type: 'heatwave',
+    date: 'January 2006',
+    title: 'Victorian Heatwave',
+    tagline: 'A 13-day heatwave across Victoria killed hundreds and overwhelmed health services.',
+    stats: [{ n:'374', l:'Excess deaths' }, { n:'13 days', l:'Duration' }, { n:'$100M+', l:'Economic cost' }],
+    desc: 'Victoria experienced an extraordinary 13-day heatwave in early 2006. The sustained heat — not a single extreme day but weeks of relentless warmth — caused hundreds of excess deaths, particularly among the elderly. It demonstrated that duration matters as much as peak temperature.',
+    lessons: ['Extended heat is more deadly than a single hot day — plan for multi-day events', 'Check on elderly neighbours every day during a heatwave', 'Have battery-powered fans — power outages happen exactly when you need cooling most', 'Know the signs of heat exhaustion and heatstroke'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Exposure_to_Extreme_Heat_or_Cold',
+    shop: 'https://survivalstorehouse.com/shop-1'
+  },
+  {
+    year: 2009,
+    type: 'bushfire',
+    date: '7 February 2009',
+    title: 'Black Saturday',
+    tagline: 'Australia\'s worst peacetime disaster. 173 dead, 2,000 homes destroyed in a single day.',
+    stats: [{ n:'173', l:'Lives lost' }, { n:'2,029', l:'Homes destroyed' }, { n:'450,000ha', l:'Burnt' }],
+    desc: 'Black Saturday remains the deadliest natural disaster in Australian history. On a day of catastrophic fire danger — 46°C, 100km/h winds, years of drought — fires ignited across Victoria and killed 173 people. Many died in their cars trying to evacuate. Entire communities were wiped out in minutes. The Royal Commission that followed fundamentally changed how Australia prepares for fire.',
+    lessons: ['Leaving early is always the right decision on catastrophic fire danger days', 'Staying to defend is only viable with full preparation — most people are not prepared', 'Have a written household plan with two meeting points if separated', 'Never shelter in a car — find a solid brick building or open space away from trees'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Black_Saturday_Bushfires',
+    shop: 'https://survivalstorehouse.com/shop-1/ols/products/battle-box-long-term-survival-kit-in-authentic-military-ammo-tin'
+  },
+  {
+    year: 2010,
+    type: 'flood',
+    date: 'December 2010 — January 2011',
+    title: 'Queensland Floods',
+    tagline: 'Three quarters of Queensland declared a disaster zone. Toowoomba flash flood described as an inland tsunami.',
+    stats: [{ n:'35', l:'Lives lost' }, { n:'200,000', l:'People affected' }, { n:'$2.38B', l:'Insured losses' }],
+    desc: 'Driven by a La Niña weather pattern and record rainfall, Queensland experienced its worst flooding in decades. The Toowoomba flash flood on 10 January 2011 sent a wall of water through the CBD with almost no warning, killing twelve people in minutes. Downstream, the Lockyer Valley was devastated. Brisbane flooded for the first time since 1974.',
+    lessons: ['Flash floods can arrive in minutes — know your local flood risk before the wet season', 'Floodwater is contaminated — do not walk or drive through it', 'Have documents in a waterproof bag at all times during flood risk periods', 'If it\'s flooded, forget it — more people die trying to cross floodwater than from the flood itself'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Dangers_of_Flood_Water',
+    shop: 'https://survivalstorehouse.com/shop-1/ols/products/the-ready-kit'
+  },
+  {
+    year: 2011,
+    type: 'cyclone',
+    date: '3 February 2011',
+    title: 'Cyclone Yasi',
+    tagline: 'Category 5. The most powerful cyclone to hit Queensland since 1918.',
+    stats: [{ n:'Cat 5', l:'Peak intensity' }, { n:'285km/h', l:'Wind gusts' }, { n:'1', l:'Direct death' }],
+    desc: 'Cyclone Yasi made landfall near Mission Beach as one of the most powerful cyclones ever recorded in Australia. Wind gusts reached 285km/h. The relatively low death toll — just one direct fatality — was the result of mass evacuation of over 10,000 people. It was a masterclass in how preparation and early evacuation saves lives, even against a catastrophic storm.',
+    lessons: ['Mass evacuation works — the low death toll proved it beyond doubt', 'Leave at least 48 hours before cyclone landfall — roads close and fuel runs out', 'A full tank of fuel and a packed bag means you can leave the moment the order comes', 'Cyclone shelters save lives — know where your nearest one is'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Cyclone_Preparedness_for_Australians',
+    shop: 'https://survivalstorehouse.com/shop-1/ols/products/battle-box-long-term-survival-kit-in-authentic-military-ammo-tin'
+  },
+  {
+    year: 2019,
+    type: 'bushfire',
+    date: 'September 2019 — March 2020',
+    title: 'Black Summer',
+    tagline: 'The fire season that shocked the world. 18.6 million hectares. 3 billion animals killed.',
+    stats: [{ n:'33', l:'Lives lost directly' }, { n:'18.6M ha', l:'Burnt' }, { n:'3 billion', l:'Animals killed' }],
+    desc: 'Black Summer was unprecedented in scale. Fires burned continuously for months across NSW, Victoria, South Australia and Queensland. Smoke blanketed Sydney, Canberra and Melbourne for weeks. International news coverage brought global attention to Australia\'s fire risk. The scale of the disaster — 33 direct deaths, hundreds more from smoke — permanently changed how Australians think about fire season.',
+    lessons: ['Smoke is a serious health emergency — have N95 masks and an indoor air plan', 'Fire seasons are extending — preparation can\'t start in November anymore', 'App-based emergency alerts work — download Hazards Near Me or your state equivalent', 'Mental health after a disaster is a real preparedness consideration'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Bushfire_Survival',
+    shop: 'https://survivalstorehouse.com/shop-1/ols/products/battle-box-long-term-survival-kit-in-authentic-military-ammo-tin'
+  },
+  {
+    year: 2020,
+    type: 'pandemic',
+    date: 'March 2020 — 2022',
+    title: 'COVID-19 Pandemic',
+    tagline: 'Empty supermarket shelves. Lockdowns without warning. Australia\'s supply chain exposed.',
+    stats: [{ n:'24hrs', l:'Before shelves emptied' }, { n:'112 days', l:'Melbourne\'s longest lockdown' }, { n:'Millions', l:'Australians isolated' }],
+    desc: 'COVID-19 was the emergency that turned mainstream Australians into preppers. Within 24 hours of the pandemic declaration, supermarket shelves were stripped of toilet paper, pasta, rice and canned goods. Lockdowns came with hours of notice. For the first time, millions of ordinary Australians understood what it felt like to be unable to leave home and running out of supplies.',
+    lessons: ['A two-week food and supply buffer protects against any supply disruption', 'Long shelf life food is not just for survivalists — it\'s basic household insurance', 'Lockdowns can happen with very little notice — be ready to shelter in place', 'Medications, prescription supplies and cash need to be stockpiled'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Supply_Chain_Disruptions',
+    shop: 'https://survivalstorehouse.com/shop-1/ols/products/24-pack-high-energy-biscuits'
+  },
+  {
+    year: 2022,
+    type: 'flood',
+    date: 'February — March 2022',
+    title: 'South-East Queensland & NSW Floods',
+    tagline: 'The worst flooding in a generation hit Australia\'s most populated coastal corridor.',
+    stats: [{ n:'23', l:'Lives lost' }, { n:'13,000+', l:'Homes damaged' }, { n:'$4.3B', l:'Insured losses' }],
+    desc: 'Ex-Tropical Cyclone Seth drove catastrophic rainfall across South-East Queensland and Northern NSW. Lismore recorded its worst flood in history, completely overwhelming the levee. Thousands of residents were stranded. The community-led rescue effort — with residents using kayaks and boats to reach trapped neighbours — became the defining image of the disaster.',
+    lessons: ['Community networks save lives when emergency services are overwhelmed', 'Know how to signal for help if trapped — whistle, bright clothing, mirror', 'Melioidosis risk rises sharply after flooding — wear boots and cover cuts', 'Lismore had flooded before — know your area\'s flood history before buying or renting'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Melioidosis_-_What_It_Is_and_How_to_Stay_Safe_After_Flooding',
+    shop: 'https://survivalstorehouse.com/shop-1/ols/products/the-ready-kit'
+  },
+  {
+    year: 2023,
+    type: 'cyclone',
+    date: 'August 2023',
+    title: 'Cyclone Ellie & NT Flooding',
+    tagline: 'Katherine and the Daly River cut off for weeks. Roads impassable, supplies exhausted.',
+    stats: [{ n:'Weeks', l:'Communities isolated' }, { n:'500+', l:'Residents evacuated' }, { n:'Months', l:'Road recovery time' }],
+    desc: 'Cyclone Ellie and associated monsoonal flooding isolated large parts of the Northern Territory for weeks. Communities along the Daly River were cut off from resupply. The flooding demonstrated how quickly remote Australians can find themselves completely self-reliant, with no road access and limited air supply capacity.',
+    lessons: ['Remote communities need months of supplies, not days', 'Water purification is essential when floodwater contaminates local supplies', 'Communication equipment is as critical as food and water in remote areas', 'Plan for at least 30 days of supplies if you live or travel in remote Australia'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Outback_Travel_Essentials',
+    shop: 'https://survivalstorehouse.com/shop-1'
+  },
+  {
+    year: 2024,
+    type: 'cyclone',
+    date: 'December 2024 — January 2025',
+    title: 'Cyclone Jasper & Far North Queensland Floods',
+    tagline: 'Cairns region cut off. Record rainfall. Roads washed away for months.',
+    stats: [{ n:'Weeks', l:'Communities isolated' }, { n:'700mm', l:'Rainfall in 24 hours' }, { n:'Months', l:'Road repairs' }],
+    desc: 'Cyclone Jasper made landfall near Wujal Wujal in December 2024, triggering catastrophic flooding across Far North Queensland. Record rainfall — over 700mm in 24 hours in some areas — washed away roads and isolated communities for weeks. Indigenous communities bore the heaviest impact. Recovery took months.',
+    lessons: ['Even category 2 cyclones can cause catastrophic flooding', '700mm of rain in 24 hours can destroy road infrastructure entirely', 'Indigenous and remote communities are always hardest hit and slowest to recover', 'Northern Australians should treat wet season as a six-month preparedness period'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Cyclone_Preparedness_for_Australians',
+    shop: 'https://survivalstorehouse.com/shop-1/ols/products/battle-box-long-term-survival-kit-in-authentic-military-ammo-tin'
+  },
+  {
+    year: 2025,
+    type: 'supply',
+    date: 'March 2025',
+    title: 'East Coast Fuel & Supply Disruptions',
+    tagline: 'A foretaste of what a real supply chain crisis looks like for ordinary Australians.',
+    stats: [{ n:'26 days', l:'Australia\'s fuel reserves' }, { n:'600+', l:'Stations affected' }, { n:'$2.40/L', l:'Petrol prices' }],
+    desc: 'Disruptions to east coast fuel supply chains in early 2025 caused shortages at hundreds of service stations. The crisis exposed Australia\'s structural vulnerability — we have among the lowest fuel reserves of any developed nation. For many Australians, it was the first time they\'d experienced a supply shortage that directly affected daily life.',
+    lessons: ['Keep your fuel tank above half at all times — not just in a crisis', 'Australia has only 26 days of fuel reserves — less than almost any comparable nation', 'A fuel shortage cascades into food shortages within days through logistics disruption', 'Store a small emergency fuel supply within legal limits for your state'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Australia_Fuel_Shortage_Practical_Household_Guide',
+    shop: 'https://survivalstorehouse.com/shop-1/ols/products/24-pack-high-energy-biscuits'
+  },
+  {
+    year: 2026,
+    type: 'cyclone',
+    date: 'March 2026',
+    title: 'Cyclone Narelle',
+    tagline: 'Category 5. Four landfalls. Australia\'s longest-tracking cyclone in a decade.',
+    stats: [{ n:'Cat 5', l:'Peak intensity' }, { n:'4', l:'Landfalls' }, { n:'6,500km', l:'Total track distance' }],
+    desc: 'Cyclone Narelle formed in the Coral Sea on 17 March 2026 and tracked across Queensland, the Northern Territory and Western Australia — making four landfalls over eight days. At its peak it was one of the most powerful cyclones to hit Australia since Yasi. The storm knocked Chevron\'s Wheatstone LNG plant offline for weeks, worsening the fuel crisis. Queensland Health issued urgent melioidosis warnings during flood recovery.',
+    lessons: ['Australia can face simultaneous cyclone and supply chain crises at the same time', 'Melioidosis is a real and serious risk during flood cleanup in northern Australia', 'LNG infrastructure damage can directly impact fuel supply across the entire country', 'Preparedness for one disaster protects you from the cascade of events that follow'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Cyclone_Preparedness_for_Australians',
+    shop: 'https://survivalstorehouse.com/shop-1/ols/products/battle-box-long-term-survival-kit-in-authentic-military-ammo-tin'
+  },
+  {
+    year: 2026,
+    type: 'supply',
+    date: 'February — April 2026',
+    title: 'Australia Fuel Shortage Crisis',
+    tagline: '600+ service stations dry. Iran blockade triggers Australia\'s worst fuel crisis in decades.',
+    stats: [{ n:'600+', l:'Stations out of fuel' }, { n:'26 days', l:'National reserves' }, { n:'$2.40/L', l:'Avg petrol price' }],
+    desc: 'Iran\'s closure of the Strait of Hormuz in late February 2026 triggered a cascading global energy crisis. Australia, with among the lowest strategic fuel reserves in the developed world, was among the hardest hit. Over 600 service stations ran dry. The government released strategic reserves and lowered fuel quality standards while six tankers were dispatched from China and Malaysia.',
+    lessons: ['The Strait of Hormuz carries one-fifth of the world\'s oil — its closure affects Australia directly', 'Australia\'s 26-day fuel reserve is a national vulnerability that has never been fixed', 'Panic buying accelerates shortages — having supplies already means you don\'t need to panic buy', 'A fuel crisis becomes a food crisis within days — long shelf life food is your buffer'],
+    wiki: 'https://wiki.survivalstorehouse.com/wiki/Australia_Fuel_Shortage_Practical_Household_Guide',
+    shop: 'https://survivalstorehouse.com/shop-1/ols/products/24-pack-high-energy-biscuits'
+  },
+];
+
+let activeFilter = 'all';
+
+function render(filtered) {
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = '';
+  let lastYear = null;
+  let side = 0;
+
+  filtered.forEach((ev, i) => {
+    if (ev.year !== lastYear) {
+      const ym = document.createElement('div');
+      ym.className = 'year-marker';
+      ym.innerHTML = `<div class="year-pill">${ev.year}</div>`;
+      tl.appendChild(ym);
+      lastYear = ev.year;
+      side = 0;
+    }
+
+    const div = document.createElement('div');
+    div.className = `event ${side % 2 === 1 ? 'left' : ''}`;
+    div.style.animationDelay = (i * 0.05) + 's';
+
+    const statsHtml = ev.stats.map(s => `
+      <div class="stat">
+        <div class="stat-num">${s.n}</div>
+        <div class="stat-label">${s.l}</div>
+      </div>`).join('');
+
+    const lessonsHtml = ev.lessons.map(l => `<div class="lesson">${l}</div>`).join('');
+
+    div.innerHTML = `
+      ${side % 2 === 1 ? '<div class="event-spacer"></div>' : ''}
+      <div class="event-dot-wrap"><div class="event-dot ${ev.type}"></div></div>
+      <div class="event-card ${ev.type}" onclick="toggleCard(this)">
+        <div class="event-header">
+          <div class="event-meta">
+            <span class="event-type ${ev.type}">${ev.type}</span>
+            <span class="event-date">${ev.date}</span>
+          </div>
+          <div class="event-title">${ev.title}</div>
+          <div class="event-tagline">${ev.tagline}</div>
+          <div class="event-stats">${statsHtml}</div>
+        </div>
+        <div class="event-body">
+          <div class="event-desc">${ev.desc}</div>
+          <div class="lessons-title">What this teaches us about preparedness</div>
+          <div class="lessons">${lessonsHtml}</div>
+          <div class="event-links">
+            <a href="${ev.wiki}" class="event-link wiki" target="_blank">📖 Read Wiki Guide</a>
+            <a href="${ev.shop}" class="event-link shop" target="_blank">🛒 Shop Relevant Kit</a>
+          </div>
+        </div>
+      </div>
+      ${side % 2 === 0 ? '<div class="event-spacer"></div>' : ''}
+    `;
+
+    tl.appendChild(div);
+    side++;
+  });
+}
+
+function toggleCard(card) {
+  card.classList.toggle('expanded');
+}
+
+function filter(type, btn) {
+  activeFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = type === 'all' ? events : events.filter(e => e.type === type);
+  render(filtered);
+}
+
+render(events);
+</script>
+</body>
+</html>

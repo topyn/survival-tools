@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Your Emergency Kit — Survival Storehouse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-deep: #0d2318;
+    --green-mid: #1a3a2a;
+    --green-light: #2d6a4f;
+    --green-bright: #52b788;
+    --orange: #c85a00;
+    --orange-light: #e07020;
+    --cream: #f4f1eb;
+    --cream-dark: #e8e3d8;
+    --white: #ffffff;
+    --text-muted: rgba(255,255,255,0.55);
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--green-deep);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Camo texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 200px 120px at 10% 20%, rgba(42,55,28,0.4) 0%, transparent 100%),
+      radial-gradient(ellipse 150px 200px at 30% 60%, rgba(28,38,18,0.3) 0%, transparent 100%),
+      radial-gradient(ellipse 250px 100px at 70% 15%, rgba(38,50,22,0.35) 0%, transparent 100%),
+      radial-gradient(ellipse 120px 180px at 85% 70%, rgba(50,65,30,0.3) 0%, transparent 100%),
+      radial-gradient(ellipse 180px 140px at 50% 90%, rgba(35,48,20,0.35) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 32px 0 0;
+    text-align: center;
+  }
+
+  .header-brand {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--green-bright);
+    margin-bottom: 16px;
+  }
+
+  .header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(48px, 8vw, 72px);
+    font-weight: 900;
+    line-height: 0.88;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+
+  .header-title span { color: var(--orange); }
+
+  .header-sub {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 480px;
+    margin: 0 auto 32px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 40px;
+    padding: 0 4px;
+  }
+
+  .progress-step {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: var(--transition);
+  }
+
+  .progress-step.active { background: var(--orange); }
+  .progress-step.done { background: var(--green-bright); }
+
+  .progress-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* QUESTION CARD */
+  .quiz-wrap {
+    animation: fadeUp 0.4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 10px;
+  }
+
+  .question-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 800;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    margin-bottom: 28px;
+  }
+
+  /* ANSWER OPTIONS */
+  .options {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: left;
+    width: 100%;
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--orange);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .option:hover {
+    border-color: rgba(200,90,0,0.5);
+    background: rgba(200,90,0,0.08);
+    transform: translateX(4px);
+  }
+
+  .option.selected {
+    border-color: var(--orange);
+    background: rgba(200,90,0,0.12);
+  }
+
+  .option.selected .option-icon { background: var(--orange); }
+
+  .option-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    transition: var(--transition);
+    position: relative;
+    z-index: 1;
+  }
+
+  .option-content { position: relative; z-index: 1; flex: 1; }
+
+  .option-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .option-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .option-check {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    position: relative;
+    z-index: 1;
+    font-size: 12px;
+  }
+
+  .option.selected .option-check {
+    background: var(--orange);
+    border-color: var(--orange);
+  }
+
+  /* NAV BUTTONS */
+  .nav-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .btn-back {
+    padding: 14px 24px;
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    color: var(--text-muted);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .btn-back:hover {
+    border-color: rgba(255,255,255,0.3);
+    color: var(--white);
+  }
+
+  .btn-next {
+    flex: 1;
+    padding: 16px 28px;
+    background: var(--orange);
+    border: none;
+    border-radius: 6px;
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .btn-next.ready {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .btn-next.ready:hover {
+    background: var(--orange-light);
+    transform: translateY(-1px);
+  }
+
+  /* RESULTS */
+  .result-wrap {
+    animation: fadeUp 0.5s ease both;
+    padding-bottom: 60px;
+  }
+
+  .result-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .result-badge {
+    display: inline-block;
+    background: rgba(82,183,136,0.15);
+    border: 1.5px solid rgba(82,183,136,0.4);
+    border-radius: 100px;
+    padding: 8px 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green-bright);
+    margin-bottom: 16px;
+  }
+
+  .result-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(36px, 7vw, 58px);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.9;
+    margin-bottom: 12px;
+  }
+
+  .result-title span { color: var(--orange); }
+
+  .result-subtitle {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* PRODUCT CARD */
+  .product-card {
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(200,90,0,0.4);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .product-card.primary {
+    border-color: var(--orange);
+    background: rgba(200,90,0,0.06);
+  }
+
+  .product-card-header {
+    padding: 20px 24px 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .product-recommended {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 6px;
+  }
+
+  .product-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .product-tagline {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .product-price {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--orange);
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  .product-price span {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-muted);
+    display: block;
+    text-align: right;
+    margin-top: 2px;
+  }
+
+  .product-features {
+    padding: 0 24px 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+  }
+
+  .feature-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green-bright);
+    flex-shrink: 0;
+  }
+
+  .product-card-footer {
+    padding: 14px 24px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .btn-shop {
+    flex: 1;
+    padding: 14px 20px;
+    background: var(--orange);
+    border: none;
+    border-radius: 6px;
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    transition: var(--transition);
+  }
+
+  .btn-shop:hover { background: var(--orange-light); }
+
+  .btn-shop.secondary {
+    background: transparent;
+    border: 1.5px solid rgba(200,90,0,0.4);
+    color: var(--orange);
+  }
+
+  .btn-shop.secondary:hover {
+    background: rgba(200,90,0,0.08);
+    border-color: var(--orange);
+  }
+
+  /* ADD-ON CARD */
+  .addon-card {
+    background: rgba(82,183,136,0.06);
+    border: 1.5px solid rgba(82,183,136,0.25);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .addon-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .addon-content { flex: 1; }
+
+  .addon-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 3px;
+  }
+
+  .addon-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .addon-price {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--green-bright);
+    white-space: nowrap;
+  }
+
+  .addon-rrp {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-decoration: line-through;
+    text-align: right;
+  }
+
+  /* REASON CARD */
+  .reason-wrap {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+  }
+
+  .reason-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .reason-text {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+  }
+
+  /* RESTART */
+  .restart-row {
+    text-align: center;
+    margin-top: 24px;
+  }
+
+  .btn-restart {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: underline;
+    letter-spacing: 0.04em;
+    transition: var(--transition);
+    padding: 8px;
+  }
+
+  .btn-restart:hover { color: var(--white); }
+
+  /* FOOTER */
+  .quiz-footer {
+    text-align: center;
+    padding: 24px 0 40px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin-top: 16px;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .product-features { grid-template-columns: 1fr; }
+    .product-card-footer { flex-direction: column; }
+    .btn-shop { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="header-brand">Survival Storehouse Australia — Est. 2009</div>
+    <h1 class="header-title">Build Your<br><span>Emergency Kit</span></h1>
+    <p class="header-sub">Answer 4 quick questions and we'll recommend the right kit for your situation. Takes 60 seconds.</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-step" id="p1"></div>
+    <div class="progress-step" id="p2"></div>
+    <div class="progress-step" id="p3"></div>
+    <div class="progress-step" id="p4"></div>
+    <span class="progress-label" id="progress-label">Question 1 of 4</span>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz-area"></div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    id: 'household',
+    num: '01',
+    text: 'How many people are you preparing for?',
+    options: [
+      { icon: '🧍', label: 'Just me', desc: 'Solo preparedness — compact and portable', value: 'solo' },
+      { icon: '👫', label: 'Two people', desc: 'Couple or two adults', value: 'couple' },
+      { icon: '👨‍👩‍👧', label: 'Small family', desc: '3–4 people including kids', value: 'family' },
+      { icon: '🏠', label: 'Larger household', desc: '5+ people or multigenerational home', value: 'large' },
+    ]
+  },
+  {
+    id: 'location',
+    num: '02',
+    text: 'Where do you live?',
+    options: [
+      { icon: '🏙️', label: 'City or suburbs', desc: 'Close to services, emergency response within hours', value: 'urban' },
+      { icon: '🏘️', label: 'Regional town', desc: 'Some distance from major services', value: 'regional' },
+      { icon: '🌾', label: 'Rural or remote', desc: 'Far from towns, self-reliant by necessity', value: 'rural' },
+      { icon: '🚗', label: 'On the road', desc: 'Travel frequently — need a car or portable kit', value: 'mobile' },
+    ]
+  },
+  {
+    id: 'concern',
+    num: '03',
+    text: "What's your biggest concern?",
+    options: [
+      { icon: '🔥', label: 'Bushfires', desc: 'Evacuation, grab-and-go, smoke and heat', value: 'fire' },
+      { icon: '🌊', label: 'Floods & cyclones', desc: 'Water, shelter, post-storm cleanup', value: 'flood' },
+      { icon: '⚡', label: 'Power outages', desc: 'Extended blackouts, grid failure', value: 'power' },
+      { icon: '⛽', label: 'Supply disruptions', desc: 'Fuel shortages, empty shelves, isolation', value: 'supply' },
+    ]
+  },
+  {
+    id: 'budget',
+    num: '04',
+    text: "What's your budget?",
+    options: [
+      { icon: '💰', label: 'Under $100', desc: 'Start small, build over time', value: 'low' },
+      { icon: '💳', label: '$100–$150', desc: 'A solid complete starter kit', value: 'mid' },
+      { icon: '🛡️', label: '$150+', desc: 'Full household protection from day one', value: 'high' },
+      { icon: '🎯', label: 'Best value', desc: "I want the most for my money", value: 'value' },
+    ]
+  }
+];
+
+const products = {
+  battle_box: {
+    name: 'Battle Box',
+    tagline: 'Complete emergency starter kit. Everything you need for the first 72 hours, ready to grab.',
+    price: '$150',
+    shipping: 'Free shipping AU-wide',
+    url: 'https://survivalstorehouse.com/shop-1/ols/products/battle-box-long-term-survival-kit-in-authentic-military-ammo-tin',
+    features: ['20-year shelf life food', '20-year shelf life water', 'Basic first aid kit', 'Authentic military ammo tin', 'Multi-tool & torch', 'Emergency sleeping bag'],
+    primary: true
+  },
+  tactical_tin: {
+    name: 'Tactical Tin',
+    tagline: 'Compact grab-and-go kit. Portable enough for the car, the office, or a backpack.',
+    price: '$125',
+    shipping: 'Free shipping AU-wide',
+    url: 'https://survivalstorehouse.com/shop-1/ols/products/tactical-tin',
+    features: ['20-year shelf life food', '20-year shelf life water', 'First aid essentials', 'Compact ammo-style tin', 'Multi-tool included', 'Lightweight & portable'],
+    primary: true
+  },
+  ready_kit: {
+    name: 'Ready Kit',
+    tagline: 'Full household emergency pack in a MOLLE utility bag. Add LifeStraw Peak for $35.',
+    price: '$125',
+    shipping: 'Free shipping AU-wide',
+    url: 'https://survivalstorehouse.com/shop-1/ols/products/the-ready-kit',
+    features: ['Long shelf life food — 2045', 'Puravai emergency water', 'Comprehensive first aid', 'MOLLE utility pack', 'Torch, compass & multi-tool', 'LifeStraw Peak add-on $35'],
+    primary: true
+  },
+  biscuits: {
+    name: '24-Pack Biscuits',
+    tagline: 'Entry-level preparedness. Start here, add more over time.',
+    price: '$96',
+    shipping: 'Free shipping AU-wide',
+    url: 'https://survivalstorehouse.com/shop-1/ols/products/24-pack-high-energy-biscuits',
+    features: ['24 bars per pack', '475 calories per bar', 'Expires 2045', 'Chocolate, Peanut, Honey Butter', 'Compact storage', 'No refrigeration needed'],
+    primary: false
+  }
+};
+
+const addon_lifestraw = {
+  icon: '💧',
+  name: 'LifeStraw Peak — Add-on',
+  desc: 'Filters 99.999% of bacteria and microplastics from any water source. RRP $50 — yours for $35 when added to the Ready Kit.',
+  price: '$35',
+  rrp: 'RRP $50'
+};
+
+let answers = {};
+let current = 0;
+
+function getRecommendation() {
+  const { household, location, concern, budget } = answers;
+  let reason = '';
+  let primary = '';
+  let secondary = '';
+  let showAddon = false;
+
+  // Logic tree
+  if (budget === 'low') {
+    primary = 'biscuits';
+    secondary = 'tactical_tin';
+    reason = "Based on your budget, starting with a 12-pack of survival biscuits is the smartest first step. They expire in 2045 — buy them once and they're ready whenever you need them. When you're ready to expand, the Tactical Tin is the logical next step.";
+  } else if (household === 'large') {
+    primary = 'battle_box';
+    secondary = 'ready_kit';
+    reason = `For a larger household, the Battle Box gives you the most complete foundation. You may want to consider two kits — one Battle Box plus a Ready Kit covers a household of 5–6 people through a 72-hour emergency.`;
+    showAddon = true;
+  } else if (location === 'mobile') {
+    primary = 'tactical_tin';
+    secondary = 'biscuits';
+    reason = "You need something portable. The Tactical Tin is designed for exactly this — compact enough for a glovebox, backpack, or under the car seat. Combined with a 12-pack of biscuits stashed at home, you've covered both scenarios.";
+  } else if (concern === 'flood' || concern === 'supply') {
+    primary = 'ready_kit';
+    secondary = 'battle_box';
+    reason = `For flood and supply disruption preparedness, the Ready Kit is the right choice — it comes in a MOLLE utility pack that's easy to grab and move quickly. We recommend adding the LifeStraw Peak for $35 (RRP $50) — it gives you personal water filtration from any water source, which is critical during floods when mains water may be compromised.`;
+    showAddon = true;
+  } else if (location === 'rural' || location === 'regional') {
+    primary = 'battle_box';
+    secondary = 'ready_kit';
+    reason = `Living ${location === 'rural' ? 'rurally' : 'regionally'} means emergency services could be hours away. The Battle Box is built for this — complete 72-hour capability in a single compact kit. Pair it with the LifeStraw Peak add-on to the Ready Kit for full water filtration capability.`;
+    showAddon = concern === 'flood';
+  } else if (budget === 'high' || household === 'family') {
+    primary = 'battle_box';
+    secondary = 'ready_kit';
+    reason = "For a family with a higher budget, the Battle Box is your best starting point — it's the most complete kit we offer. Adding a Ready Kit as a second household kit gives you full coverage for a family of 3–4 through any 72-hour emergency.";
+    showAddon = true;
+  } else {
+    // Default — mid budget, couple, urban, any concern
+    primary = 'ready_kit';
+    secondary = 'tactical_tin';
+    reason = "The Ready Kit hits the sweet spot — complete 72-hour coverage for two people in a grab-and-go MOLLE pack, with room to add the LifeStraw Peak as an add-on for water filtration. It's the kit we'd buy first.";
+    showAddon = true;
+  }
+
+  return { primary, secondary, reason, showAddon };
+}
+
+function render() {
+  const area = document.getElementById('quiz-area');
+
+  if (current >= questions.length) {
+    // Show results
+    const rec = getRecommendation();
+    const pri = products[rec.primary];
+    const sec = products[rec.secondary];
+
+    area.innerHTML = `
+      <div class="result-wrap">
+        <div class="result-header">
+          <div class="result-badge">Your recommendation is ready</div>
+          <h2 class="result-title">Your Perfect<br><span>Emergency Kit</span></h2>
+          <p class="result-subtitle">Based on your answers, here's what we recommend — and why.</p>
+        </div>
+
+        <div class="reason-wrap">
+          <div class="reason-title">Why we recommend this</div>
+          <div class="reason-text">${rec.reason}</div>
+        </div>
+
+        <div class="product-card ${pri.primary ? 'primary' : ''}">
+          <div class="product-card-header">
+            <div>
+              <div class="product-recommended">⚡ Best match for you</div>
+              <div class="product-name">${pri.name}</div>
+              <div class="product-tagline">${pri.tagline}</div>
+            </div>
+            <div>
+              <div class="product-price">${pri.price}<span>${pri.shipping}</span></div>
+            </div>
+          </div>
+          <div class="product-features">
+            ${pri.features.map(f => `<div class="feature-item"><div class="feature-dot"></div>${f}</div>`).join('')}
+          </div>
+          <div class="product-card-footer">
+            <a href="${pri.url}" class="btn-shop" target="_blank">Shop Now →</a>
+          </div>
+        </div>
+
+        ${rec.showAddon ? `
+        <div class="addon-card">
+          <div class="addon-icon">${addon_lifestraw.icon}</div>
+          <div class="addon-content">
+            <div class="addon-name">${addon_lifestraw.name}</div>
+            <div class="addon-desc">${addon_lifestraw.desc}</div>
+          </div>
+          <div>
+            <div class="addon-price">${addon_lifestraw.price}</div>
+            <div class="addon-rrp">${addon_lifestraw.rrp}</div>
+          </div>
+        </div>
+        ` : ''}
+
+        <div class="product-card">
+          <div class="product-card-header">
+            <div>
+              <div class="product-recommended" style="color:var(--green-bright)">Also consider</div>
+              <div class="product-name">${sec.name}</div>
+              <div class="product-tagline">${sec.tagline}</div>
+            </div>
+            <div>
+              <div class="product-price" style="color:var(--green-bright)">${sec.price}<span>${sec.shipping}</span></div>
+            </div>
+          </div>
+          <div class="product-features">
+            ${sec.features.map(f => `<div class="feature-item"><div class="feature-dot"></div>${f}</div>`).join('')}
+          </div>
+          <div class="product-card-footer">
+            <a href="${sec.url}" class="btn-shop secondary" target="_blank">View Product →</a>
+          </div>
+        </div>
+
+        <div class="restart-row">
+          <button class="btn-restart" onclick="restart()">← Start over with different answers</button>
+        </div>
+      </div>
+
+      <div class="quiz-footer">
+        Questions? Email us at <a href="mailto:sales@survivalstorehouse.com" style="color:var(--green-bright)">sales@survivalstorehouse.com</a>
+        or visit <a href="https://survivalstorehouse.com" style="color:var(--green-bright)">survivalstorehouse.com</a><br>
+        Australian owned since 2009 · Erina, NSW Central Coast · Free shipping Australia-wide
+      </div>
+    `;
+
+    updateProgress();
+    return;
+  }
+
+  const q = questions[current];
+  const selected = answers[q.id];
+
+  area.innerHTML = `
+    <div class="quiz-wrap" key="${current}">
+      <div class="question-num">Question ${q.num} of 04</div>
+      <div class="question-text">${q.text}</div>
+      <div class="options">
+        ${q.options.map(opt => `
+          <button class="option ${selected === opt.value ? 'selected' : ''}"
+            onclick="selectOption('${q.id}', '${opt.value}', this)">
+            <div class="option-icon">${opt.icon}</div>
+            <div class="option-content">
+              <div class="option-label">${opt.label}</div>
+              <div class="option-desc">${opt.desc}</div>
+            </div>
+            <div class="option-check">${selected === opt.value ? '✓' : ''}</div>
+          </button>
+        `).join('')}
+      </div>
+      <div class="nav-row">
+        ${current > 0 ? `<button class="btn-back" onclick="goBack()">← Back</button>` : ''}
+        <button class="btn-next ${selected ? 'ready' : ''}" id="btn-next" onclick="goNext()">
+          ${current === questions.length - 1 ? 'See My Recommendation →' : 'Next Question →'}
+        </button>
+      </div>
+    </div>
+  `;
+
+  updateProgress();
+}
+
+function updateProgress() {
+  for (let i = 0; i < 4; i++) {
+    const el = document.getElementById('p' + (i+1));
+    if (!el) continue;
+    el.className = 'progress-step';
+    if (i < current) el.classList.add('done');
+    else if (i === current) el.classList.add('active');
+  }
+  const label = document.getElementById('progress-label');
+  if (label) {
+    label.textContent = current >= 4 ? 'Complete' : `Question ${current + 1} of 4`;
+  }
+}
+
+function selectOption(qid, value, btn) {
+  answers[qid] = value;
+  document.querySelectorAll('.option').forEach(o => {
+    o.classList.remove('selected');
+    o.querySelector('.option-check').textContent = '';
+  });
+  btn.classList.add('selected');
+  btn.querySelector('.option-check').textContent = '✓';
+  const next = document.getElementById('btn-next');
+  if (next) next.classList.add('ready');
+}
+
+function goNext() {
+  const q = questions[current];
+  if (!answers[q.id]) return;
+  current++;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack() {
+  if (current > 0) {
+    current--;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function restart() {
+  answers = {};
+  current = 0;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+render();
+</script>
+</body>
+</html>

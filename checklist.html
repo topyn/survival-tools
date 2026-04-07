@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>72-Hour Emergency Kit Checklist — Survival Storehouse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gd: #0d2318; --gm: #1a3a2a; --gb: #52b788;
+    --or: #c85a00; --orl: #e07020;
+    --mu: rgba(255,255,255,0.5);
+    --tr: all 0.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  body { font-family:'Barlow',sans-serif; background:var(--gd); color:#fff; min-height:100vh; overflow-x:hidden; }
+  body::before { content:''; position:fixed; inset:0; background-image:radial-gradient(ellipse 200px 120px at 10% 20%,rgba(42,55,28,.4) 0%,transparent 100%),radial-gradient(ellipse 150px 200px at 80% 60%,rgba(28,38,18,.3) 0%,transparent 100%),radial-gradient(ellipse 250px 100px at 50% 85%,rgba(38,50,22,.35) 0%,transparent 100%); pointer-events:none; z-index:0; }
+  .wrap { max-width:760px; margin:0 auto; padding:0 20px 60px; position:relative; z-index:1; }
+
+  /* HEADER */
+  .hdr { padding:36px 0 28px; text-align:center; }
+  .hdr-brand { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.25em; text-transform:uppercase; color:var(--gb); margin-bottom:12px; }
+  .hdr-title { font-family:'Barlow Condensed',sans-serif; font-size:clamp(40px,8vw,64px); font-weight:900; line-height:.9; text-transform:uppercase; margin-bottom:12px; }
+  .hdr-title span { color:var(--or); }
+  .hdr-sub { font-size:15px; font-weight:300; color:var(--mu); line-height:1.6; max-width:480px; margin:0 auto 16px; }
+  .app-banner { display:flex; align-items:center; gap:12px; background:rgba(82,183,136,.08); border:1px solid rgba(82,183,136,.25); border-radius:8px; padding:12px 18px; margin-bottom:24px; }
+  .app-banner-text { font-size:13px; color:rgba(255,255,255,.75); line-height:1.5; flex:1; }
+  .app-banner-text strong { color:var(--gb); }
+  .app-banner-links { display:flex; flex-direction:column; gap:4px; }
+  .app-link { font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--gb); text-decoration:none; white-space:nowrap; }
+  .app-link:hover { text-decoration:underline; }
+
+  /* SCORE */
+  .score-wrap { background:rgba(255,255,255,.04); border:1.5px solid rgba(255,255,255,.1); border-radius:10px; padding:18px 22px; margin-bottom:28px; display:flex; align-items:center; gap:18px; }
+  .score-num { font-family:'Barlow Condensed',sans-serif; font-size:52px; font-weight:900; line-height:1; color:var(--or); min-width:76px; transition:color .3s; }
+  .score-num.ok { color:#f0a500; }
+  .score-num.good { color:var(--gb); }
+  .score-right { flex:1; }
+  .score-label { font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; margin-bottom:8px; }
+  .score-track { height:6px; background:rgba(255,255,255,.1); border-radius:3px; overflow:hidden; }
+  .score-fill { height:100%; border-radius:3px; background:var(--or); transition:width .5s ease,background .3s; }
+  .score-fill.ok { background:#f0a500; }
+  .score-fill.good { background:var(--gb); }
+  .score-hint { font-size:12px; color:var(--mu); margin-top:6px; }
+
+  /* CATEGORIES */
+  .cat { margin-bottom:16px; border:1.5px solid rgba(255,255,255,.08); border-radius:10px; overflow:hidden; }
+  .cat-hdr { padding:13px 18px; display:flex; align-items:center; gap:12px; cursor:pointer; background:rgba(255,255,255,.03); user-select:none; }
+  .cat-hdr:hover { background:rgba(255,255,255,.05); }
+  .cat-icon { font-size:20px; flex-shrink:0; }
+  .cat-name { font-family:'Barlow Condensed',sans-serif; font-size:19px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; flex:1; }
+  .cat-prog { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; color:var(--mu); white-space:nowrap; }
+  .cat-prog.done { color:var(--gb); }
+  .cat-chev { font-size:10px; color:var(--mu); transition:transform .2s; }
+  .cat.open .cat-chev { transform:rotate(90deg); }
+  .cat-items { display:none; padding:4px 0 10px; }
+  .cat.open .cat-items { display:block; }
+
+  /* ITEMS */
+  .item { display:flex; align-items:flex-start; gap:12px; padding:9px 18px; cursor:pointer; transition:background .15s; }
+  .item:hover { background:rgba(255,255,255,.03); }
+  .chk { width:21px; height:21px; border-radius:5px; border:1.5px solid rgba(255,255,255,.2); flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:var(--tr); margin-top:1px; font-size:12px; }
+  .item.on .chk { background:var(--gb); border-color:var(--gb); color:#0d2318; }
+  .item-body { flex:1; }
+  .item-name { font-size:14px; font-weight:500; line-height:1.3; transition:color .15s; }
+  .item.on .item-name { color:rgba(255,255,255,.35); text-decoration:line-through; text-decoration-color:rgba(255,255,255,.2); }
+  .item-note { font-size:11px; font-weight:300; color:var(--mu); line-height:1.4; margin-top:2px; }
+  .ess { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--or); background:rgba(200,90,0,.1); border:1px solid rgba(200,90,0,.25); border-radius:3px; padding:2px 5px; flex-shrink:0; margin-top:2px; }
+
+  /* GAPS */
+  .gaps { margin-top:28px; background:rgba(200,90,0,.06); border:1.5px solid rgba(200,90,0,.3); border-radius:10px; padding:20px 22px; margin-bottom:16px; display:none; }
+  .gaps-title { font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--or); margin-bottom:12px; }
+  .gaps-list { list-style:none; display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+  .gaps-list li { font-size:13px; color:rgba(255,255,255,.75); display:flex; align-items:center; gap:8px; }
+  .gaps-list li::before { content:'!'; display:flex; align-items:center; justify-content:center; width:16px; height:16px; border-radius:50%; background:var(--or); font-size:10px; font-weight:700; color:#fff; flex-shrink:0; }
+  .shop-note { font-size:12px; color:var(--mu); line-height:1.6; border-top:1px solid rgba(255,255,255,.08); padding-top:12px; }
+  .shop-note a { color:var(--gb); text-decoration:none; }
+
+  /* APP CALLOUT */
+  .app-callout { background:rgba(82,183,136,.06); border:1.5px solid rgba(82,183,136,.2); border-radius:10px; padding:18px 22px; margin-top:16px; }
+  .app-callout-title { font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--gb); margin-bottom:8px; }
+  .app-callout-text { font-size:13px; color:rgba(255,255,255,.7); line-height:1.6; }
+  .app-callout-text a { color:var(--gb); text-decoration:none; }
+
+  /* BUTTONS */
+  .btn-row { display:flex; gap:12px; margin-top:20px; }
+  .btn-print { flex:1; padding:15px 22px; background:var(--or); border:none; border-radius:6px; color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:17px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; transition:var(--tr); }
+  .btn-print:hover { background:var(--orl); transform:translateY(-1px); }
+  .btn-reset { padding:15px 22px; background:transparent; border:1.5px solid rgba(255,255,255,.15); border-radius:6px; color:var(--mu); font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; transition:var(--tr); }
+  .btn-reset:hover { border-color:rgba(255,255,255,.3); color:#fff; }
+  .btn-quiz { display:block; text-align:center; padding:15px 22px; background:var(--gm); border:1.5px solid var(--gb); border-radius:6px; color:var(--gb); font-family:'Barlow Condensed',sans-serif; font-size:17px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; text-decoration:none; transition:var(--tr); margin-top:12px; }
+  .btn-quiz:hover { background:rgba(82,183,136,.15); }
+
+  /* ── PRINT ── */
+  @media print {
+    * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+    body { background:#fff !important; color:#1a1a1a !important; }
+    body::before { display:none; }
+    .wrap { display:none !important; }
+    .prt { display:block !important; font-family:'Barlow',Georgia,serif; color:#1a1a1a; padding:12px 20px; }
+    .prt-hdr { display:flex; align-items:flex-start; justify-content:space-between; padding-bottom:14px; border-bottom:3px solid #1a3a2a; margin-bottom:18px; }
+    .prt-logo { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:900; text-transform:uppercase; letter-spacing:.06em; color:#1a3a2a; line-height:1; }
+    .prt-logo-sub { font-size:10px; color:#666; letter-spacing:.1em; text-transform:uppercase; margin-top:4px; }
+    .prt-title { font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:900; text-transform:uppercase; color:#1a1a1a; text-align:right; }
+    .prt-date { font-size:10px; color:#888; text-align:right; margin-top:3px; }
+    .prt-score { display:flex; align-items:center; gap:18px; background:#f4f1eb; border:1px solid #ddd; border-radius:6px; padding:12px 16px; margin-bottom:16px; }
+    .prt-score-num { font-family:'Barlow Condensed',sans-serif; font-size:38px; font-weight:900; color:#c85a00; line-height:1; min-width:64px; }
+    .prt-score-label { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; text-transform:uppercase; }
+    .prt-score-sub { font-size:11px; color:#666; margin-top:2px; }
+    .prt-gaps { background:#fff8f4; border:1.5px solid #c85a00; border-radius:6px; padding:12px 16px; margin-bottom:14px; break-inside:avoid; }
+    .prt-gaps-title { font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.15em; color:#c85a00; margin-bottom:8px; }
+    .prt-gaps-grid { display:grid; grid-template-columns:1fr 1fr; gap:3px 18px; list-style:none; }
+    .prt-gaps-grid li { font-size:10px; color:#444; display:flex; align-items:center; gap:5px; }
+    .prt-gaps-grid li::before { content:'!'; display:inline-flex; align-items:center; justify-content:center; width:12px; height:12px; border-radius:50%; background:#c85a00; font-size:8px; font-weight:700; color:#fff; flex-shrink:0; }
+    .prt-cat { margin-bottom:14px; break-inside:avoid; }
+    .prt-cat-hdr { display:flex; align-items:center; gap:8px; background:#1a3a2a; color:#fff; padding:7px 12px; border-radius:3px 3px 0 0; }
+    .prt-cat-name { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:.07em; flex:1; }
+    .prt-cat-score { font-size:11px; opacity:.7; }
+    .prt-items { border:1px solid #ddd; border-top:none; border-radius:0 0 3px 3px; }
+    .prt-item { display:flex; align-items:flex-start; gap:8px; padding:5px 12px; border-bottom:1px solid #f0f0f0; }
+    .prt-item:last-child { border-bottom:none; }
+    .prt-box { width:12px; height:12px; border:1.5px solid #999; border-radius:2px; flex-shrink:0; margin-top:2px; display:flex; align-items:center; justify-content:center; font-size:9px; color:#fff; }
+    .prt-box.on { background:#52b788; border-color:#52b788; }
+    .prt-item-name { font-size:11px; font-weight:500; color:#1a1a1a; flex:1; line-height:1.3; }
+    .prt-item-name.on { color:#aaa; text-decoration:line-through; }
+    .prt-ess { font-size:8px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#c85a00; background:rgba(200,90,0,.08); border:1px solid rgba(200,90,0,.2); border-radius:2px; padding:1px 4px; white-space:nowrap; margin-top:2px; }
+    .prt-footer { border-top:2px solid #1a3a2a; padding-top:10px; margin-top:8px; display:flex; justify-content:space-between; align-items:flex-end; }
+    .prt-footer-l { font-size:10px; color:#555; line-height:1.7; }
+    .prt-footer-l strong { color:#1a3a2a; }
+    .prt-footer-r { font-size:9px; color:#888; text-align:right; line-height:1.7; }
+    .prt-app-note { background:#f0f7f4; border:1px solid #52b788; border-radius:4px; padding:8px 12px; margin-bottom:14px; font-size:10px; color:#1a3a2a; line-height:1.5; }
+    .prt-app-note strong { font-weight:700; }
+  }
+  .prt { display:none; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-brand">Survival Storehouse Australia — Est. 2009</div>
+    <h1 class="hdr-title">72-Hour Kit<br><span>Checklist</span></h1>
+    <p class="hdr-sub">Tick off what you already have. See your gaps instantly. Print a copy for your household.</p>
+    <div class="app-banner">
+      <div style="font-size:28px">📲</div>
+      <div class="app-banner-text"><strong>Save this checklist offline.</strong> The Survival Storehouse App lets you cache survival guides — including this checklist — to your phone. Access it without signal when you actually need it.</div>
+      <div class="app-banner-links">
+        <a class="app-link" href="https://apps.apple.com/us/app/survival-storehouse/id6744917490" target="_blank">App Store →</a>
+        <a class="app-link" href="https://play.google.com/store/apps/details?id=com.mycompany.survivalstorehouse" target="_blank">Google Play →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="score-wrap">
+    <div class="score-num" id="snum">0%</div>
+    <div class="score-right">
+      <div class="score-label" id="slabel">Start ticking items below</div>
+      <div class="score-track"><div class="score-fill" id="sfill" style="width:0%"></div></div>
+      <div class="score-hint" id="shint">0 of 0 items checked</div>
+    </div>
+  </div>
+
+  <div id="clwrap"></div>
+
+  <div class="gaps" id="gaps">
+    <div class="gaps-title">⚠ Items still needed</div>
+    <ul class="gaps-list" id="glist"></ul>
+    <div class="shop-note">
+      Missing food or water? Our <a href="https://survivalstorehouse.com/shop-1/ols/products/battle-box-long-term-survival-kit-in-authentic-military-ammo-tin" target="_blank">Battle Box</a>, <a href="https://survivalstorehouse.com/shop-1/ols/products/the-ready-kit" target="_blank">Ready Kit</a> and <a href="https://survivalstorehouse.com/shop-1/ols/products/24-pack-high-energy-biscuits" target="_blank">24-Pack Biscuits</a> cover the essentials with 20-year shelf life. Free shipping Australia-wide.
+    </div>
+  </div>
+
+  <div class="app-callout">
+    <div class="app-callout-title">📲 Take this checklist offline</div>
+    <div class="app-callout-text">The Survival Storehouse App integrates with our wiki — cache survival guides, checklists and emergency plans to your phone for access without signal. When emergencies happen, networks fail first. <a href="https://www.survivalstorehouse.com/offline-app" target="_blank">Learn more about the app →</a></div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-print" onclick="doPrint()">🖨 Print My Checklist</button>
+    <button class="btn-reset" onclick="resetAll()">Reset</button>
+  </div>
+  <a class="btn-quiz" href="https://survivalstorehouse.com/kit-finder" target="_blank">← Not sure which kit you need? Take our 60-second quiz</a>
+</div>
+
+<!-- PRINT AREA -->
+<div class="prt" id="prt"></div>
+
+<script>
+const cats = [
+  { icon:'💧', name:'Water', items:[
+    { n:'4 litres of water per person per day (minimum)', t:'For a family of 4 for 3 days = 48 litres', e:true },
+    { n:'Water purification tablets or drops', t:'Backup in case stored water runs out', e:true },
+    { n:'Water filter (e.g. LifeStraw Peak)', t:'Available as add-on to the Ready Kit — RRP $50, our price $35', e:false },
+    { n:'Collapsible water containers', t:'For transporting or storing additional water', e:false },
+  ]},
+  { icon:'🍫', name:'Food', items:[
+    { n:'Non-perishable food for 3 days per person', t:'Canned goods, long shelf life bars, dried food', e:true },
+    { n:'Manual can opener', t:'Essential if using canned food', e:true },
+    { n:'High energy survival biscuits', t:'475 cal per bar — compact with 20-year shelf life. Available from survivalstorehouse.com', e:false },
+    { n:'Comfort foods and snacks', t:'Important for children and morale during stress', e:false },
+    { n:'Baby food or formula if needed', t:'Specific to your household', e:false },
+    { n:'Pet food if applicable', t:'3-day supply for each pet', e:false },
+  ]},
+  { icon:'🩺', name:'First Aid', items:[
+    { n:'Comprehensive first aid kit', t:'Bandages, gauze, antiseptic, scissors, gloves', e:true },
+    { n:'7-day supply of prescription medications', t:'Keep a separate emergency supply rotated regularly', e:true },
+    { n:'Pain relief (paracetamol, ibuprofen)', t:'Non-prescription basics', e:true },
+    { n:'Antihistamines', t:'For allergic reactions', e:false },
+    { n:'First aid manual — printed copy', t:'Phones may not work in an emergency', e:false },
+    { n:'Thermometer', t:'Especially important for households with children', e:false },
+  ]},
+  { icon:'📄', name:'Documents', items:[
+    { n:'Copies of ID (passport, licence, Medicare)', t:'Waterproof bag or sealed plastic sleeve', e:true },
+    { n:'Insurance policy details', t:'Home, car and health', e:true },
+    { n:'Emergency contact list — printed', t:'Do not rely on phone memory', e:true },
+    { n:'Cash in small notes', t:'ATMs and card readers may be offline', e:true },
+    { n:'Property documents (title, lease)', t:'Useful for insurance claims after a disaster', e:false },
+    { n:'Photos of valuables', t:'For insurance purposes', e:false },
+  ]},
+  { icon:'📻', name:'Communication', items:[
+    { n:'Battery-powered or hand-crank radio', t:'For emergency broadcasts when power is out', e:true },
+    { n:'Fully charged power bank (20,000mAh+)', t:'To charge phones multiple times', e:true },
+    { n:'Spare phone charger cables', t:'USB-C and Lightning as applicable', e:false },
+    { n:'Whistle', t:'To signal for help without needing power', e:false },
+    { n:'UHF CB radio (handheld)', t:'Useful for rural areas without mobile signal', e:false },
+    { n:'Survival Storehouse App — content cached', t:'Offline survival guides, maps and documents. Download at survivalstorehouse.com/app', e:false },
+  ]},
+  { icon:'🏕️', name:'Shelter & Warmth', items:[
+    { n:'Emergency sleeping bags or thermal blankets', t:'One per person', e:true },
+    { n:'Waterproof poncho or rain jacket', t:'One per person', e:true },
+    { n:'Change of clothes in a waterproof bag', t:'Include sturdy closed-toe shoes', e:false },
+    { n:'Tent or tarp', t:'If evacuation from home is possible', e:false },
+    { n:'Warm layers (thermal base layer, fleece)', t:'Especially important in southern states during winter', e:false },
+    { n:'Waterproof boots or rubber boots', t:'Essential for flood cleanup — melioidosis risk in northern Australia', e:false },
+  ]},
+  { icon:'🔦', name:'Light & Power', items:[
+    { n:'Torch with spare batteries', t:'LED — long battery life', e:true },
+    { n:'Spare batteries (AA and AAA)', t:'Multi-pack, stored in waterproof bag', e:true },
+    { n:'Candles and waterproof matches or lighter', t:'Backup lighting', e:false },
+    { n:'Solar-powered charger', t:'Useful for extended outages', e:false },
+    { n:'Head torch', t:'Hands-free lighting for emergencies', e:false },
+  ]},
+  { icon:'🔧', name:'Tools & Safety', items:[
+    { n:'Multi-tool or Swiss Army knife', t:'One of the most versatile emergency items', e:true },
+    { n:'Duct tape', t:'Repairs, sealing, improvised shelter', e:true },
+    { n:'Work gloves (heavy duty)', t:'For debris removal and cleanup', e:false },
+    { n:'Face masks (P2/N95)', t:'For bushfire smoke and post-flood cleanup', e:false },
+    { n:'Basic toolkit (pliers, wrench, screwdriver)', t:'For gas and water shutoff', e:false },
+    { n:'Compass', t:'Navigation if GPS and phone fail', e:false },
+  ]},
+  { icon:'👶', name:'Special Needs', items:[
+    { n:'Nappies, wipes and formula if applicable', t:'At least 3-day supply', e:false },
+    { n:"Children's medications", t:'Age-appropriate pain relief and regular medications', e:false },
+    { n:'Entertainment for children', t:'Books, small toys — reduces stress during emergencies', e:false },
+    { n:'Mobility aids or medical equipment', t:'Wheelchairs, CPAP, hearing aid batteries', e:false },
+    { n:'Glasses or contact lens supplies', t:'Spare pair if possible', e:false },
+  ]},
+];
+
+let ticked = {};
+
+const total = cats.reduce((s,c)=>s+c.items.length,0);
+const countTicked = ()=>Object.values(ticked).filter(Boolean).length;
+
+function updateScore() {
+  const done = countTicked();
+  const pct = Math.round(done/total*100);
+  document.getElementById('snum').textContent = pct+'%';
+  document.getElementById('sfill').style.width = pct+'%';
+  document.getElementById('shint').textContent = done+' of '+total+' items checked';
+  const sn = document.getElementById('snum');
+  const sf = document.getElementById('sfill');
+  const sl = document.getElementById('slabel');
+  sn.className = 'score-num'; sf.className = 'score-fill';
+  if(pct>=80){ sn.classList.add('good'); sf.classList.add('good'); sl.textContent='Well prepared — great work!'; }
+  else if(pct>=50){ sn.classList.add('ok'); sf.classList.add('ok'); sl.textContent='Getting there — address the gaps below'; }
+  else if(pct>0){ sl.textContent='Early stages — keep going'; }
+  else { sl.textContent='Start ticking items below'; }
+  updateGaps(); updateCatProgress();
+}
+
+function updateGaps() {
+  const gaps=[];
+  cats.forEach(c=>c.items.forEach((it,i)=>{ if(!ticked[c.name+'_'+i]) gaps.push({n:it.n,e:it.e}); }));
+  const el=document.getElementById('gaps');
+  if(!countTicked()){ el.style.display='none'; return; }
+  el.style.display='block';
+  const ess=gaps.filter(g=>g.e), non=gaps.filter(g=>!g.e);
+  document.getElementById('glist').innerHTML=[...ess,...non].slice(0,12)
+    .map(g=>`<li>${g.n}${g.e?' <span style="color:var(--or);font-size:11px;font-weight:600">(essential)</span>':''}</li>`).join('');
+}
+
+function updateCatProgress() {
+  cats.forEach((c,ci)=>{
+    const done=c.items.filter((_,i)=>ticked[c.name+'_'+i]).length;
+    const el=document.getElementById('cp'+ci);
+    if(el){ el.textContent=done+'/'+c.items.length; el.className='cat-prog'+(done===c.items.length?' done':''); }
+  });
+}
+
+function toggle(cname,i) {
+  const k=cname+'_'+i;
+  ticked[k]=!ticked[k];
+  const el=document.getElementById('it_'+k);
+  if(el) el.classList.toggle('on',ticked[k]);
+  updateScore();
+}
+
+function toggleCat(ci) {
+  document.querySelector('.cat[data-ci="'+ci+'"]').classList.toggle('open');
+}
+
+function render() {
+  document.getElementById('clwrap').innerHTML=cats.map((c,ci)=>`
+    <div class="cat" data-ci="${ci}">
+      <div class="cat-hdr" onclick="toggleCat(${ci})">
+        <span class="cat-icon">${c.icon}</span>
+        <span class="cat-name">${c.name}</span>
+        <span class="cat-prog" id="cp${ci}">0/${c.items.length}</span>
+        <span class="cat-chev">▶</span>
+      </div>
+      <div class="cat-items">
+        ${c.items.map((it,i)=>`
+          <div class="item" id="it_${c.name}_${i}" onclick="toggle('${c.name}',${i})">
+            <div class="chk">✓</div>
+            <div class="item-body">
+              <div class="item-name">${it.n}</div>
+              ${it.t?`<div class="item-note">${it.t}</div>`:''}
+            </div>
+            ${it.e?'<div class="ess">Essential</div>':''}
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+  document.querySelector('.cat').classList.add('open');
+}
+
+function resetAll() {
+  ticked={};
+  document.querySelectorAll('.item').forEach(el=>el.classList.remove('on'));
+  updateScore();
+}
+
+function doPrint() {
+  const done=countTicked(), pct=Math.round(done/total*100);
+  const today=new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
+  const gaps=[];
+  cats.forEach(c=>c.items.forEach((it,i)=>{ if(!ticked[c.name+'_'+i]) gaps.push(it); }));
+
+  const catsHtml=cats.map(c=>{
+    const cd=c.items.filter((_,i)=>ticked[c.name+'_'+i]).length;
+    return `<div class="cat">
+      <div class="cat-hdr"><span>${c.icon}</span> <span class="cat-name">${c.name}</span> <span class="cat-score">${cd}/${c.items.length}</span></div>
+      <div class="items">${c.items.map((it,i)=>{
+        const on=ticked[c.name+'_'+i];
+        return `<div class="item ${on?'on':''}">
+          <div class="box">${on?'&#10003;':''}</div>
+          <div class="iname">${it.n}${it.e&&!on?' <span class="ess">essential</span>':''}</div>
+        </div>`;
+      }).join('')}</div>
+    </div>`;
+  }).join('');
+
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>72-Hour Kit Checklist — Survival Storehouse</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:Georgia,serif;color:#1a1a1a;padding:20px;font-size:12px;}
+    .hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:12px;border-bottom:3px solid #1a3a2a;margin-bottom:16px;}
+    .logo{font-family:Arial,sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#1a3a2a;}
+    .logo-sub{font-size:9px;color:#666;letter-spacing:.1em;text-transform:uppercase;margin-top:3px;}
+    .title-block{text-align:right;}
+    .title{font-family:Arial,sans-serif;font-size:18px;font-weight:900;text-transform:uppercase;color:#1a1a1a;}
+    .date{font-size:9px;color:#888;margin-top:3px;}
+    .score-bar{display:flex;align-items:center;gap:16px;background:#f4f1eb;border:1px solid #ddd;border-radius:6px;padding:10px 14px;margin-bottom:14px;}
+    .score-pct{font-family:Arial,sans-serif;font-size:36px;font-weight:900;color:#c85a00;line-height:1;min-width:60px;}
+    .score-label{font-family:Arial,sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;}
+    .score-sub{font-size:10px;color:#666;margin-top:2px;}
+    .gaps-box{background:#fff8f4;border:1.5px solid #c85a00;border-radius:5px;padding:10px 14px;margin-bottom:12px;page-break-inside:avoid;}
+    .gaps-title{font-family:Arial,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#c85a00;margin-bottom:8px;}
+    .gaps-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 16px;list-style:none;}
+    .gaps-grid li{font-size:10px;color:#444;display:flex;align-items:center;gap:5px;}
+    .gaps-grid li::before{content:"!";display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:50%;background:#c85a00;font-size:8px;font-weight:700;color:#fff;flex-shrink:0;}
+    .app-note{background:#f0f7f4;border:1px solid #52b788;border-radius:4px;padding:8px 12px;margin-bottom:12px;font-size:10px;color:#1a3a2a;line-height:1.5;}
+    .cat{margin-bottom:12px;page-break-inside:avoid;}
+    .cat-hdr{display:flex;align-items:center;gap:8px;background:#1a3a2a;color:#fff;padding:6px 10px;border-radius:3px 3px 0 0;}
+    .cat-name{font-family:Arial,sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;flex:1;}
+    .cat-score{font-size:10px;opacity:.7;}
+    .items{border:1px solid #ddd;border-top:none;border-radius:0 0 3px 3px;}
+    .item{display:flex;align-items:flex-start;gap:8px;padding:5px 10px;border-bottom:1px solid #f0f0f0;}
+    .item:last-child{border-bottom:none;}
+    .item.on .iname{color:#bbb;text-decoration:line-through;}
+    .box{width:12px;height:12px;border:1.5px solid #999;border-radius:2px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:9px;}
+    .item.on .box{background:#52b788;border-color:#52b788;color:#fff;}
+    .iname{font-size:11px;font-weight:500;color:#1a1a1a;flex:1;line-height:1.3;}
+    .ess{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#c85a00;background:rgba(200,90,0,.08);border:1px solid rgba(200,90,0,.2);border-radius:2px;padding:1px 4px;margin-left:4px;}
+    .footer{border-top:2px solid #1a3a2a;padding-top:10px;margin-top:10px;display:flex;justify-content:space-between;align-items:flex-end;}
+    .footer-l{font-size:9px;color:#555;line-height:1.7;}
+    .footer-l strong{color:#1a3a2a;}
+    .footer-r{font-size:8px;color:#888;text-align:right;line-height:1.7;}
+    @media print{body{padding:10px;}}
+  </style>
+  </head><body>
+  <div class="hdr">
+    <div><div class="logo">Survival Storehouse</div><div class="logo-sub">Australian Emergency Preparedness &middot; Est. 2009</div></div>
+    <div class="title-block"><div class="title">72-Hour Emergency Kit Checklist</div><div class="date">Prepared: ${today}</div></div>
+  </div>
+  <div class="score-bar">
+    <div class="score-pct">${pct}%</div>
+    <div><div class="score-label">${pct>=80?'Well prepared':pct>=50?'Partially prepared':'Early stages'}</div>
+    <div class="score-sub">${done} of ${total} items checked &middot; ${gaps.length} items still needed</div></div>
+  </div>
+  ${gaps.length?`<div class="gaps-box"><div class="gaps-title">Items still needed (${gaps.length} remaining)</div>
+    <ul class="gaps-grid">${gaps.slice(0,20).map(g=>`<li>${g.n}</li>`).join('')}</ul></div>`
+    :'<div style="color:#1a3a2a;font-weight:700;font-size:11px;margin-bottom:12px">&#10003; All items checked &mdash; your kit is complete!</div>'}
+  <div class="app-note"><strong>&#128242; Survival Storehouse App:</strong> Cache this checklist and 200+ Australian survival guides to your phone for offline access &mdash; no signal needed. Download at survivalstorehouse.com/app &middot; App Store (iPhone) &middot; Google Play (Android)</div>
+  ${catsHtml}
+  <div class="footer">
+    <div class="footer-l"><strong>Survival Storehouse Australia</strong> &middot; Australian owned since 2009 &middot; Erina, NSW Central Coast<br>
+    survivalstorehouse.com &middot; sales@survivalstorehouse.com &middot; +61 403 517 622</div>
+    <div class="footer-r">Free shipping Australia-wide<br>wiki.survivalstorehouse.com<br>survivalstorehouse.com/app</div>
+  </div>
+  <script>window.onload=function(){window.print();}<\/script>
+  </body></html>`;
+
+  const w=window.open('','_blank');
+  if(w){
+    w.document.write(html);
+    w.document.close();
+  } else {
+    alert('Please allow popups for this page to print your checklist.');
+  }
+}
+
+render();
+updateScore();
+</script>
+</body>
+</html>
