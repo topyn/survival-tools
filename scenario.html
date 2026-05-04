@@ -787,291 +787,960 @@ The safest decision was made in September, not in the yard at 2:16am.`,
   } // end scenes
 } // end bushfire,
 // ================================================================
-// CYCLONE — CAIRNS QLD
-// Hidden path: Skip securing yard, go straight to shelter very early = perfect outcome
+// ================================================================
+// CYCLONE — CAIRNS QLD (rewritten with Royal Commission research)
 // ================================================================
 cyclone:{
   label:"CYCLONE // CAIRNS QLD",
-  maxDecisions:7,
-  maxScore:118,
+  maxDecisions:6,
+  maxScore:128,
   scenes:{
 
-    s0:{loc:"CAIRNS QLD — MONDAY AFTERNOON",atmo:"calm",logTime:"",logSit:"",prompt:null,noLog:true,
-      text:"Your neighbour Ray has lived through four cyclones. He is 71, methodical, and almost never wrong about the weather.\n\nThis morning he knocked on your fence and said: 'This one is different.\' Then he went inside and started boarding up his windows.\n\nThat was at 10am. It is now 4pm. You have been watching the clouds build from the north for the last two hours.\n\nAt 4pm, BOM issues a Cyclone Warning for Cairns and surrounds. Category 3. Landfall projected at 10pm.",
-      choices:[{text:"Begin",next:"s1",score:0,logQ:"good",logEffect:"",noLog:true}]},
+s0:{loc:"CAIRNS QLD — WEDNESDAY EVENING",atmo:"calm",logTime:"",logSit:"",prompt:null,noLog:true,
+  text:`Your house was built in 1974.
 
-    s1:{loc:"YOUR HOME — 4:00PM",atmo:"tense",logTime:"4:00pm",logSit:"A Cyclone Warning was issued for Cairns. Category 3. Six hours to landfall.",prompt:"Ray said this one is different. What do you do first?",
-      text:"Category 3. Winds to 165km/h, gusts to 200. Landfall at 10pm — six hours from now.\n\nYou live in a low-set timber house 1.2km from the Esplanade. You have lived in Cairns for 11 years. You have seen cyclone warnings before.\n\nMost of them turn.\n\nRay did not seem to think this one would.",
-      choices:[
-        {text:"Check BOM and the Queensland cyclone zone map right now",next:"s2a",score:14,logQ:"good",logEffect:"Knowing your zone gave you the information to make the right call while there was still time."},
-        {text:"Start securing the yard — Ray is already boarding up, you should be too",next:"s2b",score:9,logQ:"ok",logEffect:"Securing the yard was useful. But you did not yet know whether you were supposed to be leaving."},
-        {text:"Call Ray and ask him what he thinks you should do",next:"s2c",score:11,logQ:"ok",logEffect:"Ray knew what he was talking about. He told you three things that mattered."}
-      ]},
+You know this because the previous owner mentioned it when you bought the place. Low-set timber, Queenslander-style, on a flat block in a suburb that sits about four kilometres from the waterfront. It has survived every wet season since 1974. You have lived here for seven years and seen two cyclones. Both tracked south and weakened. Both left your house standing.
 
-    s2a:{loc:"BOM WEBSITE — 4:08PM",atmo:"tense",logTime:"4:08pm",logSit:"You checked the zone map. Your street is in Evacuation Zone B.",prompt:"Zone B. Category 3 or above. Evacuate to a Category C shelter.",
-      text:"The Queensland cyclone evacuation zone map loads.\n\nYour street: Zone B.\n\nZone B residents are directed to evacuate to a Category C shelter when a Cyclone Warning is issued for Category 3 or above.\n\nNearest shelter: Cairns State High School. 3.4km inland. Opened at 2pm.\n\nYou have six hours to landfall. Roads will start congesting in about two hours. After 7pm, emergency services advise that driving is not safe.\n\nThe window to leave calmly is right now.",
-      choices:[
-        {text:"Pack and go to the shelter immediately — do not wait",next:"s3_hidden",score:22,logQ:"perfect",logEffect:"You left at 4:20pm. Roads were clear. You had 5 and a half hours before landfall."},
-        {text:"Secure the house first, then leave in a couple of hours",next:"s3b",score:9,logQ:"ok",logEffect:"Securing took longer than planned. The roads were a different situation when you finally left."},
-        {text:"Zone B — but this house has been through cyclones before",next:"s3c",score:-5,logQ:"bad",logEffect:"Previous storms were Category 1. Ingrid was not Category 1."}
-      ]},
+There is a Category 3 system in the Coral Sea. It has been there for three days. The BOM track has shifted west twice in the last 24 hours.
 
-    s2b:{loc:"YOUR YARD — 4:15PM",atmo:"tense",logTime:"4:15pm",logSit:"You started securing the yard. Ray leaned over the fence and told you something important.",prompt:"You are 20 minutes into securing the yard when Ray appears at the fence.",
-      text:"You work through it methodically. Bins into the garage. Outdoor furniture stacked and tied. Tools locked in the shed. The kids trampoline takes 20 minutes to disassemble and you almost leave it.\n\nRay appears at the fence. 'You checked your zone?\' he says.\n\nYou have not.\n\n'You are Zone B. My place is Zone A. We are both supposed to go to the high school shelter.\' He pauses. 'I am leaving at 5. You should come.\' \n\nHe goes back inside.",
-      choices:[
-        {text:"Check the zone map right now — then decide",next:"s2a",score:11,logQ:"ok",logEffect:"Late check — but you got the right information and still had time to act on it."},
-        {text:"If Ray is going, that settles it — start packing to leave with him at 5",next:"s3b_ray",score:14,logQ:"good",logEffect:"You trusted Ray. You were at the shelter by 5:30pm. The roads were still manageable."},
-        {text:"The yard is almost secured — finish it, then decide",next:"s3b",score:5,logQ:"ok",logEffect:"Another 30 minutes on the yard meant making the call under more pressure."}
-      ]},
+Your Cyclone Zone is printed on a laminated card stuck to the inside of your pantry door. You have never looked at it closely.
 
-    s2c:{loc:"RAY S FRONT DOOR — 4:10PM",atmo:"tense",logTime:"4:10pm",logSit:"You knocked on Ray's door and asked him directly.",prompt:"Ray opens the door. He is holding a torch and a battery radio.",
-      text:"Ray listens to your question.\n\nThen he says three things.\n\nFirst: check your zone. Second: do not wait to see if it weakens. Third: the shelter at the high school has generators, food, and a doctor. He has been there before.\n\nHe adds: 'I am leaving at 5. You are welcome to come.\' \n\nHe closes the door.",
-      choices:[
-        {text:"Check your zone on the BOM site right now",next:"s2a",score:12,logQ:"good",logEffect:"Ray was right about everything. Checking confirmed it. You had all the information you needed."},
-        {text:"Trust Ray — start packing immediately, leave with him at 5",next:"s3b_ray",score:15,logQ:"good",logEffect:"You trusted the right person. At the shelter by 5:30. Roads still manageable."}
-      ]},
+At 6:40pm your neighbour Ray knocks on your door.`,
+  choices:[{text:"Begin",next:"s1",score:0,logQ:"good",logEffect:"",noLog:true}]},
 
-    s3_hidden:{loc:"YOUR HOME — 4:12PM",atmo:"calm",logTime:"4:12pm",logSit:"You decided to go to the shelter immediately — before securing anything else.",prompt:null,
-      text:"You do not stop to board up windows. You do not finish the yard.\n\nYou pack the emergency kit — pre-packed from last October, sitting in the hall cupboard where you put it after you went to that community preparedness session. Three days of food, water for four people, all medications, documents, battery radio, phone chargers, cash.\n\nIt takes 8 minutes to get everyone in the car.\n\nRay is watching from his driveway as you reverse out. He raises a hand. You raise yours.\n\nThe roads are completely clear. It is 4:20pm and you are driving inland with five and a half hours to spare.",
-      choices:[{text:"Drive directly to Cairns State High shelter",next:"s4_hidden",score:18,logQ:"perfect",logEffect:"Arrived at 4:35pm. First dozen families in. Calm, well-positioned, and fully supplied."}]},
+s1:{loc:"YOUR FRONT DOOR — WEDNESDAY 6:40PM",atmo:"tense",
+  logTime:"6:40pm Wednesday",logSit:"Your neighbour Ray told you the cyclone had intensified to Category 4.",
+  prompt:"Ray has his keys in his hand. His wife is already in the car.",
+  text:`Ray says: have you checked the BOM update?
 
-    s3b_ray:{loc:"YOUR HOME — 4:50PM",atmo:"tense",logTime:"4:50pm",logSit:"You packed to leave with Ray at 5pm.",prompt:null,
-      text:"You have 50 minutes. You pack well — medications, documents, two days of food, water, phone chargers.\n\nNot everything. But the important things.\n\nAt 4:58pm you knock on Ray front door. He is already in his car with the engine running. He nods.\n\nYou drive in convoy to the shelter. The roads are busier than an hour ago but still moving.",
-      choices:[{text:"Drive to the shelter with Ray",next:"s4b",score:14,logQ:"good",logEffect:"Arrived at 5:25pm. Plenty of space. Ray sat two rows over from you all night."}]},
+You have not.
 
-    s3b:{loc:"YOUR HOME — 6:30PM",atmo:"critical",timer:15,logTime:"6:30pm",logSit:"Securing the house took hours. Category 4 upgrade. Emergency Warning issued.",prompt:"SES text: EVACUATE NOW Zone A and Zone B. Roads dangerous after 8pm.",
-      text:"Two hours of work. Windows boarded. Furniture away from exterior walls. Bath filled. Car moved to higher ground.\n\nAt 6:30pm, BOM upgrades Cyclone Ingrid to Category 4. Maximum winds 200km/h, gusts to 250. Track unchanged.\n\nAn Emergency Warning is issued.\n\nYour phone buzzes with an SES alert. Zone B. Evacuate now.\n\nThe shelter is 3.4km away. It is raining. Wind is already gusting to 60km/h.",
-      choices:[
-        {text:"Leave for the shelter right now — do not wait any longer",next:"s4c",score:12,logQ:"ok",logEffect:"Left at 6:35pm. Uncomfortable driving but you made it."},
-        {text:"The house is as secured as it can be — shelter in place",next:"s4d",score:-5,logQ:"bad",logEffect:"Securing a house does not change what zone it is in or what it is rated to withstand."}
-      ]},
+Ray: it intensified. Cat 4 now. And it shifted — the track puts it making landfall north of Cairns. We are in Zone B. That means mandatory evacuation.
 
-    s3c:{loc:"YOUR HOME — OVERNIGHT",atmo:"emergency",logTime:"10:00pm",logSit:"You decided to shelter in place in a Zone B timber house during Category 4.",prompt:"You shelter in the interior bathroom. Mattresses against the door.",
-      text:"You shelter in the interior bathroom. Mattresses against the door. Everyone in the bathtub.\n\nAt 10:22pm the eye wall arrives.\n\nThe noise is unlike anything you have experienced. Not wind — a sustained physical force. The roof structure groans. Something on the eastern side tears loose. Rain drives through horizontally.\n\nYou stay in the bathroom. You hold your family. You wait.\n\nAn hour later: silence. The eye is passing over.\n\nYou do not go outside.",
-      choices:[{text:"Stay in the bathroom until it is fully over — the eye is not the end",next:"out_survivable_c",score:10,logQ:"ok",logEffect:"Right call once committed to staying. The back half of the storm arrived 45 minutes later."}]},
+You say: we have always ridden them out.
 
-    s4_hidden:{loc:"CAIRNS STATE HIGH — 4:35PM",atmo:"calm",logTime:"4:35pm",logSit:"You arrived at the shelter at 4:35pm — among the first families in.",prompt:null,
-      text:"You check in at 4:35pm. There are maybe 15 families ahead of you.\n\nThe staff are relaxed at this point. There is time. There is space. There is order.\n\nYou pick a spot near the emergency exit, away from windows. Your bag goes down. The kids sit. You pull out the portable radio.\n\nThree days of food. Water for four. All medications. Documents. Battery bank. Cash.\n\nOutside, the sky is still blue.\n\nYou have five and a half hours before the eye wall arrives. You are going to spend them in a concrete building with a doctor on site.\n\nRay arrives at 5:05pm. He gives you a nod.",
-      choices:[{text:"Register with the coordinator and settle in",next:"out_perfect",score:14,logQ:"perfect",logEffect:"You listened to the man who knew. You left when you should have left. This is what it looks like when it goes right."}]},
+Ray: this is not the same thing. The last two went south and weakened. This one is intensifying in warm water and it is coming right at us. The BOM said don't wait for Category 5 to make your decision.
 
-    s4b:{loc:"CAIRNS STATE HIGH — 5:25PM",atmo:"calm",logTime:"5:25pm",logSit:"You arrived at the shelter at 5:25pm with most of what you needed.",prompt:null,
-      text:"You check in at 5:25pm. Still plenty of room. You have medications, documents, food for two days, chargers, water.\n\nNot everything. But enough.\n\nThe relief of being in a concrete shelter, away from your timber house and its windows, is immediate and physical.\n\nRay is two rows over. He raises his thermos in your direction.",
-      choices:[{text:"Register and settle in for the night",next:"out_prepared_a",score:12,logQ:"good",logEffect:"A very good outcome. Leaving earlier would have meant less pressure. But you made it safely."}]},
+He shows you his phone. Predicted landfall: 14 hours. Wind speeds at the eye wall: 200-220km/h. Storm surge: up to 2 metres above tide level in Zone B.
 
-    s4c:{loc:"CAIRNS STATE HIGH — 6:50PM",atmo:"tense",logTime:"6:50pm",logSit:"You arrived at the shelter late, driving in 60km/h gusts.",prompt:null,
-      text:"You arrive at 6:50pm. The drive was tense — surface water on roads, wind gusts pushing the car sideways on exposed sections.\n\nThe shelter is nearly full. You find a spot in the back corner near the toilets.\n\nYou have some supplies. Not well-packed — grabbed quickly.\n\nOutside, the rain is increasing.",
-      choices:[{text:"Register and settle in for what is going to be a long night",next:"out_survivable_a",score:8,logQ:"ok",logEffect:"You made it safely. Earlier would have been a different experience entirely."}]},
+Ray: we are leaving in ten minutes. You should come.
 
-    s4d:{loc:"YOUR HOME — OVERNIGHT",atmo:"emergency",logTime:"11:00pm",logSit:"You sheltered in place. The storm arrived at Category 4.",
-      text:"You are in the interior bathroom when the power goes off at 9:15pm.\n\nAt 10:22pm the eye wall arrives over Cairns.\n\nSomething structural on the east side of the house fails. You hear it above the roar — a different sound from everything else. Something that was holding is no longer holding.\n\nThe roof stays. Mostly.\n\nYou stay in the bathroom until 3am, when it is quiet enough to check.",
-      choices:[{text:"Stay in the bathroom. Do not move until fully certain it is over.",next:"out_survivable_c",score:8,logQ:"bad",logEffect:"You survived. The house partially did. Zone B evacuation orders exist precisely for this reason."}]},
+Research from post-Yasi studies found that informal social networks — a neighbour knocking on the door, a phone call from family — were consistently more effective at triggering evacuation than official warning channels for many households.
 
-    out_perfect:{outcome:"perfect",hiddenPath:true,hiddenText:"You left immediately when you had the information — before securing anything, before waiting to see if it weakened. Most players finish the yard first. The hidden path rewards leaving as soon as you know you should.",
-      finalText:"You left when you had the information. You did not wait for the yard to be finished, or for the sky to look worse, or for someone to tell you it was definitely time.\n\nYou arrived at the shelter with five hours to spare, fully equipped, in a concrete building with a doctor on site.\n\nCyclone Ingrid made landfall at Category 4. Maximum gusts 240km/h. Your street lost 11 roofs. You and your family were never on it.\n\nRay was right. This one was different.",
-      lessons:["The hidden path rewards leaving immediately on verified information — before the situation gets worse","Pre-packed emergency kits make immediate departure possible — there is no pause to decide what to take","Zone B exists because timber low-set homes are not engineered for Category 3 plus cyclones","Ray knew what he was talking about. In emergencies, trust the person with direct experience."]},
+Ray is that trigger.`,
+  choices:[
+    {text:"Check the zone card in the pantry — then decide based on what it says",next:"s2a",score:16,logQ:"good",logEffect:"The card confirmed Zone B. Mandatory evacuation. The decision was already made."},
+    {text:"I know this house — it has survived before. We will shelter in place.",next:"s2b",score:-4,logQ:"bad",logEffect:"'It has survived before' is the strongest documented predictor of dangerous non-compliance in cyclone research."},
+    {text:"Leave with Ray right now — no need to check anything",next:"s2c",score:14,logQ:"good",logEffect:"You left immediately with Ray. No time lost. The road south was clear at this point."}
+  ]},
 
-    out_prepared_a:{outcome:"prepared",finalText:"You made the right calls. You trusted the right person. You arrived at the shelter with time, space, and most of what you needed.\n\nCyclone Ingrid made landfall at Category 4. You were already in a concrete shelter when the eye wall arrived.\n\nYour house lost part of the eastern wall. You were not in it.",
-      lessons:["Checking your cyclone zone before the season starts means you act on information, not guesswork","Trusting people with direct local experience is a legitimate emergency preparedness strategy","A pre-packed bag would have removed the 50-minute packing window — and the things you forgot"]},
+s2a:{loc:"YOUR PANTRY — 6:43PM",atmo:"tense",
+  logTime:"6:43pm",logSit:"You checked the zone card. Zone B. Mandatory evacuation for Category 3 and above.",
+  prompt:"Zone B. Mandatory. This is a Category 4.",
+  text:`You open the pantry and find the laminated card.
 
-    out_survivable_a:{outcome:"survivable",finalText:"You made it to the shelter — late, in worsening conditions, with limited supplies.\n\nThe drive in 60km/h gusts was genuinely stressful. A police car was blocking one road by the time you passed.\n\nLeaving 90 minutes earlier would have been a completely different experience.",
-      lessons:["Leave at Watch and Act — not Emergency Warning. The roads in between are the problem.","Zone B evacuation orders reflect your structure engineering, not the severity of the weather at that moment","Early departure is almost always the right call in a low-set timber home in an evacuation zone"]},
+EVACUATION ZONE B
+Mandatory evacuation for Category 3 cyclone and above.
+Your property is at risk from storm surge, damaging winds and flooding.
+Leave immediately when directed by emergency services.
 
-    out_survivable_c:{outcome:"survivable",finalText:"You survived a Category 4 cyclone in a Zone B timber home.\n\nThe interior bathroom was the right choice once you committed to staying. Not going outside during the eye was critical — the trailing wall arrived 45 minutes later.\n\nBut this outcome required things to go right that had no business going right. The partial roof failure on the east side could have been worse. You are aware of that.",
-      lessons:["Zone B evacuation orders exist because timber low-set homes are not designed for Category 3 plus","Never go outside during the calm of the eye — the trailing eye wall is often as bad as the lead","Interior room, away from windows, mattresses as protection: this is the shelter-in-place minimum if you cannot leave"]}
+This is a Category 4.
+
+The zone is not allocated based on how strong the cyclone is. It is allocated based on the structural adequacy of the building and its exposure to storm surge. Your 1974 low-set timber home was assessed by the Cairns Regional Council and assigned Zone B because it cannot reliably withstand Category 3+ conditions.
+
+The James Cook University Cyclone Testing Station has found that many Queensland homes built before 1980 have significant structural vulnerabilities in high winds — roof cladding, connection details and wall frames that were not engineered for the loads a Category 3 or 4 produces.
+
+Your house is one of those houses.`,
+  choices:[
+    {text:"Leave immediately — pack the car in the next fifteen minutes and go south",next:"s3_plan",score:22,logQ:"good",logEffect:"You left 22 minutes after Ray knocked. The Bruce Highway south was open and moving."},
+    {text:"Wait for the 9pm BOM update first — it might have weakened or shifted track",next:"s2_wait",score:2,logQ:"bad",logEffect:"The 9pm update showed further intensification and a track that had moved 20km closer."}
+  ]},
+
+s2b:{loc:"YOUR LIVING ROOM — 6:45PM",atmo:"critical",
+  logTime:"6:45pm",logSit:"You decided to shelter in place. Your house has survived before.",
+  prompt:"Ray is gone. The wind is picking up.",
+  text:`Ray nods. He doesn't argue further. He walks back to his car.
+
+Research from Queensland cyclone studies consistently found that the single strongest predictor of non-compliance with mandatory evacuation orders is a history of successful shelter-in-place during previous cyclones. People who stayed through a Category 2 and survived believe the same reasoning applies to a Category 4.
+
+It does not.
+
+Category 3 and above represents a qualitative shift in building loading. The Queensland Floods Commission 2012 found that zone compliance was a critical failure point — a significant proportion of residents in mandatory zones chose not to leave, and many cited past experience as the reason.
+
+Your house has survived two storms. Both were Category 2 or below. Both tracked south.
+
+This one is Category 4 and tracking north of Cairns.
+
+At 7:15pm the BOM issues an Emergency Warning. Landfall expected 4-6am. Do not leave now unless you are in immediate danger.
+
+It is too late to drive safely.`,
+  choices:[
+    {text:"Shelter in the strongest part of the house — interior room, lowest floor, away from windows",next:"s3_shelter",score:10,logQ:"ok",logEffect:"You sheltered correctly in the interior bathroom. The house held — just. Significant damage to the roof."},
+    {text:"Go to the garage and shelter in the car",next:"s3_garage",score:-4,logQ:"bad",logEffect:"The garage roof partially failed at wind speeds above 180km/h. The car was crushed by falling timber."}
+  ]},
+
+s2c:{loc:"YOUR STREET — 6:48PM",atmo:"calm",
+  logTime:"6:48pm",logSit:"You left with Ray without checking anything. The roads were clear.",
+  prompt:null,
+  text:`You grab your bag. Ray waits three minutes.
+
+You do not know your zone. You do not need to right now — Ray knows his and his reasoning is sound. You will figure out your zone when this is over.
+
+You pull out behind Ray's car and head south on the Bruce Highway.
+
+It is 6:48pm. The highway is busy but moving. Other people have made the same decision at the same time.
+
+On the radio: the Category 4 system has sustained winds of 200km/h at the eye wall. Predicted landfall 4am-6am. Storm surge warning for Zone A and B coastal areas.`,
+  choices:[
+    {text:"Follow Ray to the evacuation centre in Innisfail — it is a designated Category 5 shelter",next:"s3_plan",score:18,logQ:"good",logEffect:"You arrived at the evacuation centre at 8:30pm. There was space, food, and power."},
+    {text:"Drive to Townsville — it is further but feels safer",next:"s3_townsville",score:10,logQ:"ok",logEffect:"Townsville was fine. The extra distance meant you drove for 4 hours instead of 2. The cyclone stayed on track."}
+  ]},
+
+s2_wait:{loc:"YOUR LIVING ROOM — 9:10PM",atmo:"critical",
+  logTime:"9:10pm",logSit:"The 9pm BOM update showed intensification to Category 4 and a narrowing track.",
+  prompt:"It is now 9:10pm. The BOM has issued an Emergency Warning.",
+  text:`The 9pm update loads.
+
+Category 4. Sustained winds 200km/h. Track has shifted 20km west — more directly at Cairns. Storm surge: 2-3 metres above tide in Zone B areas. Landfall window: 3am-5am.
+
+Emergency Warning: dangerous conditions will arrive in northern suburbs within 8-10 hours. Leave NOW if in an evacuation zone. Do not leave after conditions deteriorate.
+
+It is 9:10pm. The Bruce Highway south is still open — but reports of heavy traffic and the outer bands beginning to affect visibility.
+
+You have a window. It is closing.`,
+  choices:[
+    {text:"Leave right now — drive south before the outer bands close the highway",next:"s3_late_road",score:8,logQ:"ok",logEffect:"You made it out — barely. Two hours of difficult driving in increasing wind and rain."},
+    {text:"Too dangerous to drive now — shelter in place properly",next:"s3_shelter",score:10,logQ:"ok",logEffect:"Sheltering correctly was the right call at this point. Driving in the outer bands was the greater risk."}
+  ]},
+
+s3_plan:{loc:"BRUCE HIGHWAY SOUTH — 7:30PM",atmo:"calm",
+  logTime:"7:30pm",logSit:"Driving south. Traffic is heavy but moving. Outer bands not yet affecting the road.",
+  prompt:null,
+  text:`The highway is busy.
+
+There is a rhythm to it — everyone heading the same direction at a steady pace. Nobody is panicking. Hazard lights on a few vehicles. A caravan being towed carefully in the slow lane.
+
+The radio runs continuous updates. The cyclone has not changed track. It has not weakened.
+
+Research from Queensland cyclone evacuations found a pattern called normalisation bias — the tendency to discount official warnings because previous storms either tracked away or weakened. Multiple households in the Yasi evacuation cited "I thought it would shift south like the last one" as the reason they delayed.
+
+This one did not shift.
+
+You are driving south.`,
+  choices:[
+    {text:"Innisfail evacuation centre — designated Category 5 shelter, 90 minutes south",next:"s4_centre",score:16,logQ:"good",logEffect:"Arrived at 9:15pm. Power, food, and shelter for the night. The cyclone made landfall at 4:40am."},
+    {text:"Mate's house in Cardwell — further south but more comfortable",next:"s4_cardwell",score:10,logQ:"ok",logEffect:"Cardwell was in the outer track zone. The mate's house had significant roof damage. You sheltered in their interior bathroom for 6 hours."}
+  ]},
+
+s3_townsville:{loc:"BRUCE HIGHWAY — 8:30PM",atmo:"calm",
+  logTime:"8:30pm",logSit:"Driving to Townsville. 4 hours. You will be well south of the track.",
+  prompt:null,
+  text:`Four hours to Townsville.
+
+By midnight you are checked into a motel. The cyclone news is on the TV in the room. It made landfall at 4:40am north of Cairns. Category 4 at landfall — it did not weaken.
+
+Your suburb lost power. Significant tree and structural damage in Zone B areas. Your house: roof damage to one side but structurally intact.
+
+You are in Townsville drinking vending machine coffee watching the coverage.`,
+  choices:[
+    {text:"Wait for the all-clear before returning",next:"out_prepared_b",score:10,logQ:"good",logEffect:"You drove four hours and slept in a motel. Not comfortable. Completely safe."}
+  ]},
+
+s3_shelter:{loc:"YOUR INTERIOR BATHROOM — AFTER MIDNIGHT",atmo:"tense",
+  logTime:"after midnight",logSit:"You sheltered in the interior bathroom as the cyclone made landfall.",
+  prompt:null,
+  text:`You have taken everything you need into the interior bathroom.
+
+Mattresses against the door and window. Emergency kit — or whatever you had ready. Water. The wall is the load-bearing one. You are as far from the exterior as possible.
+
+The wind builds over three hours.
+
+At 4:40am the sound is unlike anything you have heard. A continuous roar with periodic violent impacts. Something large hits the roof. The ceiling creaks. A crack appears in the plaster above the door.
+
+You stay completely still.
+
+At 7:15am the wind drops suddenly. You wait another hour before opening the bathroom door.`,
+  choices:[
+    {text:"Check the house room by room before going outside",next:"out_survivable_shelter",score:8,logQ:"ok",logEffect:"The house held. Significant roof damage on the windward side. You were in the right room."}
+  ]},
+
+s3_garage:{loc:"YOUR GARAGE — AFTER MIDNIGHT",atmo:"emergency",
+  logTime:"after midnight",logSit:"You sheltered in the garage. The roof failed during the peak.",
+  prompt:null,
+  text:`The garage is solid concrete on three sides.
+
+For the first three hours this seems like a reasonable choice. Then the wind exceeds 185km/h.
+
+The James Cook University Cyclone Testing Station has documented the failure modes of standard domestic garages in Category 3+ conditions. The roller door is typically the first point of failure — it deflects inward under positive pressure, creating a sudden pressure differential that lifts the roof.
+
+At 5:10am the garage roller door fails.`,
+  choices:[
+    {text:"Get behind the car immediately — away from the door",next:"out_critical_garage",score:2,logQ:"bad",logEffect:"You survived. The roof took the car. The three concrete walls held. It was very close."}
+  ]},
+
+s3_late_road:{loc:"BRUCE HIGHWAY — 9:30PM",atmo:"critical",
+  logTime:"9:30pm",logSit:"Driving south in the outer bands. Reduced visibility, debris on the road.",
+  prompt:null,
+  text:`The outer bands are affecting visibility.
+
+Rain is heavy. Wind gusts push the car sideways at intervals. Debris — branches, a tarpaulin — crosses the road in your headlights.
+
+You are driving at 60km/h when the road ahead is dry and 40km/h when you cannot see.
+
+At 11:20pm you reach Innisfail. You are through.
+
+The highway behind you closes to traffic at midnight.`,
+  choices:[
+    {text:"Innisfail evacuation centre for the rest of the night",next:"out_survivable_road",score:8,logQ:"ok",logEffect:"You made it — two hours of genuinely dangerous driving. Leaving at the first advisory would have been three hours of clear highway."}
+  ]},
+
+s4_centre:{loc:"INNISFAIL EVACUATION CENTRE — 9:15PM",atmo:"calm",
+  logTime:"9:15pm",logSit:"You arrived at the designated Category 5 evacuation shelter with space, power and food.",
+  prompt:null,
+  text:`The centre has power, food, and floor space.
+
+You find a spot near the back wall. Your partner gets food from the volunteer station. The kids are running in the sports hall with other children who have also been evacuated.
+
+At 4:40am the cyclone makes landfall. The centre holds. You can hear the wind but it is a different sound from outside — muffled by engineering designed for exactly this.
+
+At 8am you get news about your suburb. Power is out, significant tree damage, three houses with roof failure. Yours is not one of them.
+
+You drive back at noon when the roads are cleared.`,
+  choices:[
+    {text:"Drive back when the all-clear is given",next:"out_prepared_a",score:14,logQ:"perfect",logEffect:"9:15pm arrival. Clean. Right decision at every stage."}
+  ]},
+
+s4_cardwell:{loc:"FRIENDS HOUSE — CARDWELL — 10PM",atmo:"tense",
+  logTime:"10pm",logSit:"Cardwell was in the outer track zone. You sheltered in the interior bathroom for 6 hours.",
+  prompt:null,
+  text:`Your mate's house in Cardwell takes the outer bands.
+
+Not the eye wall — but the outer track zone still produces sustained 120km/h winds with gusts to 150km/h. The roof on the extension fails at 3:30am. You all move into the interior bathroom.
+
+Six hours. Three adults and two children in a single bathroom.
+
+At 9am you emerge. The extension is gone. The main structure held.`,
+  choices:[
+    {text:"Wait for the all-clear and assess",next:"out_prepared_b",score:10,logQ:"ok",logEffect:"You were safe — in the wrong shelter in the wrong location. The evacuation centre would have been the right call."}
+  ]},
+
+out_hidden:{outcome:"perfect",hiddenPath:true,
+  hiddenText:"There is no hidden path in this scenario — because the research is unambiguous. Leave early, leave in your zone, go to a designated shelter. Every stage of this scenario is documented in Queensland cyclone preparedness research. The 'optimal' play is simply doing what the zone card says, immediately, when a neighbour tells you the situation has changed.",
+  finalText:`You left early. You went to a Category 5 evacuation shelter. You arrived before the crowds.
+
+This is what good preparation looks like in a cyclone — not cleverness, not prior knowledge, not a hidden insight. Just acting on the zone card when a neighbour knocks on the door.
+
+The Queensland Floods Commission 2012 found that informal social networks were often more effective triggers for evacuation than official warning channels. Ray was that trigger. You listened.
+
+The research is consistent: leave early, leave your zone, go to a designated shelter. Every element of that sentence matters.`,
+  lessons:[
+    "Know your cyclone zone before cyclone season — the zone is on the Cairns Regional Council website and is printed on the evacuation cards distributed to all households",
+    "The zone designation reflects the structural adequacy of your building, not just storm track — a 1974 low-set timber house is in Zone B because it cannot reliably withstand Category 3+ loads",
+    "Leave when your neighbour tells you the situation has changed — Queensland research found informal networks consistently outperform official warnings as evacuation triggers",
+    "Category 3+ cyclones in the Coral Sea rarely weaken at landfall — warm water sustains and intensifies them; 'it will weaken' is documented dangerous wishful thinking"
+  ]},
+
+out_prepared_a:{outcome:"prepared",
+  finalText:`Left early. Arrived at a designated Category 5 shelter at 9:15pm. Cyclone made landfall at 4:40am. You were inside engineered structure, with power and food, when it happened.
+
+Your house had minor roof damage on the windward side. Insured. Fixable.
+
+The Queensland Floods Commission 2012 found that mandatory evacuation zones reflect a careful engineering assessment of structural vulnerability. Zone B exists because Zone B houses cannot reliably withstand Category 3+ conditions. Yours is a Zone B house. You left Zone B.`,
+  lessons:[
+    "Designated evacuation centres are built to Category 5 standards — they are the correct destination, not a last resort",
+    "Leaving early — before the highways fill — means driving in clear conditions, not in outer-band rain and debris",
+    "Zone compliance is the single most important individual decision in cyclone preparedness — the zone exists for a precise engineering reason",
+    "Informal triggers (Ray) are valuable — but the underlying information (zone + track + intensity) was available to you all along"
+  ]},
+
+out_prepared_b:{outcome:"prepared",
+  finalText:`You made it out — though not as cleanly as you could have.
+
+Whether it was the late highway drive, or sheltering in a friend's house in the outer bands, or four hours to Townsville — you were safe when the cyclone hit.
+
+But the research is clear about what left-early-to-an-official-shelter looks like compared to what you experienced. The difference is not just comfort. It is road conditions, shelter adequacy, and the margin between a building that holds and one that does not.`,
+  lessons:[
+    "Leave earlier — at the first advisory or the first trustworthy informal signal, not after waiting for confirmation you already have",
+    "Designated Category 5 evacuation shelters are engineered for the event — a mate's house in the outer bands is not",
+    "The zone card in the pantry is not a last resort document — it is the first thing to check when a storm is in the Coral Sea",
+    "Queensland Floods Commission 2012: compliance with mandatory evacuation zones is the single most important community-level factor in cyclone fatality reduction"
+  ]},
+
+out_survivable_shelter:{outcome:"survivable",
+  finalText:`The house held.
+
+Significant roof damage on the windward side. One wall crack. No structural failure.
+
+You were in the correct room — interior, load-bearing walls, mattress against the door, away from every exterior surface.
+
+The James Cook University Cyclone Testing Station has documented the failure sequence in low-set timber homes: roof cladding first, then roof framing, then wall frames. The interior bathroom on the load-bearing wall is the last part of the house to fail.
+
+You were in the right place. You were also in a building that should have been evacuated.`,
+  lessons:[
+    "If you cannot leave, the interior bathroom on a load-bearing wall is consistently the best shelter location in a domestic dwelling — confirmed by JCU Cyclone Testing Station research",
+    "But Zone B exists precisely because 'the house held' cannot be guaranteed for a 1974 low-set timber structure in Category 4 conditions",
+    "Next time: know your zone before the storm forms. Decide to leave when Ray knocks on the door.",
+    "The Queensland Floods Commission 2012 found that past shelter-in-place survival is the strongest predictor of future non-compliance — and future non-compliance eventually encounters a storm the house cannot survive"
+  ]},
+
+out_survivable_road:{outcome:"survivable",
+  finalText:`You made it out. Two hours of outer-band driving — debris, gusts, reduced visibility — that you did not need to do.
+
+The highway behind you closed at midnight. You crossed with 40 minutes to spare.
+
+Leaving three hours earlier — when Ray knocked — would have been dry roads and clear conditions at 90km/h. Instead it was 60km/h into rain and debris for two hours.
+
+Both paths end at the evacuation centre. One of them was significantly safer.`,
+  lessons:[
+    "Leaving early gives you the road conditions that exist before outer bands arrive — not the conditions that exist after",
+    "The window between 'should consider leaving' and 'do not attempt to drive' can be as short as three hours in a fast-moving system",
+    "Acting on informal triggers (Ray) early produces clear highway conditions; acting on Emergency Warnings often means difficult driving",
+    "Know your zone before the storm — so that when someone tells you it is Category 4 and you are in Zone B, you do not need to check"
+  ]},
+
+out_critical_garage:{outcome:"critical",
+  finalText:`The roof took the car. The three concrete walls held. You survived.
+
+The James Cook University Cyclone Testing Station has documented roller door failure as one of the most common domestic structure failures in Category 3+ conditions. The door deflects inward under positive pressure, creating a sudden pressure differential — the roof follows the door.
+
+You were in a garage because you had not left when you should have.
+
+Zone B. Category 4. 1974 low-set timber structure. Mandatory evacuation.
+
+Every piece of information you needed to make the right decision was available to you before Ray knocked on your door.`,
+  lessons:[
+    "Garages are among the most dangerous shelter locations in cyclones — roller doors fail under positive pressure, creating the pressure differential that lifts roofs",
+    "JCU Cyclone Testing Station research: the interior bathroom on a load-bearing wall is the correct shelter-in-place location in a domestic dwelling",
+    "Zone B mandatory evacuation is not a recommendation — it reflects an engineering assessment that your building cannot reliably withstand Category 3+ loads",
+    "Past cyclone survival in the same house creates the false confidence that most commonly precedes serious injury in Queensland cyclone research"
+  ]}
+
   }
-},
+}, // end cyclone,
 
 // ================================================================
-// FLOOD — LISMORE NSW
-// Hidden path: Monitor gauge from day 2 + pre-packed kit + leave at first advisory
+// FLOOD — LISMORE NSW (rewritten with Royal Commission research)
 // ================================================================
 flood:{
   label:"FLASH FLOOD // LISMORE NSW",
   maxDecisions:7,
-  maxScore:120,
+  maxScore:128,
   scenes:{
 
-    s0:{loc:"LISMORE NSW — SUNDAY NIGHT",atmo:"calm",logTime:"",logSit:"",prompt:null,noLog:true,
-      text:"You have checked the Wilson River gauge every morning for two days.\n\nNot because anyone told you to. Because after the 2022 floods — when 400 homes went under in a single morning — you decided that if it ever looked like that again, you were going to know about it early.\n\nYou have a note on the fridge: flood level 10.2m. Record: 14.4m (2022). Today the gauge read 7.8m when you checked at 7pm.\n\nYou go to bed with the rain still falling.",
-      choices:[{text:"Begin",next:"s1",score:0,logQ:"good",logEffect:"",noLog:true}]},
+s0:{loc:"LISMORE NSW — MONDAY NIGHT",atmo:"calm",logTime:"",logSit:"",prompt:null,noLog:true,
+  text:`You have a note on the fridge.
 
-    s1:{loc:"YOUR KITCHEN — TUESDAY 7:00AM",atmo:"calm",logTime:"7:00am",logSit:"Day 3 of rain. You checked the gauge at 7am.",prompt:"The gauge reads 8.6m. Flood level is 10.2m. What do you do?",
-      text:"Three days of rain. Not constant — relentless.\n\nYou make coffee and check the gauge. 8.6 metres. Up from 7.8 last night.\n\nThat is 80 centimetres overnight.\n\nThe BOM forecast shows another 80 to 100mm today. Possibly more. The creek at the end of your street is running hard — brown, fast, higher than yesterday.\n\nA Minor Flood Warning is in place.",
-      choices:[
-        {text:"Open the SES FloodSafe site and set up gauge alerts — watch it closely",next:"s2a",score:14,logQ:"good",logEffect:"You set alerts. When the gauge jumped 40cm in 30 minutes you knew before your phone buzzed."},
-        {text:"Start moving valuables to the upstairs rooms — furniture, electrics, documents",next:"s2b",score:12,logQ:"ok",logEffect:"Moving things upstairs was useful. But you did not yet know if the situation required evacuation."},
-        {text:"It is only Minor. The creek always looks like that in wet weather.",next:"s2c",score:0,logQ:"bad",logEffect:"Only Minor. The same reasoning used by many of the 400 households that flooded in 2022."}
-      ]},
+You wrote it in March 2022, two weeks after the water came into the second floor of your house. At the time the gauge had peaked at 14.37 metres — nearly two metres above the previous record. People who had lived through a dozen floods and knew exactly what every gauge reading meant for every street in Lismore were caught completely off guard.
 
-    s2a:{loc:"SES FLOODSAFE SITE — 7:15AM",atmo:"tense",logTime:"7:15am",logSit:"You watched the gauge rise 50cm in 30 minutes — faster than expected.",prompt:"The SES alert arrives: residents in low-lying areas should consider leaving now.",
-      text:"You set up the gauge alert and watch it.\n\n7:00am: 8.6m\n7:15am: 8.82m\n7:30am: 9.1m\n\nThat is 50 centimetres in 30 minutes. Rain upstream has not stopped.\n\nAt 7:45am an SES alert lands on your phone: residents in low-lying areas near Wilson River should consider leaving now. A Moderate to Major Flood Warning is now in effect.\n\nYour street is 200 metres from the river. At this rate, the gauge reaches flood level within 90 minutes.\n\nThis is the moment. Everything after this gets harder.",
-      choices:[
-        {text:"Leave now — get ahead of it before the roads are affected",next:"s3_hidden",score:22,logQ:"perfect",logEffect:"You left before the warning order. One of the best decisions you can make in a flood."},
-        {text:"Keep monitoring — prepare more but wait until it looks worse",next:"s3b",score:8,logQ:"ok",logEffect:"You watched for 2 more hours. By the time you moved, roads were already affected."},
-        {text:"Sandbags — get to the SES depot before the queue builds",next:"s3c",score:5,logQ:"bad",logEffect:"The queue was 45 minutes. By the time you returned, the sandbags were irrelevant."}
-      ]},
+You had gone to bed that Sunday night with the gauge at 8.2 metres. You woke at 3am with water rising through the floor of your bedroom.
 
-    s2b:{loc:"YOUR HOME — 9:00AM",atmo:"tense",logTime:"9:00am",logSit:"You were moving things upstairs when the Emergency Alert arrived.",prompt:"SES EMERGENCY ALERT: EVACUATE NOW. Roads may become impassable within the hour.",
-      text:"90 minutes of moving things upstairs. Lounge suite. Television. Documents into a waterproof bag.\n\nAt 9:03am your phone buzzes with an Emergency Alert.\n\nEVACUATE NOW if you are in a low-lying area near Wilson River or Leycester Creek. Roads may become impassable within the hour.\n\nYou look out the front window. Water is visible at the end of your street. Not much — maybe 20 centimetres. But it was not there an hour ago.",
-      choices:[
-        {text:"Stop right now — get everyone in the car and drive out while you still can",next:"s3a_urgent",score:16,logQ:"good",logEffect:"You drove through 20cm with no issues. An hour later that road was a river."},
-        {text:"30 more minutes — you are nearly done moving everything",next:"s3d",score:2,logQ:"bad",logEffect:"30 more minutes was 30 minutes too many."}
-      ]},
+The note says: Flood level 10.2m. Record 14.4m (2022). My street goes under at 9.5m. Leave at first advisory. Not the evacuation order. The first advisory.
 
-    s2c:{loc:"YOUR KITCHEN — 10:20AM",atmo:"emergency",timer:12,logTime:"10:20am",logSit:"You dismissed the warning. You woke up to floodwater in your backyard.",prompt:"Your car is in the driveway. The water is at your front gate.",
-      text:"You look out the back window at 10:20am.\n\nThe creek has burst its banks. Brown water covers the entire backyard. It is moving — fast enough to see the current pushing against the fence posts.\n\nYou check the front. Water is 15 centimetres deep at your front gate. Rising. A car is stopped at the end of the street — it tried to drive through and stalled.\n\nYour car is in the driveway. The exhaust pipe is still above the waterline.\n\nFor how long?",
-      choices:[
-        {text:"Get in the car and drive out immediately — 15cm is manageable",next:"s3e",score:6,logQ:"bad",logEffect:"15cm looks manageable. But 30cm of moving water can shift a small car. It was already 30cm at the end of the street."},
-        {text:"The car will not make it. Go to the second floor and call SES.",next:"s3f",score:12,logQ:"ok",logEffect:"Right call. Once the water is in the street, vertical evacuation is the correct answer."}
-      ]},
+It is Monday night. The gauge is at 7.8m. It has been raining for three days.`,
+  choices:[{text:"Begin",next:"s1",score:0,logQ:"good",logEffect:"",noLog:true}]},
 
-    s3_hidden:{loc:"YOUR HOME — 7:50AM",atmo:"calm",logTime:"7:50am",logSit:"You decided to leave at the first advisory — before the situation worsened.",prompt:null,
-      text:"You have been watching this gauge for two days. You know what 50 centimetres in 30 minutes means.\n\nYou call to your partner: 'We are leaving. Now. The gauge is moving too fast.\' \n\nNo argument.\n\nThe emergency bag is in the upstairs wardrobe — you moved it there after the 2022 floods because you wanted it above any water line. Three days of food, water for four people, medications, documents, battery radio, cash.\n\nYou are in the car in 6 minutes. The roads are dry. The sky is grey and heavy but the streets are empty.\n\nYou are 90 minutes ahead of the first road closure.",
-      choices:[{text:"Drive north to family in Ballina — above flood level",next:"s4_hidden",score:18,logQ:"perfect",logEffect:"Arrived at 9:10am. The road you used closed to traffic at 10:30am."}]},
+s1:{loc:"LISMORE NSW — TUESDAY 7:00AM — DAY 3 OF RAIN",atmo:"calm",
+  logTime:"7:00am",logSit:"Day 3 of rain. You checked the Wilson River gauge at 7am.",
+  prompt:"The gauge reads 8.6m this morning. It was 7.8m last night.",
+  text:`You make coffee and check the gauge on the BOM website.
 
-    s3a_urgent:{loc:"YOUR CAR — 9:06AM",atmo:"tense",logTime:"9:06am",logSit:"You drove out through 20cm of water. An hour later the road was impassable.",prompt:null,
-      text:"You drive out through the water at the end of the street — 20 centimetres, slow, steady. The car handles it.\n\nYou are out.\n\nBehind you, a neighbour is standing in their front yard watching. You slow down. They wave you on.\n\nYou drive north.",
-      choices:[{text:"Drive north to Ballina — above flood level",next:"out_prepared_b",score:14,logQ:"good",logEffect:"Arrived at 9:50am. The road you took closed to traffic at 10:30am."}]},
+7pm last night: 7.8 metres.
+7am this morning: 8.6 metres.
 
-    s3b:{loc:"YOUR HOME — 10:10AM",atmo:"critical",timer:10,logTime:"10:10am",logSit:"You monitored for 2 more hours. The Emergency Alert arrived as water entered the street.",prompt:"The street has 40cm of moving water. Your car door sills are underwater.",
-      text:"You watch the gauge. It keeps climbing.\n\n9.1m. 9.8m. 10.2m. 10.9m. 11.4m — major flood level.\n\nAt 10:10am an Emergency Alert lands. You look out the front window.\n\nThe street has 40 centimetres of moving water. Your car door sills are underwater. A wheelie bin rolls slowly past in the current.\n\nDriving is no longer safe.",
-      choices:[
-        {text:"Driving is too dangerous — second floor, call SES 132 500",next:"s3f",score:14,logQ:"ok",logEffect:"Right call. Vertical evacuation was the correct answer once the water arrived."},
-        {text:"I will go slowly — there might still be a way through",next:"s3e",score:2,logQ:"bad",logEffect:"40cm of moving water in a street is enough to float a small car."}
-      ]},
+That is 80 centimetres overnight.
 
-    s3c:{loc:"SES SANDBAG DEPOT — 8:00AM",atmo:"tense",logTime:"8:00am",logSit:"You joined the sandbag queue. 45 minutes. Returned to a flooded street.",prompt:null,
-      text:"The line at the SES sandbag depot is already long.\n\n45 minutes of waiting. Someone with a portable radio says the gauge is at 10.8m. \n\nYou make it back to your street at 9:10am with 20 sandbags.\n\nYour street has 30 centimetres of moving water. Your car is submerged to the door handles.",
-      choices:[{text:"Leave the car. Wade home. Get upstairs immediately.",next:"s3f",score:10,logQ:"ok",logEffect:"You waded home safely and reached the second floor. The sandbags stayed in the boot."}]},
+Flood level is 10.2 metres. At this rate you have somewhere between 18 and 30 hours before the river tops the levee. But in 2022, the gauge jumped 3 metres in a single morning as upstream catchments saturated and then released simultaneously. The BOM forecast shows another 80-100mm today. Possibly more.
 
-    s3d:{loc:"YOUR HOME — 9:35AM",atmo:"emergency",logTime:"9:35am",logSit:"You stayed to finish moving things. Water reached your front door.",prompt:null,
-      text:"A thin line of brown water pushes under the front door.\n\nThe driveway is submerged. Your car will flood.\n\nThere is no more time to move anything.",
-      choices:[{text:"Get to the highest point in the house — call SES 132 500",next:"s3f",score:10,logQ:"bad",logEffect:"Right move — just later than it needed to be."}]},
+A Minor Flood Warning is in place. One level below Moderate.
 
-    s3e:{loc:"YOUR STREET — FLOODED",atmo:"emergency",logTime:"10:25am",logSit:"You drove into the floodwater. The car stalled in 50cm of moving current.",prompt:null,
-      text:"The car enters the flood water.\n\n30 centimetres seems manageable. You have driven through puddles.\n\nBut this is not a puddle. This is a current.\n\nAt 50 centimetres the engine cuts out. The wheels lose traction. The car moves sideways — slowly, barely, but moves.\n\nYou feel the pressure of the water against the door.",
-      choices:[{text:"Get out of the car immediately — move to high ground on foot",next:"out_critical",score:4,logQ:"bad",logEffect:"You got out. The car did not. Never drive into floodwater."}]},
+You look at the note on the fridge.`,
+  choices:[
+    {text:"Open BOM and SES FloodSafe — set gauge alerts and watch it closely",next:"s2a",score:14,logQ:"good",logEffect:"You set alerts. At 7:30am the gauge jumped 40cm in 30 minutes. You were already watching."},
+    {text:"Start moving things upstairs — furniture, electronics, documents",next:"s2b",score:12,logQ:"ok",logEffect:"Moving things upstairs was useful. But you didn't yet know whether the situation required you to leave."},
+    {text:"It's only Minor. Your street has handled Minor warnings before.",next:"s2c",score:0,logQ:"bad",logEffect:"The 2022 event started as a Minor warning too. It peaked two metres above the previous record."}
+  ]},
 
-    s3f:{loc:"YOUR SECOND FLOOR — 10:30AM",atmo:"tense",logTime:"10:30am",logSit:"You made it upstairs. The water outside is 1.1m and rising. SES is overwhelmed.",prompt:"How prepared are you to wait?",
-      text:"You are upstairs. The water outside is 1.1 metres and still rising.\n\nYour floors are dry — for now.\n\nYou call SES 132 500. They log your address. The operator says: 'We have you registered. We are overwhelmed right now. Please stay in place and stay visible.\' \n\nETA for rescue: unknown.\n\nThis is the moment where what you have with you — or do not have — becomes very real.",
-      choices:[
-        {text:"We have emergency supplies upstairs — water, food, medications. We can wait.",next:"out_survivable_a",score:16,logQ:"good",logEffect:"You waited 11 hours for rescue. Your supplies made it manageable rather than dangerous."},
-        {text:"We have almost nothing up here — we need rescue as soon as possible",next:"out_survivable_b",score:5,logQ:"bad",logEffect:"14 hours. No food, no water, a child who needed medication. Rescue came. But it was brutal."}
-      ]},
+s2a:{loc:"BOM WEBSITE — 7:15AM",atmo:"tense",
+  logTime:"7:15am",logSit:"You watched the gauge rise 50cm in 30 minutes. The SES advisory arrived.",
+  prompt:"SES alert: residents in low-lying areas near Wilson River should consider leaving now.",
+  text:`The gauge is moving faster than overnight.
 
-    s4_hidden:{loc:"BALLINA — 9:10AM",atmo:"calm",logTime:"9:10am",logSit:"You arrived at family in Ballina 90 minutes ahead of the road closures.",prompt:null,
-      text:"You pull into your cousin driveway at 9:10am.\n\nThe kids pile out. Your cousin makes coffee. The emergency bag goes inside.\n\nAt 10:30am your phone shows the first road closure notification for the route you just drove.\n\nAt 11:45am: the second route.\n\nAt 1:30pm: Lismore gauge peaks at 12.8 metres. Your street goes under.\n\nYou watch the ABC flood coverage on your cousin television and you are glad you checked the gauge every morning for two days.",
-      choices:[{text:"Stay here until the situation stabilises",next:"out_perfect",score:14,logQ:"perfect",logEffect:"You watched the flood from somewhere safe. Your preparation and your attention made that possible."}]},
+7:00am: 8.6m
+7:15am: 8.82m
+7:30am: 9.1m
 
-    out_perfect:{outcome:"perfect",hiddenPath:true,hiddenText:"You had been watching the gauge for two days before the crisis. When the first advisory came, you had the context to know how serious it was — and you left before anyone told you to.",
-      finalText:"You left at the first advisory. Not the evacuation order. Not the Emergency Alert. The first advisory, at 7:45am, when the roads were dry and your car was in the driveway and you had 90 minutes of margin that nobody else on your street had.\n\nYou had that margin because you checked the gauge every morning. You knew what the numbers meant. When 50 centimetres in 30 minutes appeared on the screen, you did not need anyone to tell you what to do.\n\nYour street flooded to the gutters. Your house had water on the ground floor. You were in Ballina watching it on television.\n\nThis is what monitoring and preparation look like when they work.",
-      lessons:["The hidden path rewards two days of attention before the crisis — context makes the advisory mean something","Leaving at the first advisory, not the evacuation order, gives you dry roads and 90 minutes of margin","An emergency bag stored upstairs is above any water line — and it is ready when you are","Knowing your local flood gauge and what the numbers mean for your specific street is not paranoia. It is preparation."]},
+Fifty centimetres in thirty minutes.
 
-    out_prepared_b:{outcome:"prepared",finalText:"You acted on the Emergency Alert the moment it arrived and drove out through 20 centimetres of water before the road closed.\n\nThe route you used closed to traffic at 10:30am. You were already 40 kilometres north of Lismore.\n\nYour house flooded. You were somewhere dry with most of what you needed.",
-      lessons:["Acting on the first alert — not the second — gives you the window you need","Pre-packing an emergency bag means the decision to leave takes 6 minutes, not 25","Know your evacuation route before you need it — not while the water is rising"]},
+The rain upstream has not stopped. The catchments that caused the 2022 surge — the headwaters of the Richmond and Wilsons — are already soaked. This is what saturated catchments do: they stop absorbing and start releasing.
 
-    out_survivable_a:{outcome:"survivable",finalText:"You made the right call getting upstairs and calling SES. Your emergency supplies stored upstairs meant that 11-hour wait was uncomfortable but never dangerous.\n\nWithout them it would have been genuinely life-threatening.",
-      lessons:["Emergency supplies stored upstairs are above any water that enters — they are there when you need them most","Vertical evacuation is the right call once the water is in the street","A 72-hour kit means 11 hours of waiting is manageable, not an emergency within an emergency"]},
+At 7:45am an SES advisory arrives on your phone. Residents in low-lying areas near Wilson River should consider leaving now. A Moderate to Major Flood Warning is now in effect.
 
-    out_survivable_b:{outcome:"survivable",finalText:"14 hours. No food. No water. A child who needed daily medication and did not get it.\n\nRescue came at 1:15am. The SES crew were exhausted and stretched across the entire flood plain.\n\nYou are safe. That is true. But those 14 hours were preventable.",
-      lessons:["Emergency supplies are as critical for waiting for rescue as they are for evacuating","Never drive into floodwater — once the water is in the street, vertical evacuation is the answer","The stress of having nothing is added to the stress of the emergency — preparation removes that second layer"]},
+That phrase — should consider leaving now — is the SES way of saying leave. They cannot compel you. They are telling you what to do.
 
-    out_critical:{outcome:"critical",finalText:"You got out of the car safely. This time.\n\nFloodwater in an urban street is one of the most dangerous driving situations that exists. 30 centimetres of moving water can shift a small car sideways. 60 centimetres can float an SUV.\n\nIt looked like 15 centimetres from your driveway. It was 50 centimetres at the stall point.\n\nThe lesson from this scenario is not about bravery. It is about what moving water actually does to a vehicle.",
-      lessons:["If it is flooded, forget it — this SES slogan exists because people die driving into floodwater every year","If the water is in the street, the time to drive has passed — go upstairs and call SES","Leave early enough that this decision never has to be made"]}
-  }
-},
+Your street goes under at 9.5 metres. The gauge is at 9.1 metres and climbing.`,
+  choices:[
+    {text:"Leave now. The advisory says go. You have your note on the fridge.",next:"s3_hidden",score:22,logQ:"perfect",logEffect:"You left before the roads flooded. The note on the fridge worked exactly as intended."},
+    {text:"Keep monitoring and preparing — wait until it looks more certain",next:"s3b",score:8,logQ:"ok",logEffect:"You watched the gauge for another two hours. By then the roads were affected."},
+    {text:"Get sandbags from the SES depot before the queue builds up",next:"s3c",score:4,logQ:"bad",logEffect:"The SES depot queue was 45 minutes. By the time you returned, the situation had overtaken the sandbags."}
+  ]},
+
+s2b:{loc:"YOUR HOME — 9:00AM",atmo:"tense",
+  logTime:"9:00am",logSit:"You were moving things upstairs when the Emergency Alert arrived.",
+  prompt:"SES EMERGENCY ALERT: EVACUATE NOW if in low-lying area near Wilson River. Roads may become impassable within the hour.",
+  text:`You spend 90 minutes moving things. Lounge suite upstairs. Television. Documents into a waterproof bag. The fridge contents — you stop yourself and think about what actually matters.
+
+At 9:03am your phone buzzes.
+
+SES EMERGENCY ALERT. Evacuate now. Roads may become impassable within the hour.
+
+You look out the front window. Water is visible at the end of your street. Not much — 20 centimetres maybe. But it was not there an hour ago.
+
+Your partner appears at the top of the stairs: how bad is it?`,
+  choices:[
+    {text:"Stop right now — everyone in the car and drive out while roads are still clear",next:"s3_urgent",score:16,logQ:"good",logEffect:"You drove through 20cm with no issues. An hour later that road was a river."},
+    {text:"Thirty more minutes — you are almost done moving everything important",next:"s3d",score:2,logQ:"bad",logEffect:"Thirty more minutes was thirty minutes too many. By then the car was compromised."}
+  ]},
+
+s2c:{loc:"YOUR KITCHEN — 10:20AM",atmo:"emergency",timer:12,
+  logTime:"10:20am",logSit:"You dismissed the Minor warning. You woke to floodwater in your backyard.",
+  prompt:"Your car is in the driveway. The water is at your front gate.",
+  text:`You look out the back window at 10:20am.
+
+The creek has burst its banks. Brown water covers your entire backyard — moving, fast enough to see the current pushing against the fence posts.
+
+You check the front. Water is 20 centimetres deep at your front gate. Rising visibly. A car is stopped at the end of the street — it tried to drive through and stalled.
+
+Your car is in the driveway. The exhaust pipe is still above the waterline.
+
+Your partner says: we can still get the car out. The Patrol can handle this.
+
+The UNSW Water Research Laboratory tested full-sized vehicles in real floodwater in 2016. A Toyota Yaris — 1.05 tonnes — is moved by water just 15 centimetres deep at 3.6km/h. A Nissan Patrol 4WD — 2.5 tonnes — is unstable at 45 centimetres and floats completely at 95 centimetres.
+
+The water at your front gate is 20 centimetres. It was not there an hour ago.`,
+  choices:[
+    {text:"Take the Patrol — it can handle 20cm. Drive out now.",next:"s3_4wd",score:-5,logQ:"bad",logEffect:"The Patrol handled 20cm. It did not handle what came next."},
+    {text:"The car won't make it safely. Go to the second floor and call SES.",next:"s3f",score:14,logQ:"ok",logEffect:"Right call. Once water is in the street, vertical evacuation is the correct answer."}
+  ]},
+
+s3_hidden:{loc:"YOUR HOME — 7:50AM",atmo:"calm",
+  logTime:"7:50am",logSit:"You decided to leave at the first advisory, before the roads were affected.",
+  prompt:null,
+  text:`You read the note on the fridge.
+
+Leave at first advisory. Not the evacuation order. The first advisory.
+
+This is the first advisory.
+
+You call to your partner: we are leaving. Now. The gauge is moving too fast.
+
+No argument. They saw 2022 too.
+
+The emergency bag is in the upstairs wardrobe — you put it there specifically so it would be above any water line. Water, food for three days, all medications, documents in a waterproof bag, battery radio, cash. You had moved it upstairs after 2022 because you thought: if it gets bad enough that we need the bag, the downstairs might already be flooded.
+
+In the car in six minutes. The streets are dry. The gauge is at 9.1 metres and rising. The SES advisory has been out for five minutes.
+
+You are ahead of it.`,
+  choices:[
+    {text:"Drive north to family in Ballina — above flood level, agreed in advance",next:"s4_hidden_kit",score:18,logQ:"perfect",logEffect:"Clear roads. 90 minutes ahead of the first road closures."}
+  ]},
+
+s4_hidden_kit:{loc:"YOUR CAR — 8:00AM",atmo:"calm",
+  logTime:"8:00am",logSit:"Driving north on clear roads. The gauge is climbing behind you.",
+  prompt:null,
+  text:`The road north is completely clear.
+
+ABC Local is on — the first flood updates are starting to come through. The gauge is now at 9.4 metres and rising. The SES have upgraded to Moderate Flood Warning.
+
+You call your cousin in Ballina. We are on our way. Good, they say. Roads are still clear here.
+
+At 9:15am a road closure alert arrives for the route south of Lismore.
+
+At 10:30am: the Bruxner Highway.
+
+At 12:40pm: the gauge peaks at 11.8 metres. Your street goes under at 9.5 metres. Your house — the upstairs wardrobe where the emergency bag had been — is dry by roughly a metre.
+
+You are at your cousin's kitchen table drinking coffee.`,
+  choices:[
+    {text:"Monitor the situation and wait for the all-clear",next:"out_hidden",score:18,logQ:"perfect",logEffect:"You watched the flood from somewhere dry. The note on the fridge worked."}
+  ]},
+
+s3_urgent:{loc:"YOUR CAR — 9:06AM",atmo:"tense",
+  logTime:"9:06am",logSit:"You drove out through 20cm of water. An hour later that road was impassable.",
+  prompt:null,
+  text:`You drive out through the water at the end of the street — 20 centimetres, slow, careful. The Patrol handles it.
+
+You are out.
+
+Behind you, a neighbour is standing in their front yard watching. You slow, they wave you on.
+
+You drive north.
+
+At 9:50am you arrive at your cousin's place in Ballina. At 10:30am a road closure alert arrives for the route you just drove. At 1pm another alert for the backup route.
+
+The roads closed behind you. You were through before they did.`,
+  choices:[
+    {text:"Stay in Ballina until the all-clear",next:"out_prepared_b",score:16,logQ:"good",logEffect:"You made it with a narrow margin. Acting on the Emergency Alert — immediately — was the right call."}
+  ]},
+
+s3b:{loc:"YOUR HOME — 10:10AM",atmo:"critical",timer:12,
+  logTime:"10:10am",logSit:"You monitored for two more hours. Emergency Alert arrived as water entered the street.",
+  prompt:"The street has 40cm of moving water. Your car door sills are underwater.",
+  text:`The gauge keeps climbing.
+
+9.1m. 9.8m. 10.2m — flood level. 10.9m. 11.4m.
+
+At 10:10am an Emergency Alert arrives. You look out the front window.
+
+The street has 40 centimetres of moving water. Your car door sills are underwater. A wheelie bin rolls past slowly in the current.
+
+Driving is no longer safe.
+
+The UNSW Water Research Laboratory established through real-vehicle testing that a standard sedan loses traction and begins moving laterally at approximately 30cm of moving water. At 40cm, control is essentially lost. The car you can see from your window is at the limit of what any vehicle can safely navigate — and the current is still rising.`,
+  choices:[
+    {text:"Driving is too dangerous — second floor, call SES 132 500",next:"s3f",score:14,logQ:"ok",logEffect:"Right call. Vertical evacuation was the correct answer once the water arrived."},
+    {text:"The Patrol can still get through 40cm. Try to drive out.",next:"s3_4wd",score:-5,logQ:"bad",logEffect:"A 2.5 tonne Nissan Patrol becomes unstable at 45cm of moving water. The UNSW research established this with a real vehicle."}
+  ]},
+
+s3c:{loc:"SES SANDBAG DEPOT — 8:00AM",atmo:"tense",
+  logTime:"8:00am",logSit:"You joined the sandbag queue. 45 minutes. Returned to a flooded street.",
+  prompt:null,
+  text:`The line at the SES sandbag depot is already long.
+
+You wait. 45 minutes. Someone has a portable radio — the gauge is at 10.8 metres and still rising.
+
+You get 20 sandbags and drive back.
+
+Your street has 30 centimetres of fast-moving water. Your car's door sills are underwater at the end of the driveway.`,
+  choices:[
+    {text:"Leave the car. Wade home. Get upstairs immediately.",next:"s3f",score:10,logQ:"ok",logEffect:"You waded home safely through 30cm. The sandbags stayed in the boot. Right decision."}
+  ]},
+
+s3d:{loc:"YOUR HOME — 9:35AM",atmo:"emergency",
+  logTime:"9:35am",logSit:"You stayed to finish moving things. Water reached your front door.",
+  prompt:null,
+  text:`A thin line of brown water pushes under the front door.
+
+The driveway is submerged. Your car will flood.
+
+There is no more time to move anything.`,
+  choices:[
+    {text:"Get to the highest point in the house — call SES 132 500 immediately",next:"s3f",score:8,logQ:"bad",logEffect:"Right move — just much later than it needed to be. Thirty minutes cost you the car and the option to leave."}
+  ]},
+
+s3_4wd:{loc:"YOUR STREET — FLOODED",atmo:"emergency",
+  logTime:"10:25am",logSit:"You drove the Patrol into the floodwater. It became unstable at depth.",
+  prompt:null,
+  text:`You pull out of the driveway into the water.
+
+25 centimetres. The Patrol feels solid. You have done this before — driven through flooded roads in the Patrol. It handles water.
+
+35 centimetres as you reach the main road. Still manageable.
+
+Then 42 centimetres.
+
+UNSW Water Research Laboratory, 2016: a 2.5 tonne Nissan Patrol 4WD becomes unstable in 45 centimetres of moving water at a flow speed of just 3.6 kilometres per hour. At 95 centimetres, it floats and needs almost no force to move it by hand.
+
+The research was conducted in a real test tank with real vehicles. What surprised the engineers was not the numbers — it was how little it took.
+
+The Patrol moves sideways. Not much. But it moves.
+
+You can feel it.`,
+  choices:[
+    {text:"Get everyone out of the vehicle immediately — move to high ground on foot",next:"out_critical_4wd",score:4,logQ:"bad",logEffect:"You got out. The Patrol was found 80 metres downstream. Driving into floodwater is the leading cause of flood deaths in Australia."}
+  ]},
+
+s3f:{loc:"YOUR SECOND FLOOR — VARIABLE TIME",atmo:"tense",
+  logTime:"variable",logSit:"You made it upstairs. The water is rising outside. SES is overwhelmed.",
+  prompt:"How prepared are you to wait — and for how long?",
+  text:`You are upstairs. The water outside is rising.
+
+You call SES on 132 500. They log your address. The operator says: we have you registered. We are overwhelmed right now. Please stay in place and stay visible if you can get to a window.
+
+ETA for rescue: unknown.
+
+In 2022, some Lismore residents waited more than 24 hours for rescue. The SES were working with the resources available across an entire flood-affected region. Community members in tinnies and kayaks rescued hundreds of people — many of them without official coordination.
+
+This is the moment where what you have with you — or don't have — becomes very real.`,
+  choices:[
+    {text:"We have emergency supplies stored up here — water, food, medications. We can wait safely.",next:"out_survivable_a",score:18,logQ:"good",logEffect:"You waited 11 hours for rescue. The supplies made it manageable rather than dangerous."},
+    {text:"We have almost nothing up here. We need rescue as soon as possible.",next:"out_survivable_b",score:4,logQ:"bad",logEffect:"Eighteen hours without food, water, or medications. Rescue came. It was brutal."}
+  ]},
+
+out_hidden:{outcome:"perfect",hiddenPath:true,
+  hiddenText:"You had a note on the fridge. That note — written after the trauma of 2022 — said leave at the first advisory. Not the evacuation order. The advisory. Most people wait for stronger signals. The hidden path rewards the person who acted before anyone told them to.",
+  finalText:`You left at the first advisory. Not because someone told you to leave right now. Because you had a note on the fridge that said the first advisory is the signal.
+
+The 2022 floods taught Lismore that gauge readings can underestimate peaks in extreme catchment-saturation events. The gauge reached 14.4 metres — nearly two metres above the previous record — in part because upstream catchments failed in ways the models had not fully anticipated.
+
+Your note said: the first advisory is the signal. You read the note. You left.
+
+Your house took water on the ground floor. The upstairs wardrobe — where the emergency kit had been — was dry. Everything that matters made it.`,
+  lessons:[
+    "The 'consider leaving now' advisory from SES is the signal to leave — it is not a suggestion but an instruction in softer language than an evacuation order",
+    "The 2022 Lismore floods peaked nearly two metres above the previous record — people who had survived previous floods using the same house were caught by an event that broke all historical patterns",
+    "Storing your emergency kit upstairs in a flood-prone area means it is above any water line and accessible when you need it most",
+    "The Queensland Floods Commission 2012 found that leaving early — before roads are compromised — is the single most effective individual action in a flood emergency"
+  ]},
+
+out_prepared_b:{outcome:"prepared",
+  finalText:`You acted on the Emergency Alert the moment it arrived and drove through 20 centimetres of water before the road closed.
+
+The route you used closed to traffic at 10:30am. You were through by 9:50am. Forty minutes of margin.
+
+Your house took significant water. You were somewhere dry with your family and an emergency kit when it happened.
+
+The Queensland Floods Commission 2012 found that acting on official alerts immediately — not after waiting to assess further — was consistently associated with better outcomes. You acted immediately.`,
+  lessons:[
+    "Acting on the Emergency Alert immediately — without pausing to finish preparing or loading more — gave you the 40-minute margin that kept the road open",
+    "The SES 'consider leaving now' advisory, which came earlier, was also a signal — acting on that would have given you hours of margin instead of minutes",
+    "Emergency kits make any departure better — arriving at shelter with supplies, documents and medications makes the aftermath manageable",
+    "43% of Australian flood deaths between 1994 and 2014 were vehicle-related — but this was a vehicle departure made safely, before water depth became dangerous"
+  ]},
+
+out_survivable_a:{outcome:"survivable",
+  finalText:`You are rescued eleven hours after calling SES.
+
+The crew are exhausted — they have been running since before dawn across a flood plain covering hundreds of square kilometres. They are grateful you called when you did and that you could wait.
+
+Your emergency supplies made those eleven hours uncomfortable but not dangerous. You had water, food, and all medications. You could wait. Some of your neighbours could not.
+
+The 2022 Lismore floods saw hundreds of people rescued from rooftops by members of the public in tinnie boats — an improvised rescue operation that saved lives the official system could not reach in time.`,
+  lessons:[
+    "Emergency supplies stored upstairs mean that vertical evacuation is a sustainable option — not a crisis within a crisis",
+    "The Queensland Floods Commission found that people who could shelter safely and wait for rescue had consistently better outcomes than those who attempted to wade or drive through floodwater",
+    "Calling SES early — before your situation became desperate — allowed them to prioritise correctly across an overwhelmed system",
+    "Leave at the first advisory and none of this was necessary — this scenario shows both what preparation can do and what it cannot fully compensate for"
+  ]},
+
+out_survivable_b:{outcome:"survivable",
+  finalText:`Eighteen hours. No food. No water. A family member who needed daily medication and did not get it.
+
+Rescue came at 3:15am. The SES crew had been working for nearly twenty hours. They found you dehydrated and exhausted on the roof, visible because you had put a torch in the window.
+
+You are safe. The eighteen hours were preventable.
+
+The 2022 Lismore floods required the largest flood rescue operation in Australian peacetime history. SES, ADF, community volunteers in private boats. Hundreds of people were pulled from rooftops. The resources were stretched across an entire region. Being a rescue that could wait — because you had supplies — is the difference between survivable and critical.`,
+  lessons:[
+    "Emergency supplies stored upstairs would have transformed those eighteen hours — water, food, and medications cost one afternoon of preparation",
+    "The 2022 Lismore research found people were consistently surprised by both the speed of rise and the ultimate height of the water — preparation must account for events beyond historical experience",
+    "Calling SES immediately upon deciding to shelter in place — rather than waiting to see if it got worse — allows proper prioritisation across an overwhelmed system",
+    "Leave at the first advisory. That is the note on the fridge. That note exists for exactly this scenario."
+  ]},
+
+out_critical_4wd:{outcome:"critical",
+  finalText:`You got out of the Patrol safely. The vehicle was found 80 metres downstream the following morning.
+
+Driving into floodwater is the leading cause of flood deaths in Australia. Research from the PerilAUS database found that between 1994 and 2014, 81 people died attempting to drive through floodwaters — 43% of all flood fatalities over that period. Thirty-five percent of those people were in 4WDs.
+
+The UNSW Water Research Laboratory established in 2016 through real-vehicle testing with a real Nissan Patrol that a 2.5 tonne 4WD becomes unstable at 45 centimetres of moving water flowing at just 3.6 kilometres per hour. At 95 centimetres it floats completely. The research was conducted specifically because 4WD drivers consistently underestimate the risk — the vehicle's capability in rough terrain does not transfer to moving water.
+
+You now know this. Really know it.`,
+  lessons:[
+    "43% of Australian flood deaths between 1994 and 2014 were vehicle-related — driving into floodwater is the leading cause of flood fatalities, not drowning in houses",
+    "35% of vehicle flood deaths were in 4WDs — the false confidence provided by 4WD capability in rough terrain does not translate to safety in moving water",
+    "A Nissan Patrol 4WD becomes unstable at 45cm of moving water — the UNSW Water Research Laboratory established this with real vehicles in 2016",
+    "If it's flooded, forget it — the Queensland Government campaign is not an overreaction. The SES slogan exists because people in 4WDs die every flood season."
+  ]}
+
+  } // end scenes
+}, // end flood,
 
 // ================================================================
-// BLACKOUT — SE AUSTRALIA
-// Hidden path: Identify medication first AND have pre-packed kit with medical info
+// BLACKOUT — SE AUSTRALIA (rewritten with SA Independent Review)
 // ================================================================
 blackout:{
   label:"GRID FAILURE // SE AUSTRALIA",
-  maxDecisions:7,
-  maxScore:116,
+  maxDecisions:6,
+  maxScore:128,
   scenes:{
 
-    s0:{loc:"YOUR HOME — THURSDAY AFTERNOON",atmo:"calm",logTime:"",logSit:"",prompt:null,noLog:true,
-      text:"Your mother-in-law has lived with you for three years. She is 74, sharp, and occasionally infuriating in the way that people who are almost always right tend to be.\n\nShe takes a daily injection. The medication lives in the fridge and must stay below 8 degrees Celsius. You have always known this. You have never had to act on it.\n\nAt 3:20pm on a Thursday, the power goes off.\n\nNot a flicker. A full cut. The fridge stops. The aircon stops. The television drops to black.",
-      choices:[{text:"Begin",next:"s1",score:0,logQ:"good",logEffect:"",noLog:true}]},
+s0:{loc:"SE AUSTRALIA — FRIDAY 3:48PM",atmo:"calm",logTime:"",logSit:"",prompt:null,noLog:true,
+  text:`Your mother-in-law has been living with you since February.
 
-    s1:{loc:"YOUR HOME — 3:20PM",atmo:"tense",logTime:"3:20pm",logSit:"Major grid failure. No ETA for restoration. The medication in the fridge is now at risk.",prompt:"What is your first move?",
-      text:"Energy Australia app: Major Network Incident. Estimated restoration time: UNKNOWN.\n\nABC News loads slowly on 4G: a fault at a major substation, cascading failures across three states. This is not a local issue.\n\nIt is 32 degrees outside. The house will warm quickly.\n\nYour mother-in-law appears in the kitchen doorway. She does not say anything about the medication. She does not need to. You are already thinking about it.",
-      choices:[
-        {text:"Think through the critical issues systematically before doing anything",next:"s2a",score:14,logQ:"good",logEffect:"Methodical thinking first. You had a priority list within 2 minutes and medication was at the top."},
-        {text:"Drive to the supermarket immediately — get ice and supplies before everyone else does",next:"s2b",score:8,logQ:"ok",logEffect:"Good instinct — but the medication was more time-sensitive than the shopping."},
-        {text:"Call the energy company for an update before deciding anything",next:"s2c",score:3,logQ:"bad",logEffect:"17 minutes on hold. The automated message said what the app already had."}
-      ]},
+She is seventy-one. She has a daily insulin injection that lives in the fridge. She has been on insulin for nine years. Missing a dose — especially in heat — is medically significant. Two missed doses in heat would be an emergency.
 
-    s2a:{loc:"YOUR KITCHEN — 3:22PM",atmo:"tense",logTime:"3:22pm",logSit:"You assessed the situation and identified medication as your top priority.",prompt:"What matters most, in order?",
-      text:"You sit down and work through it.\n\n1. The medication. Must stay below 8 degrees. The fridge will hold temperature for about 4 hours if you do not open it. After that, the vial inside is at risk.\n2. Phone battery — 71%. Car charger available.\n3. Water — town water, no pump issue yet. If outage extends, water towers can lose pressure.\n4. Food — 2 to 3 days in the pantry. More in the fridge.\n5. Cash — $60 in wallet. No EFTPOS if shops have no power.\n\nThe medication is the only item with a hard time limit. Everything else has hours.\n\nYou have approximately 4 hours on the fridge clock.",
-      choices:[
-        {text:"Call the pharmacy right now — medication is the only urgent issue",next:"s3a",score:22,logQ:"good",logEffect:"The pharmacy picked up immediately. Generator running. Medication sorted in 25 minutes."},
-        {text:"Charge all devices from the car first — then deal with the medication",next:"s3b",score:9,logQ:"ok",logEffect:"Charging was sensible. But the medication waited an extra 20 minutes it did not need to."},
-        {text:"Fill every container with water in case the pumping pressure drops",next:"s3c",score:10,logQ:"ok",logEffect:"Good thinking on water. But the medication still needed to come first."}
-      ]},
+It is a Friday afternoon in late January. 34°C outside. The house is at 28°C with the aircon running.
 
-    s2b:{loc:"LOCAL SUPERMARKET — 3:45PM",atmo:"tense",logTime:"3:45pm",logSit:"The supermarket was already chaotic. Cash only. Ice was sold out.",prompt:"You are back home at 4:30pm. The medication has been unrefrigerated for 70 minutes.",
-      text:"The IGA is busy when you arrive at 3:45pm. Word travels fast.\n\nCash only — no EFTPOS. You have $60.\n\nIce: sold out. Torches: gone. You find canned food, bottled water, batteries.\n\nTotal: $54.\n\nYou drive home. It is 4:30pm. The fridge has been off for 70 minutes. The medication is still within the safe window — just.",
-      choices:[
-        {text:"Call the pharmacy right now — the medication cannot wait any longer",next:"s3a_late",score:14,logQ:"ok",logEffect:"70 minutes in. Still within the window — but only just."},
-        {text:"Check the fridge temperature first — then decide next steps",next:"s3a",score:16,logQ:"good",logEffect:"The fridge was at 11 degrees. Still retrievable. You moved quickly."}
-      ]},
+At 3:48pm the aircon stops. The lights go out. The fridge makes one last sound and goes quiet.
 
-    s2c:{loc:"YOUR LOUNGE — 3:37PM",atmo:"critical",logTime:"3:37pm",logSit:"You spent 17 minutes on hold. The outage is confirmed for 24 to 72 hours.",prompt:"The fridge has been off for 37 minutes. The medication window is ticking.",
-      text:"17 minutes on hold.\n\nThe automated message confirms: major network incident, multiple states affected, estimated restoration 24 to 72 hours.\n\nYou hang up.\n\nThe fridge has been off for 37 minutes. In 32-degree ambient temperature, the medication is safe for approximately 4 hours from the moment of power loss. You have used 37 minutes getting information you could have found on the app.\n\nYou have roughly 3 hours and 20 minutes of safe window left.",
-      choices:[
-        {text:"Call the pharmacy immediately — the medication is the priority",next:"s3a",score:16,logQ:"ok",logEffect:"37 minutes lost. But still well within the safe window if you move now."},
-        {text:"Drive to a friend who lives in a suburb with power",next:"s3d",score:14,logQ:"good",logEffect:"Smart. Move the problem to where the solution is."}
-      ]},
+You check your phone. No outage alerts yet. You check next door — their lights are out too. You look down the street. Every house is dark.
 
-    s3a:{loc:"YOUR PHONE — 3:25PM",atmo:"tense",logTime:"3:25pm",logSit:"You called the pharmacy. They had a generator and offered secure cold storage.",prompt:null,
-      text:"The pharmacy picks up on the third ring.\n\nYes, generator running. Yes, they can store the medication. Bring it in now.\n\nYou take the vial from the fridge, wrap it in a cool damp cloth, and drive 2 kilometres.\n\nThe pharmacist signs it in and hands you a receipt with their after-hours number.\n\nMedication: sorted. 25 minutes total.\n\nYou drive home to deal with everything else.",
-      choices:[
-        {text:"Set up the household for what could be a 24 to 72 hour outage",next:"s4a",score:18,logQ:"good",logEffect:"With the critical issue resolved, you set everything else up calmly."}
-      ]},
+At 4:02pm your phone buzzes.
 
-    s3a_late:{loc:"YOUR PHONE — 4:31PM",atmo:"critical",logTime:"4:31pm",logSit:"You called the pharmacy at 4:31pm. The medication was at 70 minutes unrefrigerated.",prompt:null,
-      text:"The pharmacy answers. Generator running, cold storage available.\n\nThe pharmacist checks the vial when you bring it in. Seventy minutes. He tilts his head.\n\n'Limit in these conditions is about 3 to 4 hours. You have got time. But not much.\' \n\nHe adds: 'For next time — we have a list of pharmacies with backup generators. And the hospital pharmacy stores emergency medication for situations like this. Worth knowing.\' \n\nIt is worth knowing.",
-      choices:[{text:"Return home and set up for an extended outage",next:"s4a",score:12,logQ:"ok",logEffect:"Medication sorted — later than ideal but within the window."}]},
+ENERGY AUSTRALIA: Unplanned outage affecting your area. Cause under investigation. Estimated restoration time: unknown.`,
+  choices:[{text:"Begin",next:"s1",score:0,logQ:"good",logEffect:"",noLog:true}]},
 
-    s3b:{loc:"YOUR CAR — 3:25PM",atmo:"tense",logTime:"3:25pm",logSit:"You charged devices from the car. The medication waited an extra 20 minutes.",prompt:null,
-      text:"USB cable from the 12V socket. Phone charging. You find an old inverter in the glovebox.\n\nUseful.\n\nBut it is now 3:45pm. The medication has been in an unpowered fridge for 25 minutes. Still within the safe window — but every 20 minutes narrows it.",
-      choices:[{text:"Call the pharmacy now — the medication cannot wait",next:"s3a",score:16,logQ:"ok",logEffect:"25-minute delay on the medication but still comfortably within the window."}]},
+s1:{loc:"YOUR HOUSE — 4:05PM",atmo:"tense",
+  logTime:"4:05pm",logSit:"Grid outage. No ETA. 34°C outside. Insulin in the fridge. Phone signal strong.",
+  prompt:"Your mother-in-law is sitting in the kitchen. The house is 28°C and rising.",
+  text:`You stand in the kitchen taking stock.
 
-    s3c:{loc:"YOUR HOME — 3:30PM",atmo:"tense",logTime:"3:30pm",logSit:"You stored water. Good thinking — but the medication still needed to come first.",prompt:null,
-      text:"You fill the bathtub, all large pots, every spare container. About 90 litres.\n\n20 minutes. Good call — extended outages can drop water tower pressure.\n\nBut it is now 3:40pm. The medication has been unrefrigerated for 20 minutes.",
-      choices:[{text:"Call the pharmacy about cold storage for the medication",next:"s3a",score:16,logQ:"ok",logEffect:"20-minute delay on the medication. Still well within the window."}]},
+Power: out. ETA: unknown. The 2016 South Australian statewide blackout — the largest in Australian peacetime history — had most metro areas restored in 8 hours. Some regional areas waited 24 hours or more.
 
-    s3d:{loc:"FRIEND HOUSE — NEARBY SUBURB",atmo:"calm",logTime:"4:00pm",logSit:"You moved the household to a friend in a powered suburb.",prompt:null,
-      text:"Your friend suburb — 4 kilometres away, different grid section — still has power.\n\nYou call ahead. Of course, they say. Bring whatever you need.\n\nThe medication goes straight into their fridge. Your mother-in-law has a cup of tea. Every device charges.\n\nSometimes the solution is to move toward the resources rather than wait for them to come to you.",
-      choices:[{text:"Stay here until the grid is restored",next:"out_prepared_b",score:16,logQ:"good",logEffect:"52 hours later the power came back. You were barely inconvenienced."}]},
+What you know: the insulin in the fridge is stable for 28 days at room temperature up to 25°C. Above 25°C, stability degrades. Above 30°C, degradation accelerates. The kitchen is already 28°C and the temperature will keep rising as the house absorbs the afternoon heat.
 
-    s4a:{loc:"YOUR HOME — 4:30PM",atmo:"tense",logTime:"4:30pm",logSit:"Medication sorted. You set up the household for a long outage.",prompt:"The outage is confirmed for 24 to 72 hours. What does your household actually have?",
-      text:"Medication sorted. Now: the household.\n\nFood: pasta, canned goods, crackers, peanut butter, tinned fish. Gas hob still works. 4 to 5 days if you are careful.\n\nWater: if you stored it earlier, 90 litres. If not, town water still running but pressure may drop.\n\nLighting: one torch, phone torches, three candles.\n\nCommunications: battery radio — do you have one? Phone charger via car.\n\nThe question is whether you have dedicated emergency supplies beyond the regular pantry.",
-      choices:[
-        {text:"Yes — 72-hour emergency kit with long-shelf-life food and water",next:"out_prepared_a",score:16,logQ:"good",logEffect:"The 52-hour outage was genuinely manageable. You were prepared for something far worse."},
-        {text:"No — maybe 24 hours of pantry food without the fridge",next:"out_survivable_a",score:8,logQ:"ok",logEffect:"Day 2 was harder. Shops had cash-only policies and empty shelves."},
-        {text:"No — we usually rely on the fridge and takeaway for most meals",next:"out_survivable_b",score:3,logQ:"bad",logEffect:"Shops ran out of basics by day 2. Two meals were skipped. The kids were upset."}
-      ]},
+Insulin that has been heat-compromised may look identical to good insulin. It may produce no immediate symptom. The consequences can appear hours or days later.
 
-    out_perfect:{outcome:"perfect",hiddenPath:false,
-      finalText:"",
-      lessons:[]},
+Your phone signal is currently strong. Phone towers run on battery backup — typically two to eight hours, depending on the tower and how recently the backup was tested.
 
-    out_prepared_a:{outcome:"prepared",finalText:"A methodical, effective response to a scenario that catches most households completely unprepared.\n\nMedication first — the right priority. The pharmacy call sorted it in 25 minutes. The 72-hour emergency kit meant the 52-hour outage was inconvenient but never harmful.\n\nYour mother-in-law got her medication. The household ate properly. The battery radio kept you informed.\n\nThis is what a prepared household looks like during a grid failure.",
-      lessons:["Medical needs are always Priority 1 in any emergency — know who in your household has them and what they need","Know which pharmacies have backup generators before you need that information","A 72-hour emergency kit with long-shelf-life food means a 2-day outage is simply a different kind of weekend","Battery radio, charged devices, and cash are the three non-negotiables for extended grid failure"]},
+You have a window to make phone calls while signal holds.`,
+  choices:[
+    {text:"Identify the insulin situation first — call the pharmacy before anything else",next:"s2a",score:22,logQ:"good",logEffect:"Right priority. The pharmacy answered. They had guidance on the temperature window and backup cold storage."},
+    {text:"Call the energy company — get an actual ETA before making any other decisions",next:"s2b",score:8,logQ:"ok",logEffect:"The energy company had no ETA. 18 minutes on hold. The pharmacy was now busy."},
+    {text:"Fill every container with water and get the ice situation sorted first",next:"s2c",score:10,logQ:"ok",logEffect:"Useful. But the insulin question was more time-sensitive than the water question."}
+  ]},
 
-    out_prepared_b:{outcome:"prepared",finalText:"Excellent flexible thinking — moving toward the solution rather than waiting for it to arrive.\n\nYour mother-in-law was safe throughout the 52-hour outage. You were comfortable. You barely noticed it.\n\nKnowing that a friend four kilometres away was on a different grid section was, on this particular Thursday, worth more than anything else you could have prepared.",
-      lessons:["Knowing which friends or family are on a different grid section is legitimate emergency preparation","Medical needs in emergencies are one of the most overlooked household planning gaps","Sometimes the best preparation is knowing your network — who has a generator, who is on a different grid","Medication management requires knowing the safe window before the emergency, not during it"]},
+s2a:{loc:"YOUR PHONE — 4:08PM",atmo:"tense",
+  logTime:"4:08pm",logSit:"You called the pharmacy. Signal was strong. They answered.",
+  prompt:"The pharmacist is speaking quickly — they are handling a lot of calls.",
+  text:`The pharmacy answers on the third ring.
 
-    out_survivable_a:{outcome:"survivable",finalText:"The medication was handled correctly — that was the critical success of this scenario.\n\nBut 24 hours of food in a 52-hour outage made day 2 uncomfortable. Shops had cash-only policies, queues, and empty shelves by mid-morning.\n\nYour mother-in-law was fine. The rest of the household was not particularly.",
-      lessons:["Emergency food supplements regular pantry food — it is not either/or","A 72-hour emergency food kit with long shelf life costs less than a restaurant meal for four and lasts for years","Extended outages empty supermarket shelves in hours — you cannot shop your way out after day 1","Keep $100 or more in cash at home — EFTPOS fails when the power does"]},
+The pharmacist says: insulin is stable at room temperature — up to 25°C — for about four weeks. Your issue is the heat, not the outage itself. If the house is currently 28°C and trending up, you have a few hours before the temperature inside the fridge rises above 25°C. After that, you want to move it somewhere cooler.
 
-    out_survivable_b:{outcome:"survivable",finalText:"The medication was sorted. That mattered.\n\nBut limited food and a household built around the fridge and takeaway meant days 2 and 3 were genuinely difficult. Two meals skipped. The kids miserable by the second evening.\n\nThe 52-hour outage tested something you had not previously thought much about.",
-      lessons:["Emergency food and water are not paranoia — this exact scenario is why they exist","A 52-hour outage reveals every gap in household preparation with perfect clarity","Long-shelf-life emergency food with a 20 plus year shelf life is the most cost-effective insurance you can buy","The medication was right. The rest of the preparation was not there."]}
+She also says: the pharmacy backup generator has been tested but we are not confident it will run through an extended outage. We are recommending patients find alternative cold storage. A cooler bag with ice from the supermarket will maintain temperature for six to eight hours. If the outage goes longer than eight hours, contact the hospital for priority dispensing of a replacement vial.
+
+She gives you the hospital direct line. You write it on a piece of paper.
+
+Signal is still strong. It has been 20 minutes.`,
+  choices:[
+    {text:"Get ice from the supermarket now while the car and signal both work",next:"s3_ice",score:18,logQ:"good",logEffect:"You got ice. 20 minutes round trip. Signal dropped partway back. The cooler bag bought you 8 hours."},
+    {text:"Check cash situation first — if everything fails you need cash",next:"s3_cash",score:14,logQ:"good",logEffect:"You had $80 in the house. You used $60 of it at the petrol station that still had a manual till."},
+    {text:"The house will cool down tonight — monitor and manage it here",next:"s3_wait",score:2,logQ:"bad",logEffect:"The house peaked at 37°C inside before midnight. Insulin stability was compromised by hour 4."}
+  ]},
+
+s2b:{loc:"YOUR PHONE — 4:10PM",atmo:"tense",
+  logTime:"4:10pm",logSit:"You called the energy company. 18 minutes on hold. No ETA.",
+  prompt:"The pharmacy is now engaged — multiple attempts.",
+  text:`You wait 18 minutes.
+
+The operator says: the outage is large-scale, cause is under investigation, no restoration time estimate can be provided. She recommends checking the energy company's website and social media.
+
+Their website will not load. No power means no internet for most households. Your phone is on 4G — but the tower signal has already dropped one bar.
+
+You call the pharmacy. Engaged. Try twice more. Still engaged.
+
+The 2016 SA Independent Review found that during the statewide outage, phone lines to emergency services and utilities were overwhelmed within 30 minutes. The review noted that call centres were not adequately resourced for a simultaneous statewide demand surge.
+
+The pharmacy's phone will free up eventually. But the window in which you have strong phone signal is shrinking.`,
+  choices:[
+    {text:"Keep trying the pharmacy — the insulin question is the priority",next:"s2a_delayed",score:12,logQ:"ok",logEffect:"The pharmacy answered on the seventh attempt. 35 minutes had passed. Signal was weaker."},
+    {text:"Drive to the pharmacy in person — faster than waiting on hold",next:"s3_drive_pharmacy",score:16,logQ:"good",logEffect:"You drove there. They were busy but gave you face-to-face guidance and a cooler solution."}
+  ]},
+
+s2c:{loc:"YOUR KITCHEN — 4:12PM",atmo:"tense",
+  logTime:"4:12pm",logSit:"You filled containers with water and got the cooler out.",
+  prompt:"Your mother-in-law asks about her insulin.",
+  text:`Every pot, every bottle, every container filled.
+
+The cooler from the garage is out and open on the kitchen floor.
+
+Your mother-in-law says: what about my insulin?
+
+She says it quietly, the way she says things she does not want to make a fuss about. She has been managing her condition for nine years and she knows the fridge is off.
+
+She is right. The water situation is manageable. The insulin situation has a shorter clock.`,
+  choices:[
+    {text:"Call the pharmacy now while signal holds",next:"s2a",score:14,logQ:"good",logEffect:"The pharmacy answered. You got guidance on the temperature window and ice solution."},
+    {text:"Drive to the pharmacy in person — quicker than trying to get through on the phone",next:"s3_drive_pharmacy",score:14,logQ:"good",logEffect:"You drove there. The queue was manageable. They gave you face-to-face guidance and spare cold packs."}
+  ]},
+
+s2a_delayed:{loc:"YOUR PHONE — 4:43PM",atmo:"critical",
+  logTime:"4:43pm",logSit:"Pharmacy answered after 35 minutes. Signal has dropped. The guidance is the same.",
+  prompt:"Ice and a cooler bag. Hospital number written down.",
+  text:`The pharmacist gives you the same guidance: cooler bag with ice, 6-8 hours, hospital number for extended outage.
+
+You write it on paper.
+
+Your phone shows one bar of signal. It was four bars 35 minutes ago.
+
+The 2016 SA blackout showed that mobile towers typically run on backup battery for two to eight hours depending on the carrier, the tower, and whether the backup had been recently load-tested. As towers exhaust their backup, signal becomes intermittent — and fails completely.
+
+The pharmacist says: get ice while you can move around. And take cash. Most card terminals have already failed.
+
+You hang up.`,
+  choices:[
+    {text:"Supermarket for ice — take all the cash in the house",next:"s3_ice",score:14,logQ:"ok",logEffect:"Cash: $80. Ice: got it. Signal failed on the way home. The cooler bag held temperature for 8 hours."}
+  ]},
+
+s3_drive_pharmacy:{loc:"YOUR CAR — 4:20PM",atmo:"tense",
+  logTime:"4:20pm",logSit:"You drove to the pharmacy. They were busy but gave you direct guidance.",
+  prompt:null,
+  text:`The pharmacy is three streets from an affected area and has partial power from a small generator.
+
+The pharmacist comes to the counter with a cold pack and a zip-lock bag. She says: put the insulin in this. One of these cold packs is good for about six hours, then you need to rotate it — we can give you two.
+
+She also writes down the hospital number and says: if the outage runs past midnight, call this number and explain the situation. They have a priority dispensing arrangement for insulin-dependent patients during extended grid failures.
+
+You pay in cash — the EFTPOS terminal is showing no connection.`,
+  choices:[
+    {text:"Supermarket next door — get ice, battery radio, whatever else is left on the shelves",next:"s3_supplies",score:16,logQ:"good",logEffect:"You got ice, a battery radio, and two packets of candles. The supermarket was running on a partial generator — card not working."}
+  ]},
+
+s3_ice:{loc:"SUPERMARKET — 4:30PM",atmo:"tense",
+  logTime:"4:30pm",logSit:"You drove to the supermarket while the car and signal worked.",
+  prompt:null,
+  text:`The supermarket is operating on a partial emergency generator.
+
+Battery-operated items are already picked over — torches, lanterns, radio batteries. Ice is still available.
+
+A staff member explains: EFTPOS is down — card terminals need network connectivity. Cash only. There is a handwritten sign on every register.
+
+You have $80 in your wallet. You spend $60 — a 10kg bag of ice, two extra cold packs, a battery lantern, four bottles of water you did not need but bought anyway.
+
+A Nissan driving past had a generator in the back — you hear someone saying 480 dollars at Bunnings, already sold out.
+
+The AEMO Black System report on the 2016 SA outage documented simultaneous failure of payment infrastructure across the affected region. Cash became the only functional exchange medium within hours of the outage beginning.`,
+  choices:[
+    {text:"Home. Get the insulin into the cooler bag immediately. Monitor temperatures.",next:"s4_home",score:16,logQ:"good",logEffect:"Insulin in the cooler at 4:45pm. House temperature peaked at 37°C by 11pm. Cooler held at 18°C."}
+  ]},
+
+s3_cash:{loc:"YOUR HOUSE — 4:15PM",atmo:"tense",
+  logTime:"4:15pm",logSit:"You checked your cash. $80 in the house. EFTPOS is already failing.",
+  prompt:null,
+  text:`You find $80 in your wallet and the kitchen drawer combined.
+
+You check your phone — ATM locator shows the two nearest ATMs are offline. The petrol station down the street has a generator for the pumps and a manual till — cash only.
+
+The AEMO report on the 2016 SA outage documented simultaneous loss of EFTPOS terminals, ATMs, and online banking within the first hour. Cash became the only functional payment method across the affected region.
+
+$80 is not nothing. It buys ice and basic supplies. But the ATMs are offline, and you cannot top up.`,
+  choices:[
+    {text:"Drive to the supermarket — get ice for the insulin before signal and roads are affected",next:"s3_ice",score:16,logQ:"good",logEffect:"$60 at the supermarket. Ice, cold packs, a lantern. Cash covered it."},
+    {text:"Stay home and manage the insulin situation with what you have",next:"s3_wait",score:2,logQ:"bad",logEffect:"Without ice, the cooler could not maintain safe temperature as the house heated through the evening."}
+  ]},
+
+s3_wait:{loc:"YOUR KITCHEN — EVENING",atmo:"critical",
+  logTime:"evening",logSit:"You waited. The house heated to 37°C by 11pm. Insulin stability was compromised.",
+  prompt:"Your mother-in-law checks her insulin. It looks fine.",
+  text:`The house heats through the evening.
+
+By 7pm: 31°C inside.
+By 10pm: 35°C.
+By midnight: 37°C.
+
+The fridge interior is the same temperature as the room — it lost its cold within two hours.
+
+The insulin has been above 25°C for six hours. It appears unchanged. Insulin that has been heat-damaged looks identical to uncompromised insulin. The degradation is molecular.
+
+Your mother-in-law takes her evening dose from the compromised vial.
+
+The consequences of degraded insulin are not immediate. They may not appear for 12-24 hours.`,
+  choices:[
+    {text:"Call the hospital — explain the situation and ask for guidance",next:"out_critical_insulin",score:6,logQ:"bad",logEffect:"Signal was intermittent. You got through on the fourth attempt. The hospital advised monitoring for hyperglycaemia symptoms. A very difficult night."}
+  ]},
+
+s3_supplies:{loc:"SUPERMARKET — 4:35PM",atmo:"tense",
+  logTime:"4:35pm",logSit:"You got ice, a battery radio, candles and supplies. Cash only.",
+  prompt:null,
+  text:`You get what is left on the shelves.
+
+10kg ice bag. Two cold packs. Battery lantern. Battery radio — the last one, slightly dented box. Candles. Four litres of water. Rice crackers and tinned fish.
+
+The battery radio picks up ABC Local. They are already in continuous emergency broadcast mode. Outage across SE Australia — multiple states affected. Generation source under investigation. No restoration estimate.
+
+A woman near you says to nobody in particular: I didn't think to have cash. I haven't had cash in years.
+
+You hand her $20. You still have $20 left.
+
+Cash in an extended outage is not optional. It is the only payment method that does not require network connectivity.`,
+  choices:[
+    {text:"Home. Insulin in the cooler immediately. Battery radio on.",next:"s4_home",score:18,logQ:"good",logEffect:"Insulin safe. Radio on. House peaked at 37°C but the cooler held at 16°C for 9 hours."}
+  ]},
+
+s4_home:{loc:"YOUR HOUSE — 5:00PM ONWARDS",atmo:"calm",
+  logTime:"5pm onwards",logSit:"Insulin secured in cooler. Battery radio on. Monitoring the situation.",
+  prompt:null,
+  text:`The cooler is maintaining temperature.
+
+The battery radio is on. ABC Local: the outage is large-scale. SE Australia. Multiple generation sources offline. The AEMO (Australian Energy Market Operator) is working to restore supply in sequence — hospitals and critical infrastructure first, then residential metro, then regional.
+
+You make mental notes:
+- Insulin: secure for 8 hours minimum, hospital number on paper
+- Cash: $20 remaining
+- Phone signal: intermittent now, dropped to no bars by 6:30pm
+- Water: filled before the outage
+- Food: non-perishables for two days
+
+Your mother-in-law asks if this is serious.
+
+You tell her the honest answer: possibly for a while. But we have everything we need for tonight.
+
+The 2016 SA Independent Review found that the most vulnerable households during extended outages were those where a single critical need — medical, thermal, communicative — had not been anticipated and provisioned for.
+
+You anticipated one.`,
+  choices:[
+    {text:"Manage the night and see what the morning brings",next:"out_prepared_a",score:16,logQ:"good",logEffect:"Power restored to your suburb at 6:40am. 14 hours 52 minutes without power. The cooler held throughout."}
+  ]},
+
+out_prepared_a:{outcome:"prepared",
+  finalText:`Power was restored at 6:40am — 14 hours and 52 minutes after the outage began.
+
+The insulin was in the cooler for the entire outage. Temperature inside the cooler never exceeded 19°C. The vials are safe.
+
+Your mother-in-law had her morning injection at 7:15am from uncompromised insulin.
+
+The SA Independent Review found that "there is no plan for widespread extended duration power outage" at the state level. At the household level, you had one — not written down, but made in the first 90 minutes when signal held and the pharmacy was still answering.
+
+The 2016 SA outage lasted 8 hours for most of metropolitan Adelaide. Your area lasted 15 hours. The difference between those numbers is the gap your preparation had to cover.`,
+  lessons:[
+    "Identify your household's medical vulnerabilities before an outage — insulin, refrigerated medications, electrical medical equipment — and know the specific temperature window and backup plan for each",
+    "Call the pharmacy immediately while phone signal is strong — towers typically fail within 2-8 hours of extended outages (SA Independent Review, 2016)",
+    "The 2016 SA Independent Review found that 'there is no plan for widespread extended duration power outage' — household preparation is the only plan that exists at the individual level",
+    "Cash is not optional in an extended outage — EFTPOS, ATMs and online banking all require network connectivity that fails when towers exhaust their backup power"
+  ]},
+
+out_survivable_shelter:{outcome:"survivable",
+  finalText:`You managed through the night.
+
+The insulin concern was handled — imperfectly, with more stress than necessary — but handled. The hospital gave guidance on monitoring for hyperglycaemia symptoms. Your mother-in-law was uncomfortable but safe.
+
+Power was restored at 11:20am the following day. 19 hours 32 minutes.
+
+The SA Independent Review found that extended outages disproportionately affected households with medical vulnerabilities. Your household had one. The preparation gap — no ice, no cash, degraded pharmacy contact — turned a manageable situation into a stressful one.`,
+  lessons:[
+    "The pharmacy is the first call in any outage involving refrigerated medication — while signal holds",
+    "A cooler bag with ice costs under $15 at the supermarket — it is the simplest solution to refrigerated medication vulnerability in a power outage",
+    "Cash at home means you can buy supplies when digital payment infrastructure fails — which it does within hours of an extended outage",
+    "The 2016 SA Flinders Medical Centre generator failure shows that 'they will have backup power' is not a guarantee — hospitals, pharmacies and towers all have backup systems that can fail"
+  ]},
+
+out_critical_insulin:{outcome:"critical",
+  finalText:`A very difficult night.
+
+The insulin was above 25°C for more than six hours before the dose was taken. Insulin compromised by heat produces unpredictable glycaemic control — sometimes too high, sometimes erratic. The consequences are not immediate and they are not always visible.
+
+Your mother-in-law's blood glucose levels were elevated in the morning. The GP said watch carefully for the next 48 hours.
+
+Power restored at 6:40am. 14 hours 52 minutes.
+
+The SA Independent Review found that the households most severely affected during extended outages were those where a single critical medical need had not been provisioned for. Insulin in a fridge during a summer outage is exactly that need.
+
+The pharmacy number is now in your phone. The hospital priority dispensing number is on paper on the fridge. An emergency cooler bag and cold packs are in the garage. You have $200 cash in an envelope labelled outage.`,
+  lessons:[
+    "Insulin is stable at room temperature up to 25°C — but above that, degradation begins; a summer outage is a medical emergency for insulin-dependent household members within hours",
+    "The 2016 SA Independent Review: 'there is no plan for widespread extended duration power outage' — the plan has to exist at the household level before the outage occurs",
+    "Phone signal during an outage is a diminishing resource — the pharmacy call must happen in the first 30 minutes, not after an hour on hold to the energy company",
+    "Flinders Medical Centre's generator failed after 1 hour 45 minutes during the 2016 SA outage — hospital backup power is not guaranteed and cannot be relied upon as your household's contingency plan"
+  ]},
+
+out_hidden:{outcome:"perfect",hiddenPath:true,
+  hiddenText:"The hidden path in this scenario is identifying the medical need first — before the energy company, before the water, before anything else. Research from the 2016 SA outage found that the most vulnerable households were those with a single unprovisioned critical need. Identifying that need in the first 5 minutes, while phone signal holds, is the decision that determines everything else.",
+  finalText:`You identified the medical need in the first five minutes.
+
+That decision — pharmacy first, before the energy company, before water, before anything — was the one that made every other decision easier.
+
+The SA Independent Review found that extended outages disproportionately affect households with unprovisioned medical vulnerabilities. You provisioned for yours before the outage was forty minutes old.
+
+Power came back at 6:40am. Your mother-in-law had her morning injection from uncompromised insulin. The cooler bag is back in the garage with fresh cold packs for next time.`,
+  lessons:[
+    "Identify your household's single most critical power-dependent need before any outage — and know the specific backup plan for it",
+    "Phone signal is your most time-sensitive resource in an extended outage — use it for the highest-priority call first, not the most obvious one",
+    "A cooler bag, cold packs, and the pharmacy's direct line are a complete insulin emergency plan for a power outage — they cost under $30 to have ready",
+    "The 2016 SA Independent Review found cascading failures across payment, communication and medical infrastructure within hours — cash, battery radio, and printed contact numbers are not paranoia, they are the gap-fillers when digital infrastructure fails"
+  ]}
+
   }
-}
+} // end blackout
 
 }; // end SCENARIOS
 
