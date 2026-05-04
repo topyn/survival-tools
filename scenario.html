@@ -5,1190 +5,808 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Survival Scenario Simulator — Survival Storehouse Australia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@400;600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@400;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:       #080f09;
-  --panel:    #0d1a0e;
-  --border:   #1a3320;
-  --green:    #2d6a4f;
-  --greenl:   #52b788;
-  --amber:    #f4a261;
-  --red:      #e63946;
-  --text:     #c8d8c9;
-  --dim:      #5a7a5c;
-  --white:    #eef4ee;
-  --scan: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.18) 2px, rgba(0,0,0,.18) 4px);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Source Sans 3',sans-serif;
-  font-size:16px;
-  line-height:1.6;
-  min-height:100vh;
-  overflow-x:hidden;
-}
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background:var(--scan);
-  pointer-events:none;
-  z-index:999;
-  opacity:.4;
-}
-
-/* NAV */
-.nav{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 20px;
-  background:rgba(13,26,14,.9);
-  border-bottom:1px solid var(--border);
-  position:sticky;top:0;z-index:100;
-  backdrop-filter:blur(8px);
-}
-.nav-back{color:var(--greenl);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:13px;opacity:.7;transition:.2s}
-.nav-back:hover{opacity:1}
-.nav-brand{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase}
-.nav-links{display:flex;gap:16px}
-.nav-links a{font-size:12px;color:var(--dim);text-decoration:none;font-family:'Share Tech Mono',monospace;transition:.2s}
-.nav-links a:hover{color:var(--greenl)}
-
-/* MAIN */
-main{max-width:780px;margin:0 auto;padding:40px 20px 80px}
-
-/* TITLE SCREEN */
-#screen-title{animation:fadein .6s ease}
-.title-badge{
-  font-family:'Share Tech Mono',monospace;
-  font-size:11px;letter-spacing:.2em;
-  color:var(--amber);text-transform:uppercase;
-  border:1px solid rgba(244,162,97,.3);
-  display:inline-block;padding:4px 12px;
-  margin-bottom:24px;
-}
-.title-h1{
-  font-family:'Oswald',sans-serif;
-  font-size:clamp(42px,8vw,72px);
-  font-weight:700;
-  line-height:.95;
-  color:var(--white);
-  text-transform:uppercase;
-  letter-spacing:-.01em;
-  margin-bottom:8px;
-}
-.title-h1 span{color:var(--amber)}
-.title-sub{
-  font-family:'Share Tech Mono',monospace;
-  font-size:13px;color:var(--dim);
-  letter-spacing:.08em;margin-bottom:32px;
-}
-.title-intro{
-  max-width:560px;
-  font-size:16px;color:var(--text);
-  margin-bottom:40px;line-height:1.7;
-  border-left:2px solid var(--border);
-  padding-left:20px;
-}
-
-.scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px}
-@media(max-width:500px){.scenario-grid{grid-template-columns:1fr}}
-.scenario-card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:4px;
-  padding:24px 20px;
-  cursor:pointer;
-  transition:all .25s;
-  position:relative;
-  overflow:hidden;
-  text-align:left;
-}
-.scenario-card::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(82,183,136,.05) 0%,transparent 60%);
-  opacity:0;transition:.25s;
-}
-.scenario-card:hover{border-color:var(--greenl);transform:translateY(-2px)}
-.scenario-card:hover::before{opacity:1}
-.sc-icon{font-size:28px;margin-bottom:12px;display:block}
-.sc-name{
-  font-family:'Oswald',sans-serif;font-size:20px;font-weight:600;
-  color:var(--white);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;
-}
-.sc-desc{font-size:13px;color:var(--dim);line-height:1.5}
-.sc-tag{
-  display:inline-block;margin-top:12px;
-  font-family:'Share Tech Mono',monospace;font-size:10px;
-  color:var(--amber);letter-spacing:.1em;
-  border:1px solid rgba(244,162,97,.25);padding:2px 8px;border-radius:2px;
-}
-.sc-tag.hard{color:var(--red);border-color:rgba(230,57,70,.25)}
-
-/* GAME SCREEN */
+:root{--bg:#07100a;--panel:#0c1a0e;--border:#1c3522;--green:#2d6a4f;--gl:#52b788;--amber:#f4a261;--red:#e63946;--text:#c5d5c7;--dim:#567059;--white:#edf4ee;--scan:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:"Source Sans 3",sans-serif;font-size:16px;line-height:1.65;min-height:100vh;overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;background:var(--scan);pointer-events:none;z-index:9999;opacity:.35}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;background:rgba(7,16,10,.92);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+.nav-back{color:var(--gl);text-decoration:none;font-family:"Share Tech Mono",monospace;font-size:12px;opacity:.65;transition:.2s}.nav-back:hover{opacity:1}
+.nav-brand{font-family:"Oswald",sans-serif;font-size:12px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+.nav-links{display:flex;gap:18px}.nav-links a{font-size:12px;color:var(--dim);text-decoration:none;font-family:"Share Tech Mono",monospace;transition:.2s}.nav-links a:hover{color:var(--gl)}
+main{max-width:800px;margin:0 auto;padding:48px 24px 100px}
+#screen-title{animation:fadein .7s ease}
+.title-eyebrow{font-family:"Share Tech Mono",monospace;font-size:11px;letter-spacing:.22em;color:var(--amber);text-transform:uppercase;border:1px solid rgba(244,162,97,.25);display:inline-block;padding:4px 14px;margin-bottom:28px}
+.title-h1{font-family:"Oswald",sans-serif;font-size:clamp(48px,9vw,80px);font-weight:700;line-height:.92;color:var(--white);text-transform:uppercase;letter-spacing:-.01em;margin-bottom:6px}
+.title-h1 em{color:var(--amber);font-style:normal}
+.title-sub{font-family:"Share Tech Mono",monospace;font-size:12px;color:var(--dim);letter-spacing:.1em;margin-bottom:36px}
+.title-intro{max-width:580px;font-size:16px;color:var(--text);margin-bottom:44px;line-height:1.75;border-left:2px solid var(--border);padding-left:22px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:32px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:3px;padding:26px 22px;cursor:pointer;transition:all .22s;position:relative;overflow:hidden;text-align:left}
+.card::after{content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--gl);transform:scaleX(0);transform-origin:left;transition:.25s}
+.card:hover{border-color:rgba(82,183,136,.4);transform:translateY(-2px)}.card:hover::after{transform:scaleX(1)}
+.card-icon{font-size:30px;margin-bottom:14px;display:block}
+.card-name{font-family:"Oswald",sans-serif;font-size:22px;font-weight:600;color:var(--white);text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px}
+.card-desc{font-size:13px;color:var(--dim);line-height:1.5;margin-bottom:14px}
+.card-tag{font-family:"Share Tech Mono",monospace;font-size:10px;color:var(--gl);letter-spacing:.1em;border:1px solid rgba(82,183,136,.2);display:inline-block;padding:2px 9px;border-radius:2px}
+.card-tag.high{color:var(--amber);border-color:rgba(244,162,97,.2)}.card-tag.hard{color:var(--red);border-color:rgba(230,57,70,.2)}
 #screen-game{display:none;animation:fadein .5s ease}
-
-.game-header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:24px;padding-bottom:16px;
-  border-bottom:1px solid var(--border);
-}
-.game-scenario-name{
-  font-family:'Oswald',sans-serif;font-size:14px;
-  letter-spacing:.15em;color:var(--amber);text-transform:uppercase;
-}
-.game-score-display{
-  font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--dim);
-}
-
-/* ATMOSPHERE STRIP */
-.atmo-strip{
-  height:3px;width:100%;margin-bottom:28px;border-radius:2px;
-  background:var(--border);transition:background 1s ease;
-}
-.atmo-strip.calm{background:var(--green)}
-.atmo-strip.tense{background:var(--amber)}
-.atmo-strip.critical{background:var(--red);animation:pulse-bar 1s ease infinite alternate}
-.atmo-strip.emergency{background:var(--red);animation:pulse-bar .4s ease infinite alternate}
-
-@keyframes pulse-bar{from{opacity:.5}to{opacity:1}}
-
-/* SCENE */
-.scene-location{
-  font-family:'Share Tech Mono',monospace;font-size:11px;
-  color:var(--dim);letter-spacing:.15em;text-transform:uppercase;
-  margin-bottom:16px;
-}
-.scene-text{
-  font-size:17px;line-height:1.75;color:var(--white);
-  margin-bottom:32px;min-height:120px;
-  white-space:pre-wrap;
-}
-.scene-text .highlight{color:var(--amber);font-weight:600}
-.scene-text .danger{color:var(--red);font-weight:600}
-.scene-text .good{color:var(--greenl);font-weight:600}
-
-/* TIMER */
-.timer-wrap{
-  display:none;align-items:center;gap:12px;
-  margin-bottom:24px;
-  background:rgba(230,57,70,.08);border:1px solid rgba(230,57,70,.2);
-  border-radius:4px;padding:12px 16px;
-}
-.timer-wrap.active{display:flex}
-.timer-label{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--red);letter-spacing:.1em}
-.timer-bar{flex:1;height:4px;background:rgba(230,57,70,.2);border-radius:2px;overflow:hidden}
+.game-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.game-label{font-family:"Share Tech Mono",monospace;font-size:11px;color:var(--amber);letter-spacing:.14em;text-transform:uppercase}
+.game-progress{font-family:"Share Tech Mono",monospace;font-size:11px;color:var(--dim)}
+.atmo{height:2px;width:100%;margin-bottom:32px;border-radius:1px;background:var(--border);transition:background 1.2s ease}
+.atmo.calm{background:var(--green)}.atmo.tense{background:var(--amber)}
+.atmo.critical{background:var(--red);animation:flicker 1.2s ease infinite alternate}
+.atmo.emergency{background:var(--red);animation:flicker .45s ease infinite alternate}
+@keyframes flicker{from{opacity:.4}to{opacity:1}}
+.scene-loc{font-family:"Share Tech Mono",monospace;font-size:11px;color:var(--dim);letter-spacing:.18em;text-transform:uppercase;margin-bottom:20px}
+.scene-body{font-size:17px;line-height:1.85;color:var(--white);margin-bottom:0;min-height:160px;white-space:pre-wrap}
+.scene-prompt{font-family:"Oswald",sans-serif;font-size:15px;font-weight:600;letter-spacing:.06em;color:var(--amber);text-transform:uppercase;margin:28px 0 20px;display:none}
+.scene-prompt.show{display:block}
+.consequence{border-left:3px solid var(--gl);padding:14px 18px;margin:20px 0 28px;font-size:15px;font-style:italic;color:var(--text);display:none;animation:fadein .4s ease;border-radius:0 3px 3px 0;background:rgba(82,183,136,.05)}
+.consequence.show{display:block}.consequence.bad{border-color:var(--red);background:rgba(230,57,70,.06)}.consequence.warn{border-color:var(--amber);background:rgba(244,162,97,.05)}
+.timer{display:none;align-items:center;gap:14px;margin-bottom:24px;background:rgba(230,57,70,.07);border:1px solid rgba(230,57,70,.18);border-radius:3px;padding:12px 18px}
+.timer.active{display:flex}.timer-lbl{font-family:"Share Tech Mono",monospace;font-size:11px;color:var(--red);letter-spacing:.12em}
+.timer-bar{flex:1;height:3px;background:rgba(230,57,70,.15);border-radius:2px;overflow:hidden}
 .timer-fill{height:100%;background:var(--red);transition:width .1s linear;border-radius:2px}
-.timer-count{font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--red);font-weight:700;min-width:32px;text-align:right}
-
-/* CHOICES */
-.choices{display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
-.choice-btn{
-  background:transparent;
-  border:1px solid var(--border);
-  border-radius:4px;
-  padding:16px 20px;
-  color:var(--text);
-  font-family:'Source Sans 3',sans-serif;font-size:15px;
-  cursor:pointer;text-align:left;
-  transition:all .2s;
-  position:relative;overflow:hidden;
-  line-height:1.4;
-}
-.choice-btn::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:0;
-  background:rgba(82,183,136,.08);transition:.25s;
-}
-.choice-btn:hover{border-color:var(--greenl);color:var(--white)}
-.choice-btn:hover::before{width:100%}
-.choice-btn .choice-letter{
-  font-family:'Share Tech Mono',monospace;font-size:11px;
-  color:var(--amber);margin-right:12px;letter-spacing:.1em;
-}
-.choice-btn:disabled{opacity:.4;cursor:not-allowed}
-
-/* OUTCOME SCREEN */
+.timer-n{font-family:"Share Tech Mono",monospace;font-size:20px;color:var(--red);font-weight:700;min-width:30px;text-align:right}
+.choices{display:flex;flex-direction:column;gap:10px;margin-bottom:36px}
+.cbtn{background:transparent;border:1px solid var(--border);border-radius:3px;padding:18px 22px;color:var(--text);font-family:"Source Sans 3",sans-serif;font-size:16px;cursor:pointer;text-align:left;transition:all .2s;position:relative;overflow:hidden;line-height:1.5}
+.cbtn::before{content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(82,183,136,.07);transition:.22s}
+.cbtn:hover{border-color:rgba(82,183,136,.5);color:var(--white)}.cbtn:hover::before{width:100%}
+.cbtn .cl{font-family:"Share Tech Mono",monospace;font-size:11px;color:var(--amber);margin-right:14px;letter-spacing:.1em}
+.cbtn:disabled{opacity:.35;cursor:not-allowed}
 #screen-outcome{display:none;animation:fadein .6s ease}
-.outcome-wrap{text-align:center;padding:20px 0}
-.outcome-icon{font-size:64px;margin-bottom:16px;display:block;animation:pop .5s ease}
-@keyframes pop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
-.outcome-rating{
-  font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;
-  letter-spacing:.25em;text-transform:uppercase;margin-bottom:12px;
-}
-.outcome-rating.prepared{color:var(--greenl)}
-.outcome-rating.survivable{color:var(--amber)}
-.outcome-rating.critical{color:var(--red)}
-.outcome-title{
-  font-family:'Oswald',sans-serif;font-size:clamp(28px,6vw,48px);
-  font-weight:700;color:var(--white);text-transform:uppercase;
-  line-height:1;margin-bottom:24px;
-}
-.outcome-text{
-  font-size:16px;color:var(--text);max-width:540px;
-  margin:0 auto 32px;line-height:1.7;
-}
-.score-block{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:4px;padding:20px;margin-bottom:32px;
-  display:inline-block;min-width:220px;
-}
-.score-label{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:.15em;margin-bottom:8px}
-.score-number{
-  font-family:'Oswald',sans-serif;font-size:52px;font-weight:700;
-  line-height:1;
-}
-.score-number.prepared{color:var(--greenl)}
-.score-number.survivable{color:var(--amber)}
-.score-number.critical{color:var(--red)}
-.score-max{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--dim)}
-
-.lessons{
-  text-align:left;max-width:540px;margin:0 auto 40px;
-  background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:24px;
-}
-.lessons-title{
-  font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;
-  letter-spacing:.1em;color:var(--amber);text-transform:uppercase;margin-bottom:16px;
-}
-.lesson-item{
-  display:flex;gap:12px;margin-bottom:14px;font-size:14px;line-height:1.5;
-}
-.lesson-item:last-child{margin-bottom:0}
-.lesson-dot{color:var(--amber);flex-shrink:0;font-family:'Share Tech Mono',monospace}
-
-.outcome-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:16px}
-.btn-primary{
-  background:var(--greenl);color:#000;
-  font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;
-  letter-spacing:.08em;text-transform:uppercase;
-  border:none;border-radius:4px;padding:14px 28px;cursor:pointer;
-  text-decoration:none;display:inline-block;transition:.2s;
-}
-.btn-primary:hover{background:#74c69d;transform:translateY(-1px)}
-.btn-secondary{
-  background:transparent;color:var(--text);
-  font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;
-  letter-spacing:.08em;text-transform:uppercase;
-  border:1px solid var(--border);border-radius:4px;padding:13px 28px;cursor:pointer;
-  transition:.2s;
-}
-.btn-secondary:hover{border-color:var(--greenl);color:var(--white)}
-
-@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-/* FLASH EFFECT */
-@keyframes flash-red{
-  0%{background:rgba(230,57,70,.0)}
-  30%{background:rgba(230,57,70,.15)}
-  100%{background:rgba(230,57,70,.0)}
-}
-.flash-danger{animation:flash-red .6s ease}
+.out-hero{text-align:center;padding:16px 0 40px}
+.out-icon{font-size:60px;display:block;margin-bottom:14px;animation:pop .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.out-tier{font-family:"Oswald",sans-serif;font-size:11px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;margin-bottom:10px}
+.out-tier.perfect{color:#ffd700}.out-tier.prepared{color:var(--gl)}.out-tier.survivable{color:var(--amber)}.out-tier.critical{color:var(--red)}
+.out-title{font-family:"Oswald",sans-serif;font-size:clamp(32px,6vw,54px);font-weight:700;color:var(--white);text-transform:uppercase;line-height:.95;margin-bottom:22px}
+.out-text{font-size:16px;color:var(--text);max-width:580px;margin:0 auto 32px;line-height:1.8;white-space:pre-wrap}
+.score-row{display:flex;gap:16px;justify-content:center;margin-bottom:44px;flex-wrap:wrap}
+.score-box{background:var(--panel);border:1px solid var(--border);border-radius:3px;padding:20px 28px;text-align:center}
+.sbox-label{font-family:"Share Tech Mono",monospace;font-size:10px;color:var(--dim);letter-spacing:.16em;margin-bottom:8px}
+.sbox-val{font-family:"Oswald",sans-serif;font-size:42px;font-weight:700;line-height:1}
+.sbox-val.perfect{color:#ffd700}.sbox-val.prepared{color:var(--gl)}.sbox-val.survivable{color:var(--amber)}.sbox-val.critical{color:var(--red)}
+.sbox-sub{font-family:"Share Tech Mono",monospace;font-size:11px;color:var(--dim);margin-top:4px}
+.story-section{background:var(--panel);border:1px solid var(--border);border-radius:3px;padding:28px;margin-bottom:28px;text-align:left}
+.section-title{font-family:"Oswald",sans-serif;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;margin-bottom:22px;color:var(--amber)}
+.story-entry{display:flex;gap:0;margin-bottom:0;position:relative}
+.story-entry:not(:last-child)::before{content:"";position:absolute;left:14px;top:28px;bottom:-4px;width:1px;background:var(--border)}
+.story-dot{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;margin-top:2px;z-index:1}
+.story-dot.perfect{border-color:#ffd700;background:rgba(255,215,0,.1);color:#ffd700}
+.story-dot.good{border-color:var(--gl);background:rgba(82,183,136,.1);color:var(--gl)}
+.story-dot.ok{border-color:var(--amber);background:rgba(244,162,97,.08);color:var(--amber)}
+.story-dot.bad{border-color:var(--red);background:rgba(230,57,70,.08);color:var(--red)}
+.story-content{padding:0 0 24px 16px}
+.story-time{font-family:"Share Tech Mono",monospace;font-size:10px;color:var(--dim);letter-spacing:.12em;margin-bottom:4px}
+.story-sit{font-size:13px;color:var(--dim);margin-bottom:5px;font-style:italic}
+.story-choice{font-size:14px;color:var(--white);font-weight:600}
+.story-effect{font-size:13px;color:var(--text);margin-top:5px;line-height:1.5}
+.hidden-badge{background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.25);border-radius:3px;padding:14px 18px;margin-bottom:28px;font-size:14px;color:#ffd700;display:none;line-height:1.6}
+.hidden-badge.show{display:block}.hidden-badge strong{font-family:"Share Tech Mono",monospace;font-size:11px;letter-spacing:.1em;display:block;margin-bottom:6px}
+.lessons-list{display:flex;flex-direction:column;gap:12px}
+.lesson{display:flex;gap:12px;font-size:14px;line-height:1.55;color:var(--text)}
+.lesson-arrow{color:var(--gl);flex-shrink:0;font-family:"Share Tech Mono",monospace;margin-top:1px}
+.actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:32px}
+.btn-p{background:var(--gl);color:#000;font-family:"Oswald",sans-serif;font-size:15px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:none;border-radius:3px;padding:14px 28px;cursor:pointer;text-decoration:none;display:inline-block;transition:.2s}
+.btn-p:hover{background:#6fcf97;transform:translateY(-1px)}.btn-p.amber{background:var(--amber)}.btn-p.amber:hover{background:#f6b87a}
+.btn-s{background:transparent;color:var(--text);font-family:"Oswald",sans-serif;font-size:15px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--border);border-radius:3px;padding:13px 28px;cursor:pointer;transition:.2s}
+.btn-s:hover{border-color:var(--gl);color:var(--white)}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes flash-r{0%{background:transparent}40%{background:rgba(230,57,70,.14)}100%{background:transparent}}
+.flash{animation:flash-r .7s ease}
 </style>
 </head>
 <body>
-
 <nav class="nav">
-  <a class="nav-back" href="https://tools.survivalstorehouse.com">← All Tools</a>
-  <span class="nav-brand">Survival Storehouse — Est. 2009</span>
+  <a class="nav-back" href="https://tools.survivalstorehouse.com">&#8592; All Tools</a>
+  <span class="nav-brand">Survival Storehouse &#xb7; Est. 2009</span>
   <div class="nav-links">
-    <a href="https://tools.survivalstorehouse.com/checklist.html">✅ Checklist</a>
-    <a href="https://tools.survivalstorehouse.com/my-area.html">📍 My Area</a>
-    <a href="https://survivalstorehouse.com/shop-1">Shop →</a>
+    <a href="https://tools.survivalstorehouse.com/checklist.html">&#9989; Checklist</a>
+    <a href="https://survivalstorehouse.com/shop-1">Shop &#8594;</a>
   </div>
 </nav>
-
 <main>
-
-  <!-- TITLE SCREEN -->
-  <div id="screen-title">
-    <div class="title-badge">Interactive Training Simulation</div>
-    <h1 class="title-h1">Survival<br><span>Scenario</span><br>Simulator</h1>
-    <p class="title-sub">// Survival Storehouse Australia &nbsp;·&nbsp; Est. 2009 &nbsp;·&nbsp; Erina NSW</p>
-    <p class="title-intro">
-      Real emergencies don't give you time to think. This simulator puts you in the moment — the decisions you make under pressure reveal how prepared you actually are. Your choices branch. Your score depends on preparation, not luck.
-    </p>
-
-    <div class="scenario-grid">
-      <div class="scenario-card" onclick="startScenario('bushfire')">
-        <span class="sc-icon">🔥</span>
-        <div class="sc-name">Bushfire</div>
-        <div class="sc-desc">2am. Summer. Central Coast NSW. Your smoke alarm goes off.</div>
-        <span class="sc-tag">Common &nbsp;·&nbsp; 5 decisions</span>
-      </div>
-      <div class="scenario-card" onclick="startScenario('cyclone')">
-        <span class="sc-icon">🌀</span>
-        <div class="sc-name">Cyclone</div>
-        <div class="sc-desc">Category 3 making landfall in 6 hours. Cairns, Queensland.</div>
-        <span class="sc-tag">Seasonal &nbsp;·&nbsp; 5 decisions</span>
-      </div>
-      <div class="scenario-card" onclick="startScenario('flood')">
-        <span class="sc-icon">🌊</span>
-        <div class="sc-name">Flash Flood</div>
-        <div class="sc-desc">Three days of heavy rain. The creek behind your house is rising.</div>
-        <span class="sc-tag hard">High Risk &nbsp;·&nbsp; 5 decisions</span>
-      </div>
-      <div class="scenario-card" onclick="startScenario('blackout')">
-        <span class="sc-icon">⚡</span>
-        <div class="sc-name">Grid Failure</div>
-        <div class="sc-desc">Major power outage across SE Australia. No ETA for restoration.</div>
-        <span class="sc-tag">Increasingly Common &nbsp;·&nbsp; 5 decisions</span>
-      </div>
+<div id="screen-title">
+  <div class="title-eyebrow">Interactive Emergency Training</div>
+  <h1 class="title-h1">Survival<br><em>Scenario</em><br>Simulator</h1>
+  <p class="title-sub">// Survival Storehouse Australia &#xb7; Erina NSW &#xb7; Est. 2009</p>
+  <p class="title-intro">Emergencies don't give you time to think. This simulator puts you in the moment, in second person present tense &#8212; the way it actually feels. Every choice branches the story. At the end you get a personalised account of how it played out. Some scenarios have hidden paths. Try each one more than once.</p>
+  <div class="grid">
+    <div class="card" onclick="startScenario('bushfire')">
+      <span class="card-icon">&#128293;</span>
+      <div class="card-name">Bushfire</div>
+      <div class="card-desc">2am. Summer. Central Coast NSW. Your daughter drew a picture of your house last week. Tonight the hills behind it are glowing orange.</div>
+      <span class="card-tag">Common &#xb7; 7 decisions</span>
+    </div>
+    <div class="card" onclick="startScenario('cyclone')">
+      <span class="card-icon">&#127992;</span>
+      <div class="card-name">Cyclone</div>
+      <div class="card-desc">Category 3. Six hours to landfall at Cairns. Your neighbour knocks on your door with news you should have already known.</div>
+      <span class="card-tag high">Seasonal &#xb7; 7 decisions</span>
+    </div>
+    <div class="card" onclick="startScenario('flood')">
+      <span class="card-icon">&#127754;</span>
+      <div class="card-name">Flash Flood</div>
+      <div class="card-desc">Three days of rain. You've checked the Wilson River gauge every morning. This morning the numbers don't make sense.</div>
+      <span class="card-tag hard">High Risk &#xb7; 7 decisions</span>
+    </div>
+    <div class="card" onclick="startScenario('blackout')">
+      <span class="card-icon">&#9889;</span>
+      <div class="card-name">Grid Failure</div>
+      <div class="card-desc">3:20pm. Major outage, no ETA. Your mother-in-law takes a daily injection that lives in the fridge. The fridge is now off.</div>
+      <span class="card-tag high">Increasingly Common &#xb7; 7 decisions</span>
     </div>
   </div>
-
-  <!-- GAME SCREEN -->
-  <div id="screen-game">
-    <div class="game-header">
-      <div class="game-scenario-name" id="game-scenario-label">SCENARIO</div>
-      <div class="game-score-display">DECISION <span id="decision-num">1</span> OF <span id="decision-total">5</span></div>
-    </div>
-    <div class="atmo-strip" id="atmo-strip"></div>
-    <div class="scene-location" id="scene-location"></div>
-    <div class="scene-text" id="scene-text"></div>
-
-    <div class="timer-wrap" id="timer-wrap">
-      <div class="timer-label">⚠ TIME CRITICAL</div>
-      <div class="timer-bar"><div class="timer-fill" id="timer-fill"></div></div>
-      <div class="timer-count" id="timer-count">20</div>
-    </div>
-
-    <div class="choices" id="choices-container"></div>
+</div>
+<div id="screen-game">
+  <div class="game-hdr">
+    <div class="game-label" id="game-label">SCENARIO</div>
+    <div class="game-progress">DECISION <span id="d-num">1</span> / <span id="d-tot">7</span></div>
   </div>
-
-  <!-- OUTCOME SCREEN -->
-  <div id="screen-outcome">
-    <div class="outcome-wrap">
-      <span class="outcome-icon" id="outcome-icon"></span>
-      <div class="outcome-rating" id="outcome-rating"></div>
-      <div class="outcome-title" id="outcome-title"></div>
-      <div class="outcome-text" id="outcome-text"></div>
-      <div class="score-block">
-        <div class="score-label">PREPAREDNESS SCORE</div>
-        <div class="score-number" id="outcome-score">0</div>
-        <div class="score-max" id="outcome-max"></div>
-      </div>
-      <div class="lessons" id="lessons-block">
-        <div class="lessons-title">Key Lessons From This Scenario</div>
-        <div id="lessons-list"></div>
-      </div>
-      <div class="outcome-actions">
-        <a href="https://tools.survivalstorehouse.com/checklist.html" class="btn-primary">Check Your 72-Hr Kit</a>
-        <a href="https://survivalstorehouse.com/shop-1" class="btn-primary" style="background:var(--amber)">Shop Survival Gear</a>
-        <button class="btn-secondary" onclick="resetGame()">Try Another Scenario</button>
-      </div>
+  <div class="atmo" id="atmo"></div>
+  <div class="scene-loc" id="scene-loc"></div>
+  <div class="scene-body" id="scene-body"></div>
+  <div class="scene-prompt" id="scene-prompt"></div>
+  <div class="consequence" id="consequence"></div>
+  <div class="timer" id="timer">
+    <div class="timer-lbl">&#9888; TIME CRITICAL</div>
+    <div class="timer-bar"><div class="timer-fill" id="t-fill"></div></div>
+    <div class="timer-n" id="t-n">20</div>
+  </div>
+  <div class="choices" id="choices"></div>
+</div>
+<div id="screen-outcome">
+  <div class="out-hero">
+    <span class="out-icon" id="out-icon"></span>
+    <div class="out-tier" id="out-tier"></div>
+    <div class="out-title" id="out-title"></div>
+    <div class="out-text" id="out-text"></div>
+    <div class="score-row">
+      <div class="score-box"><div class="sbox-label">PREPAREDNESS SCORE</div><div class="sbox-val" id="out-score">0%</div><div class="sbox-sub" id="out-tier-sub"></div></div>
+      <div class="score-box"><div class="sbox-label">DECISIONS MADE</div><div class="sbox-val" style="color:var(--gl)" id="out-decisions">0</div><div class="sbox-sub">UNDER PRESSURE</div></div>
     </div>
   </div>
-
+  <div class="hidden-badge" id="hidden-badge"><strong>&#9733; HIDDEN PATH DISCOVERED</strong><span id="hidden-text"></span></div>
+  <div class="story-section"><div class="section-title">&#128214; Your Story &#8212; How It Unfolded</div><div id="story-log"></div></div>
+  <div class="story-section"><div class="section-title">&#128161; Key Lessons From Your Decisions</div><div class="lessons-list" id="lessons-list"></div></div>
+  <div class="actions">
+    <a href="https://tools.survivalstorehouse.com/checklist.html" class="btn-p">Check Your 72-Hr Kit</a>
+    <a href="https://survivalstorehouse.com/shop-1" class="btn-p amber">Shop Survival Gear</a>
+    <button class="btn-s" onclick="resetGame()">Try Another Scenario</button>
+  </div>
+</div>
 </main>
 
 <script>
-// ─── SCENARIO DATA ───────────────────────────────────────────────────────────
-
 const SCENARIOS = {
 
-  bushfire: {
-    label: "BUSHFIRE // CENTRAL COAST NSW",
-    totalDecisions: 5,
-    maxScore: 100,
-    scenes: {
-      s1: {
-        location: "YOUR HOME — 2:14AM — TUESDAY — JANUARY",
-        text: "Your smoke alarm screams to life.\n\nThe bedroom is pitch dark. Your partner rolls over. The kids are asleep down the hall. You can't smell smoke inside yet — but the alarm is insistent.\n\nWhat do you do first?",
-        atmo: "tense",
-        choices: [
-          { text: "Open the Fires Near Me app — check what's happening", next: "s2a", score: 15 },
-          { text: "Open the back door and look outside", next: "s2b", score: 8 },
-          { text: "Reset the alarm — probably a false alarm", next: "s2c", score: 0 }
-        ]
-      },
-      s2a: {
-        location: "YOUR PHONE — 2:15AM",
-        text: "🔴 WATCH AND ACT — Peats Ridge Rd, Calga NSW\n\nA grass fire is 2.4km north. Wind: 44km/h gusting to 68. Heading south-southeast.\n\nAt this wind speed the fire can travel 600 metres in 10 minutes.\n\nYou have an estimated 8–12 minutes before it reaches your street.",
-        atmo: "critical",
-        timer: 18,
-        choices: [
-          { text: "We have a bushfire plan — activate it now", next: "s3a", score: 20 },
-          { text: "Start grabbing everything important — go room by room", next: "s3b", score: 8 },
-          { text: "Call 000 to report it first", next: "s3c", score: 4 }
-        ]
-      },
-      s2b: {
-        location: "YOUR BACK DOOR — 2:15AM",
-        text: "You open the back door.\n\nThe smell of eucalyptus smoke hits you instantly. The night sky to the north glows deep orange. Embers — small burning flakes — are starting to fall in your yard.\n\nThis is not a small fire.",
-        atmo: "critical",
-        timer: 15,
-        choices: [
-          { text: "Grab your pre-packed 72-hour emergency bag and go", next: "s3a_direct", score: 18 },
-          { text: "Start gathering passports, hard drives, and valuables", next: "s3b", score: 6 },
-          { text: "Start the hose — wet the garden and roof", next: "s3d", score: 2 }
-        ]
-      },
-      s2c: {
-        location: "YOUR BEDROOM — 2:17AM",
-        text: "You reset the alarm and lie back down.\n\nTwo minutes later, you can smell smoke inside the house.\n\nYou get up and look out the window. The street two blocks over is lit orange. A neighbour's fence is already alight. Your throat is starting to burn.",
-        atmo: "emergency",
-        timer: 10,
-        choices: [
-          { text: "Get everyone out of the house immediately — leave everything", next: "s3e", score: 5 },
-          { text: "Try to grab the kids' bags and important documents", next: "s3f", score: -5 }
-        ]
-      },
-      s3a: {
-        location: "FRONT DOOR — 2:16AM",
-        text: "Your plan is simple: bags at the door, meet point at your neighbour's place in Gosford, 20km south.\n\nYour 72-hour kit is packed — water, food for 3 days, medications, documents, phone charger, cash, radio. You practiced this.\n\nEveryone is dressed and at the door in under 3 minutes.",
-        atmo: "tense",
-        choices: [
-          { text: "Load the car and leave immediately on the planned route", next: "s4a", score: 20 },
-          { text: "Take 5 minutes to put important photo albums in the car too", next: "s4b", score: 5 }
-        ]
-      },
-      s3a_direct: {
-        location: "HALLWAY — 2:16AM",
-        text: "Smart. You grab your pre-packed emergency bag from the hall cupboard.\n\nYou wake your partner. Together you wake the kids. Nobody is fully dressed but everyone has shoes.\n\nThe car is in the driveway. The bag is in your hand.",
-        atmo: "tense",
-        choices: [
-          { text: "Everyone in the car — drive south now", next: "s4a", score: 18 },
-          { text: "Take 5 more minutes to grab a few more things", next: "s4b", score: 6 }
-        ]
-      },
-      s3b: {
-        location: "KITCHEN — 2:16AM",
-        text: "You start pulling drawers — passports, insurance documents, kids' birth certificates. Laptop. External hard drive.\n\nYour partner is in the bedroom trying to find shoes.\n\nYou've been inside for 6 minutes. The smoke smell is stronger now. Outside, a car alarm is going off on your street.",
-        atmo: "emergency",
-        timer: 12,
-        choices: [
-          { text: "Leave now with what you have — the documents aren't worth it", next: "s4c", score: 12 },
-          { text: "Keep going — another 3 minutes to get everything", next: "s4d", score: 0 }
-        ]
-      },
-      s3c: {
-        location: "YOUR PHONE — 2:16AM",
-        text: "000 puts you on hold — lines are overwhelmed. You wait 90 seconds before getting through.\n\nThe dispatcher says the fire is already being fought. She tells you to evacuate immediately.\n\nYou've spent nearly 2 minutes on the phone.",
-        atmo: "critical",
-        choices: [
-          { text: "Hang up and evacuate — now", next: "s4c", score: 10 },
-          { text: "Stay on the line and ask more questions", next: "s4d", score: 0 }
-        ]
-      },
-      s3d: {
-        location: "YOUR BACKYARD — 2:16AM",
-        text: "You run the hose over the back fence and garden. Embers are landing on your roof.\n\nYou've been outside 3 minutes. The fire front is moving faster than forecast — a wind gust to 80km/h just pushed it forward.\n\nYour neighbour drives past screaming at you to leave.",
-        atmo: "emergency",
-        timer: 8,
-        choices: [
-          { text: "Drop the hose — get the family and leave immediately", next: "s4c", score: 8 },
-          { text: "Stay — the house needs protection", next: "s4e", score: -10 }
-        ]
-      },
-      s3e: {
-        location: "HALLWAY — 2:19AM",
-        text: "You yell to everyone. Your partner grabs the kids. You're out the front door in 90 seconds.\n\nNo bags. No documents. Just your family in pyjamas.\n\nThe car is in the driveway.",
-        atmo: "emergency",
-        choices: [
-          { text: "Drive south — head for the highway", next: "s4a_bare", score: 10 },
-          { text: "Go back in — you need phones and wallets", next: "s4f", score: -10 }
-        ]
-      },
-      s3f: {
-        location: "KIDS' BEDROOM — 2:19AM",
-        text: "Smoke is visibly moving through the hallway now.\n\nYou're looking for the kids' backpacks when the power goes out. The house is black.\n\nYou have a phone torch. You're running on pure adrenaline.",
-        atmo: "emergency",
-        timer: 6,
-        choices: [
-          { text: "Leave now — forget the bags", next: "s4a_bare", score: 5 },
-          { text: "Keep looking — 30 more seconds", next: "outcome_critical", score: -15 }
-        ]
-      },
-      s4a: {
-        location: "YOUR STREET — 2:19AM",
-        text: "You're in the car. Everyone is in. The bag is in the boot.\n\nYou've already told everyone the rally point: your sister's place in Gosford. You have 3 days of food, water, and medications.\n\nYou turn south. Emergency services are waving traffic through. You're calm. You're prepared.",
-        atmo: "calm",
-        choices: [
-          { text: "Follow the evacuation route south — stick to the plan", next: "outcome_prepared_a", score: 15 }
-        ]
-      },
-      s4a_bare: {
-        location: "YOUR STREET — 2:19AM",
-        text: "You're all in the car. Nobody is hurt.\n\nYou have no supplies. No documents. One phone between you with 34% battery.\n\nYou drive south. The fire crests the hill behind you as you turn onto the highway.",
-        atmo: "tense",
-        choices: [
-          { text: "Drive to your nearest emergency shelter", next: "outcome_survivable_bare", score: 8 }
-        ]
-      },
-      s4b: {
-        location: "GARAGE — 2:19AM",
-        text: "You've got the bags. Now you're loading photo albums, the kid's schoolbag, and a pot plant.\n\nYour neighbour leans on his horn as he drives past.\n\nYou load the car. One final look back at the house. You get in and go.",
-        atmo: "tense",
-        choices: [
-          { text: "Leave now — don't go back inside", next: "outcome_prepared_b", score: 12 }
-        ]
-      },
-      s4c: {
-        location: "YOUR STREET — 2:22AM",
-        text: "You leave with what you have — a mix of documents, phones, and chargers.\n\nNo pre-packed emergency food. No water. No medications.\n\nYou drive to the nearest evacuation centre.",
-        atmo: "tense",
-        choices: [
-          { text: "Head for the Gosford evacuation centre", next: "outcome_survivable_a", score: 10 }
-        ]
-      },
-      s4d: {
-        location: "YOUR KITCHEN — 2:24AM",
-        text: "You've been inside too long.\n\nThe front windows glow orange. A wall of hot air pushes through the gaps. Your eyes are stinging.\n\nSomething outside catches alight with a crack.",
-        atmo: "emergency",
-        choices: [
-          { text: "Leave immediately — nothing is worth this", next: "outcome_survivable_c", score: 5 }
-        ]
-      },
-      s4e: {
-        location: "outcome_critical", next: "outcome_critical", score: 0,
-        text: "", atmo: "emergency", choices: []
-      },
-      s4f: {
-        location: "outcome_critical", next: "outcome_critical", score: 0,
-        text: "", atmo: "emergency", choices: []
-      },
-      outcome_prepared_a: { outcome: "prepared", finalText: "You evacuated with a pre-packed kit, a plan, and a clear head. Your family is safe at your rally point. The house is gone, but everything that matters is in that car with you.", lessons: ["Having a pre-packed 72-hour kit means zero decision-making under pressure", "A family plan with a rally point removes hesitation at the worst moment", "Monitoring fire apps at the first sign of trouble gives you time to act calmly", "Your house can be rebuilt. Your family cannot be replaced."] },
-      outcome_prepared_b: { outcome: "prepared", finalText: "You evacuated safely with your emergency kit and made it out with minutes to spare. The extra time loading the car was close — but you made it.", lessons: ["A pre-packed emergency bag is the single most important preparedness step", "Don't go back inside once you've decided to leave", "Every additional minute inside during a fast-moving fire is a serious risk"], },
-      outcome_survivable_a: { outcome: "survivable", finalText: "You got out safely, but without emergency supplies you're dependent on evacuation centre resources. In a large disaster, those centres can be overwhelmed.", lessons: ["A pre-packed 72-hour kit would have made this significantly less stressful", "Knowing your evacuation route and rally point in advance is critical", "No medications or special food needs can become serious after 24-48 hours"] },
-      outcome_survivable_bare: { outcome: "survivable", finalText: "Your family is alive. That's what matters. But you have no food, no water, no medications, and one phone. You're dependent on emergency services resources for everything.", lessons: ["A pre-packed bag by the door can be grabbed in 30 seconds", "Without supplies, your recovery depends entirely on overburdened emergency services", "Practice the evacuation conversation with your family before you need it"] },
-      outcome_survivable_c: { outcome: "survivable", finalText: "You made it out but came dangerously close to being trapped. The extra minutes inside were not worth it.", lessons: ["Documents can be replaced. People cannot.", "The decision to leave should be made early — never at the last possible moment", "A pre-packed bag eliminates the temptation to 'grab one more thing'"] },
-      outcome_critical: { outcome: "critical", finalText: "In this scenario your decision cost critical time. Real bushfires at 60km/h can outrun a car. The most dangerous thing in a fast-moving fire is believing you have more time than you do.", lessons: ["Leave early — the 'Watch and Act' warning is the signal to go, not 'Emergency Warning'", "A pre-packed bag means you never need to choose between people and possessions", "Practice your evacuation plan as a family before fire season starts"] }
-    }
-  },
+// ================================================================
+// BUSHFIRE — CENTRAL COAST NSW
+// Hidden path: Wake family first + pre-packed bag = perfect outcome
+// ================================================================
+bushfire:{
+  label:"BUSHFIRE // CENTRAL COAST NSW",
+  maxDecisions:7,
+  maxScore:116,
+  scenes:{
 
-  cyclone: {
-    label: "CYCLONE // CAIRNS QLD",
-    totalDecisions: 5,
-    maxScore: 100,
-    scenes: {
-      s1: {
-        location: "CAIRNS QLD — 6 HOURS TO LANDFALL — 4PM TUESDAY",
-        text: "Cyclone Ingrid has intensified overnight. Category 3, winds to 165km/h. Bureau of Meteorology has issued a Cyclone Warning for Cairns and surrounds.\n\nLandfall is projected at 10pm — 6 hours from now.\n\nYou live in a low-set timber house 1.2km from the Cairns Esplanade.",
-        atmo: "tense",
-        choices: [
-          { text: "Check the official BOM cyclone tracker and evacuation zones", next: "s2a", score: 15 },
-          { text: "Start boarding up windows and securing the yard", next: "s2b", score: 10 },
-          { text: "It'll weaken before it hits — wait and see", next: "s2c", score: 0 }
-        ]
-      },
-      s2a: {
-        location: "BOM WEBSITE — 4:05PM",
-        text: "Your street is in Evacuation Zone B.\n\nZone B residents are directed to evacuate to a Category C shelter — the nearest is Cairns State High School, 3.4km inland.\n\nYou have 6 hours. The roads will start to congest within 2 hours.",
-        atmo: "tense",
-        choices: [
-          { text: "Pack your emergency kit and go to the shelter now", next: "s3a", score: 20 },
-          { text: "Secure the house first — then go in 2-3 hours", next: "s3b", score: 8 },
-          { text: "Shelter in place — the house has survived cyclones before", next: "s3c", score: -5 }
-        ]
-      },
-      s2b: {
-        location: "YOUR YARD — 4:10PM",
-        text: "You're working through the yard — bins in, outdoor furniture stacked, loose tools in the shed.\n\nYour neighbour leans over the fence: 'You're Zone B, mate. We're supposed to evacuate.'\n\nYou didn't check your zone.",
-        atmo: "tense",
-        choices: [
-          { text: "Stop and check your zone — then decide", next: "s2a", score: 10 },
-          { text: "Keep securing — you'll shelter in place", next: "s3c", score: 2 }
-        ]
-      },
-      s2c: {
-        location: "YOUR LOUNGE — 5:30PM",
-        text: "Cyclone Ingrid has NOT weakened. BOM has upgraded it to Category 4.\n\nWinds now to 200km/h. An Emergency Warning has been issued for Cairns.\n\nYou're Zone B. Roads are already starting to jam. You have maybe 90 minutes before it becomes dangerous to drive.",
-        atmo: "critical",
-        timer: 12,
-        choices: [
-          { text: "Grab what I can and evacuate to the shelter immediately", next: "s3a_late", score: 8 },
-          { text: "Too late to leave now — shelter in place", next: "s3c", score: -5 }
-        ]
-      },
-      s3a: {
-        location: "YOUR HOME — 4:20PM",
-        text: "You have a good head start. 6 hours is plenty of time.\n\nWhat's in your emergency kit right now?",
-        atmo: "calm",
-        choices: [
-          { text: "I have a pre-packed bag with 3 days of supplies", next: "s4a", score: 20 },
-          { text: "I'll pack now — it'll take 20-30 minutes", next: "s4b", score: 12 },
-          { text: "I'll grab what I can find quickly", next: "s4c", score: 6 }
-        ]
-      },
-      s3a_late: {
-        location: "YOUR HOME — 5:35PM",
-        text: "You grab what you can in 8 minutes. Medications. Phone charger. A bottle of water.\n\nYou skip some things you'd want. No time.\n\nYou get in the car. The first rain bands are arriving. The wind is already gusting.",
-        atmo: "critical",
-        choices: [
-          { text: "Drive straight to the shelter — no detours", next: "outcome_survivable_b", score: 10 }
-        ]
-      },
-      s3b: {
-        location: "YOUR HOME — 4:10PM",
-        text: "You spend 2 hours securing windows, moving furniture away from glass, and filling the bath with water.\n\nAt 6:30pm the BOM upgrades the cyclone to Category 4. Emergency services are now urging Zone B residents to leave.\n\nRoads are starting to congest. You need to decide.",
-        atmo: "critical",
-        timer: 15,
-        choices: [
-          { text: "Leave now for the shelter", next: "s4b", score: 10 },
-          { text: "The house is as secured as it can be — stay", next: "s3c", score: -5 }
-        ]
-      },
-      s3c: {
-        location: "YOUR HOME — NIGHT",
-        text: "You stay.\n\nAt 9:40pm the eye wall arrives. The noise is indescribable. A window fails on the east side. Rain drives through the gap horizontally.\n\nYou shelter in the interior bathroom — the strongest room — with your family.",
-        atmo: "emergency",
-        choices: [
-          { text: "Stay in the bathroom until it fully passes — even the false calm of the eye", next: "outcome_survivable_c", score: 8 }
-        ]
-      },
-      s4a: {
-        location: "EVACUATION SHELTER — 5PM",
-        text: "You arrive at Cairns State High early. You're one of the first in.\n\nYou have 3 days of food, water, medications, documents. A portable radio. A battery bank.\n\nYou're calm. Your kids are doing homework. You're as ready as anyone can be.",
-        atmo: "calm",
-        choices: [
-          { text: "Settle in and monitor BOM through the night", next: "outcome_prepared_a", score: 15 }
-        ]
-      },
-      s4b: {
-        location: "EVACUATION SHELTER — 6PM",
-        text: "You pack well and arrive at the shelter. It's getting busy but there's still room.\n\nYou have most of what you need — not everything, but enough.",
-        atmo: "calm",
-        choices: [
-          { text: "Register with shelter staff and settle the family in", next: "outcome_prepared_b", score: 12 }
-        ]
-      },
-      s4c: {
-        location: "EVACUATION SHELTER — 6:30PM",
-        text: "You made it to the shelter with minimal supplies. \n\nYou'll need to rely on the shelter's resources for food and water.",
-        atmo: "tense",
-        choices: [
-          { text: "Register and make the best of it", next: "outcome_survivable_a", score: 8 }
-        ]
-      },
-      outcome_prepared_a: { outcome: "prepared", finalText: "Textbook response. You checked your zone early, evacuated with time to spare, and arrived at the shelter fully equipped. Your family rode out Category 4 Cyclone Ingrid safely and comfortably.", lessons: ["Knowing your cyclone zone before cyclone season starts is essential", "Evacuating early — when told to — is always the right call", "A pre-packed emergency bag makes evacuation a 5-minute task, not a 30-minute scramble", "Portable radio and battery bank keep you informed when power fails"] },
-      outcome_prepared_b: { outcome: "prepared", finalText: "You made good decisions and got to the shelter in time with solid supplies. A pre-packed bag would have saved time and stress, but the outcome is excellent.", lessons: ["Packing in advance means you don't forget critical items under pressure", "Knowing your zone means you act on the right warnings, not guess", "Cyclones that 'weaken before landfall' sometimes don't — always plan for the worst"] },
-      outcome_survivable_a: { outcome: "survivable", finalText: "You made it to the shelter safely, but minimal supplies means you're dependent on emergency resources. In a large event those can be stretched thin.", lessons: ["A pre-packed kit with 72 hours of food and water is the most important thing to prepare", "Know your cyclone zone now — not when the warning is issued", "Evacuation centres can run short on specific needs like baby formula or medications"] },
-      outcome_survivable_b: { outcome: "survivable", finalText: "You waited too long but still got out. The drive in worsening conditions was dangerous. You made it — but 2 hours earlier would have been significantly safer.", lessons: ["'Watch and Act' is the signal to evacuate — not 'Emergency Warning'", "Roads in a cyclone approach become dangerous before the cyclone arrives", "Waiting to see if it 'weakens' is the most common dangerous decision in cyclone events"] },
-      outcome_survivable_c: { outcome: "survivable", finalText: "Sheltering in the strongest interior room was the right call once you committed to staying. Never go outside during the calm of the eye — it ends suddenly and without warning.", lessons: ["Zone B evacuation orders exist because those houses are not built to withstand Category 3+ cyclones", "If you must shelter in place, interior bathroom or corridor, away from windows", "Never mistake the calm of the eye for the storm being over — the worst may be ahead"] },
-    }
-  },
+    s0:{loc:"YOUR HOME — JUST BEFORE 2:14AM",atmo:"calm",logTime:"",logSit:"",prompt:null,noLog:true,
+      text:"Your daughter drew a picture of your house last week.\n\nShe used dark green crayon for the hills behind it. Pressed hard, the way kids do when they mean something. It is stuck to the fridge with a strawberry magnet.\n\nThe hills behind your house are not dark green tonight.\n\nAt 2:14am, your smoke alarm goes off.",
+      choices:[{text:"Begin",next:"s1",score:0,logQ:"good",logEffect:"",noLog:true}]},
 
-  flood: {
-    label: "FLASH FLOOD // LISMORE NSW",
-    totalDecisions: 5,
-    maxScore: 100,
-    scenes: {
-      s1: {
-        location: "LISMORE NSW — TUESDAY 7AM — DAY 3 OF HEAVY RAIN",
-        text: "Three days of rain. The Wilson River gauge at Lismore is at 8.6 metres and rising — flood level is 10.2m.\n\nThis morning there is a Minor Flood Warning in place. The forecast is for another 100mm of rain today.\n\nThe creek at the end of your street is flowing fast but still within its banks.",
-        atmo: "calm",
-        choices: [
-          { text: "Monitor the SES and BOM flood tracker — prepare to act", next: "s2a", score: 15 },
-          { text: "Start moving valuables to higher ground in the house", next: "s2b", score: 12 },
-          { text: "It's only Minor — the creek always looks like that after rain", next: "s2c", score: 0 }
-        ]
-      },
-      s2a: {
-        location: "SES FLOODSAFE WEBSITE — 7:15AM",
-        text: "The gauge has risen 40cm in the last hour. At this rate it will reach Major Flood Level (11.4m) by midday.\n\nSES has issued a text alert: 'Residents in low-lying areas near Wilson River should consider leaving now.'\n\nYou live 200 metres from the river. You have 4-5 hours.",
-        atmo: "tense",
-        choices: [
-          { text: "Leave now — don't wait for an evacuation order", next: "s3a", score: 20 },
-          { text: "Keep monitoring — prepare but don't leave yet", next: "s3b", score: 8 },
-          { text: "Get sandbags from the SES depot", next: "s3c", score: 5 }
-        ]
-      },
-      s2b: {
-        location: "YOUR HOME — 7:20AM",
-        text: "You're moving furniture upstairs. Electrics. Documents.\n\nAt 9am your phone buzzes: SES Emergency Alert — 'EVACUATE NOW if you are in a low-lying area near Wilson River. Water is rising rapidly.'",
-        atmo: "critical",
-        timer: 14,
-        choices: [
-          { text: "Stop packing — get everyone in the car and leave", next: "s3a_urgent", score: 15 },
-          { text: "30 more minutes — almost done", next: "s3d", score: 2 }
-        ]
-      },
-      s2c: {
-        location: "YOUR KITCHEN — 10AM",
-        text: "You make coffee.\n\nAt 10:22am you look out the back window. The creek has burst its banks. There is water across your back yard. It's moving fast.\n\nYour car is in the driveway. The water is 10cm deep at the front gate and rising.",
-        atmo: "emergency",
-        timer: 10,
-        choices: [
-          { text: "Get in the car and drive out now", next: "s3e", score: 8 },
-          { text: "Move to the second floor and call SES", next: "s3f", score: 10 }
-        ]
-      },
-      s3a: {
-        location: "YOUR HOME — 7:30AM",
-        text: "Smart. You're leaving with hours to spare.\n\nYour emergency kit — how ready is it?",
-        atmo: "calm",
-        choices: [
-          { text: "Pre-packed bag ready to go — grab and leave", next: "s4a", score: 20 },
-          { text: "Pack quickly — 20 minutes", next: "s4b", score: 12 },
-          { text: "Pack the car with whatever makes sense", next: "s4c", score: 8 }
-        ]
-      },
-      s3a_urgent: {
-        location: "YOUR CAR — 9:05AM",
-        text: "You're in the car. Your partner has the emergency bag. The kids are in the back.\n\nWater is just starting to pool at the end of your street. You're leaving in time.",
-        atmo: "tense",
-        choices: [
-          { text: "Head to higher ground — take your planned evacuation route", next: "outcome_prepared_b", score: 15 }
-        ]
-      },
-      s3b: {
-        location: "YOUR HOME — 8AM–10AM",
-        text: "You monitor. The gauge keeps rising — past 10.2m, past 11m, past 11.4m.\n\nAt 10:15am the SES issues an Emergency Alert. The water is now 30cm deep in your street.\n\nYour car's exhaust is just above the waterline.",
-        atmo: "emergency",
-        timer: 8,
-        choices: [
-          { text: "Drive out immediately — now or never", next: "s3e", score: 8 },
-          { text: "Too dangerous to drive — go to second floor", next: "s3f", score: 12 }
-        ]
-      },
-      s3c: {
-        location: "SES DEPOT — 8:30AM",
-        text: "The queue for sandbags is 45 minutes long. By the time you get back, the river has broken its banks.\n\nYour street has 60cm of moving water.\n\nYour car is submerged to the door handles.",
-        atmo: "emergency",
-        choices: [
-          { text: "Leave the car — wade back home and go upstairs", next: "s3f", score: 8 }
-        ]
-      },
-      s3d: {
-        location: "YOUR HOME — 9:35AM",
-        text: "The water is now at your front door.\n\nYou can't drive. The car will be underwater in minutes.",
-        atmo: "emergency",
-        choices: [
-          { text: "Move to the highest point in the house — call SES 132 500", next: "s3f", score: 8 }
-        ]
-      },
-      s3e: {
-        location: "YOUR STREET — 10:25AM",
-        text: "Your car enters the flood water. 30cm seems manageable.\n\nAt 50cm your engine cuts out. The current pushes the car sideways.\n\nFloodwater can move a car at 30cm depth. At 60cm, even SUVs float.",
-        atmo: "emergency",
-        choices: [
-          { text: "Get out of the car immediately — move to high ground on foot", next: "outcome_critical", score: 5 }
-        ]
-      },
-      s3f: {
-        location: "YOUR SECOND FLOOR — 10:30AM",
-        text: "You're safe for now. Water is 1.2m below your floor level.\n\nYou call SES: 132 500. They log your address. Rescue boat ETA: unknown — they are overwhelmed with calls.\n\nHow prepared are you to wait?",
-        atmo: "tense",
-        choices: [
-          { text: "We have emergency supplies for 2 days — we can wait safely", next: "outcome_survivable_a", score: 15 },
-          { text: "We have almost nothing — we need rescue soon", next: "outcome_survivable_b", score: 5 }
-        ]
-      },
-      s4a: {
-        location: "YOUR CAR — 7:35AM",
-        text: "Bag in the boot. Everyone in. You're leaving before the water reaches your street.\n\nYou head to your sister's place in Ballina — 40km north and well above flood level.\n\nThe roads are clear. You're calm.",
-        atmo: "calm",
-        choices: [
-          { text: "Drive to your rally point — monitor BOM on the way", next: "outcome_prepared_a", score: 15 }
-        ]
-      },
-      s4b: {
-        location: "YOUR CAR — 7:55AM",
-        text: "You packed well — medications, documents, a change of clothes, phone chargers, some food.\n\nYou're leaving with time to spare.",
-        atmo: "calm",
-        choices: [
-          { text: "Head inland to higher ground", next: "outcome_prepared_b", score: 12 }
-        ]
-      },
-      s4c: {
-        location: "YOUR CAR — 8:05AM",
-        text: "You grabbed what you could. Not everything, but you're out early.",
-        atmo: "calm",
-        choices: [
-          { text: "Drive to higher ground", next: "outcome_survivable_a", score: 8 }
-        ]
-      },
-      outcome_prepared_a: { outcome: "prepared", finalText: "You read the signs early, left before the flood order, and arrived at your rally point with a full emergency kit. Your house flooded — but your family was safe, fed, and dry throughout.", lessons: ["Leaving at the first advisory — not the evacuation order — is always safer", "A pre-packed emergency bag means zero scrambling under pressure", "Having a rally point agreed in advance removes decision-making from the moment", "SES flood gauges online give you hours of warning if you monitor them early"] },
-      outcome_prepared_b: { outcome: "prepared", finalText: "You made the right call when the emergency alert came through. You got out safely with good supplies. The house flooded significantly — but you and your family were somewhere dry.", lessons: ["Acting on the emergency alert — even if it feels too cautious — is the right call", "Keep medications, documents, and phone chargers as priority items to grab", "Know your local flood gauge and what the numbers mean for your street"] },
-      outcome_survivable_a: { outcome: "survivable", finalText: "You're stranded upstairs but you have supplies. SES boats reach you 9 hours later. It's uncomfortable — but you're safe, fed, and hydrated throughout the wait.", lessons: ["If you can't evacuate, vertical evacuation to the highest floor is the right move", "Emergency supplies for 72 hours meant you could wait safely for rescue", "Never attempt to drive through floodwater — 30cm of moving water can move a car"] },
-      outcome_survivable_b: { outcome: "survivable", finalText: "You're rescued after 14 hours. No food or water. Your youngest has a fever. You're safe — but those 14 hours were significantly more difficult than they needed to be.", lessons: ["Emergency supplies are as important for sheltering in place as evacuating", "Never drive into floodwater — even water that 'looks shallow'", "A pre-packed bag stored upstairs means supplies are always above flood level"] },
-      outcome_critical: { outcome: "critical", finalText: "Driving into floodwater is the most common cause of flood-related deaths in Australia. 30cm of moving water can move a small car. 60cm can float an SUV. The water looked driveable — it wasn't.", lessons: ["NEVER drive into floodwater — 'If it's flooded, forget it'", "Vertical evacuation to upper floors is safer than driving through floodwater", "Leave early — before the water reaches your street — and this decision never has to be made"] }
-    }
-  },
+    s1:{loc:"YOUR BEDROOM — 2:14AM",atmo:"tense",logTime:"2:14am",logSit:"The smoke alarm went off at 2:14am.",prompt:"What is your first move?",
+      text:"Your partner grabs your arm in the dark.\n\nYou sit up. You take a breath — no smoke inside. Not yet. Through the curtains the night sky is black. The alarm keeps screaming.\n\nYour youngest is 6. She is asleep down the hall. Your partner is already half out of bed.\n\nYou have one second to decide what matters most right now.",
+      choices:[
+        {text:"Your phone is on the bedside table — check the Fires Near Me app",next:"s2a",score:12,logQ:"good",logEffect:"Live data in 60 seconds. You know the distance, the wind speed, and how long you have."},
+        {text:"Go straight to the kids — get them moving before you know anything else",next:"s2b",score:10,logQ:"ok",logEffect:"You woke the family first. The next 90 seconds would depend entirely on what you had ready."},
+        {text:"Open the back door — you need to see it yourself",next:"s2c",score:8,logQ:"ok",logEffect:"The back door told you everything. But it cost 90 seconds you could not get back."}
+      ]},
 
-  blackout: {
-    label: "GRID FAILURE // SE AUSTRALIA",
-    totalDecisions: 5,
-    maxScore: 100,
-    scenes: {
-      s1: {
-        location: "YOUR HOME — THURSDAY 3:20PM",
-        text: "The power goes off.\n\nNot just your street — your phone shows a major grid failure across South East Australia. The energy provider app shows 'Major Network Incident. No Estimated Restoration Time.'\n\nIt's 32°C outside. You have a family member who takes daily refrigerated medication.",
-        atmo: "tense",
-        choices: [
-          { text: "Assess the situation methodically — check all critical items", next: "s2a", score: 15 },
-          { text: "Drive to the supermarket before everyone else does", next: "s2b", score: 8 },
-          { text: "It'll be back on in a few hours — don't panic", next: "s2c", score: 2 }
-        ]
-      },
-      s2a: {
-        location: "YOUR HOME — 3:25PM",
-        text: "You work through the critical list:\n\n• Medication in fridge — needs to stay below 8°C\n• Fridge contents good for 4 hours if unopened\n• Phone: 67% battery\n• Portable radio: found it — batteries need checking\n• Water supply: on town water (no pump issues)\n• Cash: $40 in wallet\n\nWhat's the most urgent issue?",
-        atmo: "tense",
-        choices: [
-          { text: "Medication first — find a cool solution", next: "s3a", score: 20 },
-          { text: "Charge all devices while car battery works", next: "s3b", score: 12 },
-          { text: "Fill every container with water — in case pumping fails", next: "s3c", score: 10 }
-        ]
-      },
-      s2b: {
-        location: "LOCAL SUPERMARKET — 3:45PM",
-        text: "The supermarket is already chaotic. No power means no EFTPOS. You have $40 cash.\n\nShelf limits are in place. Ice is sold out. Torches are gone.\n\nYou grab some canned food, bottled water, and batteries.\n\nYou drive home. You've been gone 45 minutes.",
-        atmo: "tense",
-        choices: [
-          { text: "Now deal with the medication situation", next: "s3a_late", score: 10 },
-          { text: "Now charge devices using the car", next: "s3b", score: 8 }
-        ]
-      },
-      s2c: {
-        location: "YOUR HOME — 6PM",
-        text: "It's not back on.\n\nThe news (via your dying phone) says the outage may last 24–72 hours due to equipment failure and cascading grid issues.\n\nYour fridge has been off for 2.5 hours. The medication is still okay — for now. Phone battery: 31%.",
-        atmo: "critical",
-        choices: [
-          { text: "Deal with the medication urgently", next: "s3a_late", score: 10 },
-          { text: "Drive to a friend's house that has power", next: "s3d", score: 12 }
-        ]
-      },
-      s3a: {
-        location: "YOUR HOME — 3:30PM",
-        text: "The medication needs refrigeration. Options:\n\n• The pharmacy 2km away may have a generator and cold storage\n• A neighbour mentioned having a small generator\n• A thermal cooler with ice from the servo could buy 12–18 hours\n• The hospital pharmacy stores emergency medications",
-        atmo: "tense",
-        choices: [
-          { text: "Call the pharmacy — ask if they have generator cold storage", next: "s4a", score: 20 },
-          { text: "Buy ice from the servo and use a cooler", next: "s4b", score: 15 },
-          { text: "Call the hospital pharmacy for emergency supply guidance", next: "s4a", score: 18 }
-        ]
-      },
-      s3a_late: {
-        location: "YOUR HOME — 4:15PM",
-        text: "The medication has been unrefrigerated for nearly an hour. It's still okay — but your window is closing.\n\nThe fridge temperature has risen to 12°C.",
-        atmo: "critical",
-        timer: 12,
-        choices: [
-          { text: "Call the pharmacy now about cold storage options", next: "s4b_late", score: 15 },
-          { text: "Drive to the hospital pharmacy for advice", next: "s4b", score: 12 }
-        ]
-      },
-      s3b: {
-        location: "YOUR CAR — 3:35PM",
-        text: "You run a USB cable from the car's 12V socket. Phone charging. You also find an old inverter in the boot.\n\nYou can run small devices off the car battery — but not indefinitely.\n\nMeanwhile — the medication.",
-        atmo: "tense",
-        choices: [
-          { text: "Sort the medication next — it's the most critical issue", next: "s3a", score: 15 },
-          { text: "Monitor the outage and wait for more information", next: "s2c", score: 3 }
-        ]
-      },
-      s3c: {
-        location: "YOUR HOME — 3:40PM",
-        text: "Good thinking — water pumping stations can fail in extended outages. You fill the bathtub, pots, and every spare container.\n\nYou now have approximately 80 litres stored — enough for several days.\n\nNow — the medication.",
-        atmo: "tense",
-        choices: [
-          { text: "Deal with the medication — it's the most time-sensitive issue", next: "s3a", score: 15 }
-        ]
-      },
-      s3d: {
-        location: "FRIEND'S HOUSE — SUBURB WITH POWER",
-        text: "Your friend's suburb is unaffected. You explain the medication situation.\n\nThey have a spare room. You have power. The medication is safe in their fridge.",
-        atmo: "calm",
-        choices: [
-          { text: "Stay here until the grid is restored", next: "outcome_prepared_b", score: 15 }
-        ]
-      },
-      s4a: {
-        location: "PHARMACY — 3:45PM",
-        text: "The pharmacy has a generator. They can store your medication securely.\n\nThey also give you a printout of the medication's temperature tolerance and a letter confirming emergency storage — useful if power is out longer than expected.\n\nYou leave it in their care. Medication is sorted.",
-        atmo: "calm",
-        choices: [
-          { text: "Return home and prepare the household for an extended outage", next: "s5a", score: 15 }
-        ]
-      },
-      s4b: {
-        location: "SERVICE STATION — 3:40PM",
-        text: "You buy a bag of ice and put the medication in your cooler. Temperature should stay safe for 12–18 hours if you don't open it.\n\nThis buys you time — but it's not a permanent solution.",
-        atmo: "tense",
-        choices: [
-          { text: "Return home and prepare for an extended outage", next: "s5a", score: 12 }
-        ]
-      },
-      s4b_late: {
-        location: "PHARMACY — 4:25PM",
-        text: "The pharmacy can store the medication — it's been out of refrigeration for just over an hour, still within safe limits.\n\nIt was close. A pharmacist tells you 90 minutes is typically the limit in warm weather.",
-        atmo: "tense",
-        choices: [
-          { text: "Return home — medication sorted, now prepare the household", next: "s5a_warn", score: 10 }
-        ]
-      },
-      s5a: {
-        location: "YOUR HOME — EVENING",
-        text: "Medication sorted. Now — the household.\n\nYou have:\n• Emergency food in the pantry (how much?)\n• A battery-powered radio\n• Torch and spare batteries\n• Cash for purchases if needed\n• 80 litres of stored water\n\nThe outage is confirmed for at least 36 hours.",
-        atmo: "tense",
-        choices: [
-          { text: "We have 72 hours of emergency food — we're well prepared", next: "outcome_prepared_a", score: 15 },
-          { text: "We have maybe 24 hours of food in the pantry", next: "outcome_survivable_a", score: 8 },
-          { text: "We have almost nothing — relying on takeaway and shopping", next: "outcome_survivable_b", score: 3 }
-        ]
-      },
-      s5a_warn: {
-        location: "YOUR HOME — EVENING",
-        text: "Medication is safe. You're preparing the household for a 36+ hour outage.\n\nWhat does your emergency food supply look like?",
-        atmo: "tense",
-        choices: [
-          { text: "We have 72 hours of emergency food and supplies", next: "outcome_prepared_b", score: 12 },
-          { text: "We have some pantry food — maybe a day", next: "outcome_survivable_a", score: 8 }
-        ]
-      },
-      outcome_prepared_a: { outcome: "prepared", finalText: "Textbook response. You prioritised correctly — medication first, water security, then food. Your 72-hour emergency kit meant the 36-hour outage was manageable and calm.", lessons: ["Medical needs are always priority one in any emergency", "Knowing where emergency cold storage is available before you need it is critical preparation", "72 hours of emergency food means a 36-hour outage is simply an inconvenience", "A battery radio and charged devices keep you informed when internet goes down"] },
-      outcome_prepared_b: { outcome: "prepared", finalText: "You found a practical solution quickly and your family was comfortable throughout the outage. Good situational awareness and flexibility — exactly what emergencies require.", lessons: ["Knowing which friends or family live in different grid zones is useful preparation", "Medication management is one of the most overlooked aspects of emergency preparedness", "Having a network of contacts who can help is as valuable as physical supplies"] },
-      outcome_survivable_a: { outcome: "survivable", finalText: "The medication was handled well but limited food supplies made the second day uncomfortable. Shops had limited stock and no EFTPOS. Cash helped — but not much was left.", lessons: ["72 hours of emergency food is the baseline — a 36-hour outage is well within that", "Extended outages empty supermarket shelves quickly — you can't shop your way out of it", "Long-shelf-life emergency food means you're never dependent on the grid to eat"] },
-      outcome_survivable_b: { outcome: "survivable", finalText: "You managed — but the second day was genuinely difficult. Shops ran out of basics. ATMs were offline. Two meals were skipped. The medication was fine but the household struggled.", lessons: ["Emergency food and water are not optional extras — this scenario is why they exist", "ATMs also fail in extended grid outages — cash in hand is essential", "A 72-hour kit with long-shelf-life food, water, and a radio costs less than a single night in a hotel"] },
-    }
+    s2a:{loc:"YOUR PHONE — 2:15AM",atmo:"critical",timer:22,logTime:"2:15am",logSit:"The Fires Near Me app showed a Watch and Act warning 2.4km from your street.",prompt:"Your partner is in the doorway. How bad?",
+      text:"A red polygon covers the ridge to your north.\n\nWATCH AND ACT — Peats Ridge Rd, Calga NSW\nWind: 44km/h gusting to 68. Bearing: south-southeast.\nDistance to your street: 2.4km.\n\nAt 68km/h gusts, fire travels 600 metres every ten minutes.\n\nThe maths is simple. The answer is not.",
+      choices:[
+        {text:"Get the kids. We go now — activate the plan you made in September",next:"s3a",score:20,logQ:"good",logEffect:"Your plan meant no one had to think. The family was at the front door in 2 minutes."},
+        {text:"Bad. Really bad. Help me start grabbing the important things.",next:"s3b",score:8,logQ:"ok",logEffect:"No plan meant making decisions under extreme pressure. Some things were forgotten."},
+        {text:"Wait — let me call 000. They will tell us whether we actually need to go.",next:"s3c",score:3,logQ:"bad",logEffect:"The line was overwhelmed. 2 minutes on hold before a dispatcher said what the app already showed."}
+      ]},
+
+    s2b:{loc:"YOUR KIDS ROOMS — 2:15AM",atmo:"tense",logTime:"2:15am",logSit:"You went straight to wake the family before knowing anything else.",prompt:"Your family is in the hallway. Your partner looks at you.",
+      text:"You go to your daughter first. You turn on the light.\n\nShe opens her eyes and looks at you and she knows. Kids always know. Is it fire? she asks. You do not answer, which is an answer.\n\nYour son is already awake in the next room. He is 9. He gets up without being asked.\n\nNinety seconds after the alarm started, all four of you are in the hallway. Shoes on. The alarm is still going. Nobody has looked outside yet.\n\nEveryone is waiting for you.",
+      choices:[
+        {text:"The emergency bag is in the hall cupboard — grab it and go straight to the car",next:"s3_hidden",score:22,logQ:"perfect",logEffect:"The bag was there because you had prepared. Instinct and preparation working together."},
+        {text:"You need to know what you are dealing with — check the app, then move",next:"s3b_check",score:10,logQ:"ok",logEffect:"Checking added 60 seconds. The information was useful. Whether it was worth those 60 seconds is hard to say."},
+        {text:"Look through the front window — see how close it actually is",next:"s2c_window",score:6,logQ:"ok",logEffect:"The front window told you enough. But 90 seconds had already passed in the hallway."}
+      ]},
+
+    s2c:{loc:"YOUR BACK DOOR — 2:15AM",atmo:"critical",timer:18,logTime:"2:15am",logSit:"You opened the back door. An ember landed on the back of your hand.",prompt:"Your partner appears in the doorway behind you.",
+      text:"The back door opens and the smell hits you — eucalyptus smoke, hot and sharp in a way that is different from a campfire.\n\nThe ridge to the north glows orange. Not a glow on the horizon. A moving line.\n\nAn ember lands on the back of your hand. Small. It burns for just a second before you shake it off.\n\nThere are more drifting across the yard. One settles on the dry grass near the trampoline.\n\nYou have seen enough.",
+      choices:[
+        {text:"Get the bag from the hall cupboard. Car. Now. — it has been packed since September",next:"s3a",score:20,logQ:"good",logEffect:"That decision — made on a quiet September afternoon — is protecting your family right now."},
+        {text:"Wake the kids while I start the hose — we need to wet down the yard",next:"s3d",score:3,logQ:"bad",logEffect:"The hose felt proactive. In 68km/h gusts a garden hose is not a plan."},
+        {text:"Split up — you get the kids, I will grab what I can from the bedroom",next:"s3b",score:7,logQ:"ok",logEffect:"You covered more ground. It cost 6 minutes and left gaps in what you grabbed."}
+      ]},
+
+    s2c_window:{loc:"YOUR FRONT WINDOW — 2:17AM",atmo:"critical",logTime:"2:17am",logSit:"You looked through the front window. The ridge was fully lit.",prompt:"Two minutes have passed. Your family is still in the hallway.",
+      text:"Through the front window the ridge to the north is fully alight.\n\nNot a distant glow. A bright, moving orange line that was not there an hour ago.\n\nA car moves fast down the next street. No headlights. Someone who has already decided.\n\nYour partner puts a hand on your shoulder.",
+      choices:[
+        {text:"The bag is in the hall cupboard. Grab it and go.",next:"s3a",score:16,logQ:"good",logEffect:"Two minutes later than ideal — but the preparation held."},
+        {text:"Start grabbing things — documents, medication, chargers, go",next:"s3b",score:7,logQ:"ok",logEffect:"Going room by room without a plan is how important things get left behind."}
+      ]},
+
+    s3_hidden:{loc:"YOUR FRONT DOOR — 2:16AM",atmo:"calm",logTime:"2:16am",logSit:"The pre-packed bag was in the hall cupboard. It was exactly where you left it in September.",prompt:null,
+      text:"The bag is there.\n\nIt has always been there — since the evening in September when you sat at the kitchen table and thought: I should actually do this properly. Water. Food for three days. Medications. Copies of every document that matters. Phone charger. Battery radio. Cash. Two hours of a quiet Sunday afternoon.\n\nYour daughter had helped. She put a drawing in the bag — the house, the dark green hills. You had left it in.\n\nYou pick it up. It is heavier than you remembered, and it is exactly what you need.\n\nEveryone is in the car in 90 seconds. You do not have to decide what to take, because you already decided.",
+      choices:[{text:"Drive south on the route you agreed on after the 2019 fires",next:"out_hidden",score:18,logQ:"perfect",logEffect:"On the highway 4 minutes after the alarm. Instinct and preparation covered each other perfectly."}]},
+
+    s3b_check:{loc:"YOUR PHONE — 2:16AM",atmo:"critical",logTime:"2:16am",logSit:"You checked the app while your family waited in the hallway.",prompt:"Red polygon. 2.4km. The screen tells you what you already knew in your gut.",
+      text:"The app loads. Red polygon. Wind gusting 68. 2.4km from the front.\n\nYour family is in the hallway behind you. They have been there for 90 seconds while you confirmed information you could have acted on without.\n\nYou know what to do now. You knew before you checked.",
+      choices:[{text:"Grab the bag from the hall cupboard. Car. Now.",next:"s3a",score:14,logQ:"ok",logEffect:"60 seconds spent checking the app. The bag was still there. You made it out — with a tighter window."}]},
+
+    s3a:{loc:"YOUR HALLWAY — 2:16AM",atmo:"tense",logTime:"2:16am",logSit:"You activated your bushfire plan. The family was moving in under 2 minutes.",prompt:"Everyone has shoes on. The bag is in your hand.",
+      text:"Your partner is already moving before you finish the sentence.\n\nThe bags are in the hall cupboard. You put them there in September after a long evening at the kitchen table. 72-hour kit. Water, food, medication, documents, radio, cash. Two hours of a quiet Sunday afternoon that is paying off right now at 2:16am.\n\nYour daughter comes out of her room already dressed. She heard the alarm and put her shoes on herself.\n\nYou do not have to tell anyone twice.\n\nTwo minutes after the alarm, all four of you are at the front door.",
+      choices:[
+        {text:"Load the car and take the route south — straight through, no detours",next:"s4a",score:18,logQ:"good",logEffect:"On the highway heading south within 5 minutes. The route was exactly as planned."},
+        {text:"The photo albums. Three minutes. You know exactly where they are.",next:"s4b",score:8,logQ:"ok",logEffect:"You got the albums. Those 3 minutes put you on the road with the fire 700m away."}
+      ]},
+
+    s3b:{loc:"YOUR BEDROOM AND KITCHEN — 2:16AM",atmo:"emergency",timer:16,logTime:"2:16am",logSit:"You went room to room grabbing things. No plan. Extreme pressure.",prompt:"You have been inside 6 minutes. The smoke smell is stronger.",
+      text:"Passports. Laptop. The kids medications from the bathroom cabinet. The insurance folder from the study — where is that folder —\n\nYour partner is in the bedroom. Your son is in the hallway in his school shoes asking questions you do not have time to answer.\n\nA car alarm goes off somewhere outside. Then stops.\n\nYou have an armful of things. You have not found the car keys yet and nobody has their shoes sorted.",
+      choices:[
+        {text:"Leave now — take what is in your arms. Keys are in your pocket.",next:"s4c",score:12,logQ:"ok",logEffect:"You left with most of the important things. Not everything. But you left."},
+        {text:"One more room. The hard drive. Two more minutes.",next:"s4d",score:0,logQ:"bad",logEffect:"Two minutes put the fire front within 400 metres of your house as you finally left."}
+      ]},
+
+    s3c:{loc:"YOUR PHONE — 2:16AM",atmo:"critical",logTime:"2:16am",logSit:"You called 000. The line was overwhelmed. Nearly 3 minutes on hold.",prompt:"The dispatcher says: evacuate immediately. Do not delay.",
+      text:"Hold music.\n\nYou pace the hallway. 30 seconds. A minute. A minute and a half.\n\nYour partner appears: What are you doing?\nWaiting for 000.\nA pause. The app said Watch and Act. We need to go.\nI know. I just —\n\nThen the dispatcher picks up.\n\nShe tells you what the app showed you nearly 3 minutes ago. She uses the word immediately. Twice.",
+      choices:[
+        {text:"Hang up. Tell the family to get in the car. Leave now.",next:"s4c",score:10,logQ:"ok",logEffect:"Still got out — but 3 minutes on hold put a different pressure on the drive south."},
+        {text:"Ask her: is the Watch and Act likely to become an Emergency Warning?",next:"s4d",score:-5,logQ:"bad",logEffect:"She does not have that information. You have spent another minute inside."}
+      ]},
+
+    s3d:{loc:"YOUR BACKYARD — 2:16AM",atmo:"emergency",timer:12,logTime:"2:16am",logSit:"You ran the hose on the back fence while embers fell around you.",prompt:"Your neighbour drives past out front, leaning on the horn.",
+      text:"You unroll the hose and point it at the back fence. The water hits dry hardwood and runs off.\n\nAn ember lands on the fence post. Then another on the roof.\n\nYou can feel the radiant heat from the ridge. Not warmth — actual heat, the kind that makes you squint even at this distance.\n\nYour partner appears at the back door with both kids behind them. Their faces say everything about what this looks like from where they are standing.\n\nThe gust hits. You feel it in your chest before you hear it.",
+      choices:[
+        {text:"Drop the hose. Get to the car. This was a mistake.",next:"s4c",score:8,logQ:"ok",logEffect:"Right call, late. You left with minutes to spare and nothing packed."},
+        {text:"The fence will go and then the house — keep the hose going",next:"out_critical",score:-20,logQ:"bad",logEffect:"A garden hose cannot hold a fire front moving at 68km/h. It never could."}
+      ]},
+
+    s4a:{loc:"YOUR STREET — 2:21AM",atmo:"calm",logTime:"2:21am",logSit:"You drove south on your planned evacuation route.",prompt:null,
+      text:"You turn south onto the main road.\n\nAn RFS volunteer is at the end of your street with a torch, waving traffic through. He does not look panicked. That helps.\n\nIn the rear-view mirror, the ridge is fully alight. A long bright orange line across the dark hillside. Moving.\n\nYour daughter is watching it through the back window.\n\nIt is eating our hill, she says.\nYeah, your son says. But we are not on it.\n\nYou drive. Battery radio on. Emergency kit in the boot.",
+      choices:[{text:"Stay on the planned route — no detours, no looking back",next:"out_prepared_a",score:14,logQ:"good",logEffect:"Arrived at your sister in Gosford 28 minutes later. Safe, fed, and self-sufficient."}]},
+
+    s4b:{loc:"YOUR GARAGE — 2:20AM",atmo:"tense",logTime:"2:20am",logSit:"You loaded photo albums before leaving. It took 3 extra minutes.",prompt:null,
+      text:"Three photo albums. The laptop. Your daughter school bag because she asked and this was not the moment to say no.\n\nYour partner has started the car. Headlights on.\n\nYou take one last look at the house from the driveway. Every room dark. Fifteen years of mortgage. The strawberry magnet still on the fridge.\n\nYou get in. You close the door.",
+      choices:[{text:"Drive south. Do not stop.",next:"out_prepared_b",score:12,logQ:"good",logEffect:"Made it out. The extra 3 minutes put you on the road with the fire 700m away. But you made it."}]},
+
+    s4c:{loc:"YOUR CAR — 2:22AM",atmo:"tense",logTime:"2:22am",logSit:"You left with what you had. No emergency kit.",prompt:null,
+      text:"You put what you grabbed in the back seat and get in.\n\nPassports. Laptop. A charger. Some drawings your daughter made that you picked up without thinking.\n\nNo water. No food. No medications. No radio.\n\nYou drive. The street behind you glows.",
+      choices:[{text:"Head south to the Gosford evacuation centre",next:"out_survivable_a",score:8,logQ:"ok",logEffect:"You got out safely. At the centre you would rely on what they had for everything."}]},
+
+    s4d:{loc:"YOUR HALLWAY — 2:24AM",atmo:"emergency",logTime:"2:24am",logSit:"You stayed inside too long. The front windows started glowing amber.",prompt:null,
+      text:"You are still inside.\n\nThe front windows pulse amber. Not the amber of streetlights — a moving amber that was not there two minutes ago.\n\nSomething outside catches with a crack and then a rushing roar. Hot air pushes under the front door.\n\nYour eyes water. Your youngest is coughing.\n\nThere is nothing in your arms that matters.",
+      choices:[{text:"Leave. Everything. Now. Car. Drive.",next:"out_survivable_b",score:5,logQ:"bad",logEffect:"You made it out by seconds. The driveway was lit as you reversed."}]},
+
+    out_hidden:{outcome:"perfect",hiddenPath:true,hiddenText:"You chose instinct over information — and your preparation made that the best possible choice. Most players check the app first. The hidden path rewards the person who prepared so well that they did not need to.",
+      finalText:"You made every decision correctly — including the one that looked wrong.\n\nYou went to your family before you knew anything. It should have been chaotic. Instead it was the fastest, calmest evacuation possible, because the bag was packed and everyone understood what the bag meant.\n\nYour daughter drawing is in the boot. The house is probably gone. Everything that matters is in that car.\n\nThis is what genuine preparedness looks like.",
+      lessons:["The hidden path rewards people whose preparation was thorough enough to make their instinct the right answer","A pre-packed bag by the door turns a panicked first move into the optimal response","A family plan means even an imperfect first decision leads somewhere good — because the next step is already known","Preparation is not just what you pack. It is the 30 seconds of calm that follows when you realise you do not have to decide."]},
+
+    out_prepared_a:{outcome:"prepared",finalText:"You read the situation correctly from the first alarm, activated a plan made on a quiet Sunday in September, and drove south with 72 hours of supplies and a clear head.\n\nThe house was lost. The RFS confirmed it two days later — the fire reached your street at 2:31am. You were on the highway at 2:21am.\n\nYou had 10 minutes to spare. The plan gave you those 10 minutes.",
+      lessons:["A pre-packed emergency bag removes every decision from the worst moment of your life","A bushfire plan with a nominated rally point means no one has to ask where are we going at 2am","The decision to prepare — made on a calm afternoon — is the most important decision in this scenario","Your house can be rebuilt. The plan you made meant your family was never at risk."]},
+
+    out_prepared_b:{outcome:"prepared",finalText:"You got out with your emergency kit and your family — with a narrow margin.\n\nThe RFS confirmed the fire reached your street at 2:27am. You reversed out of your driveway at 2:23am. Four minutes.\n\nThe photo albums came because those 3 minutes happened to be available. On a faster-moving night, they would not have been.",
+      lessons:["Pre-packed bags mean the photo album debate never happens — because there is no debate","Once the decision to leave is made, execute it — every extra minute is a margin you are spending","Tonight the margin was there. Next time may be different."]},
+
+    out_survivable_a:{outcome:"survivable",finalText:"You got out safely — and that is what matters most.\n\nBut the night at the evacuation centre was harder than it needed to be. No medications. No food. One phone between four people. Your daughter cried twice because she was hungry and you had nothing.\n\nThe centre was overwhelmed. Volunteers did everything they could. But you could not stop thinking about the Sunday afternoon you did not spend.",
+      lessons:["A 72-hour emergency kit changes everything about what comes after the escape","Evacuation centres are not hotels — supplies are limited, especially for specific needs","The decision to prepare costs two hours on a quiet afternoon. The decision not to costs something harder to measure."]},
+
+    out_survivable_b:{outcome:"survivable",finalText:"You made it out by seconds.\n\nThe driveway was on fire as you reversed. Your youngest had her eyes closed and her hands over her ears.\n\nYou are safe. Your family is safe. You are at Gosford Showground at 2:47am with nothing — no food, no water, no change of clothes.\n\nYou are safe. Tonight that has to be enough.",
+      lessons:["Leave at Watch and Act — not Emergency Warning — and this scene never happens","The time you spent inside was time the fire used to close the gap","A pre-packed bag means just one more thing is never a temptation — because there is nothing more to decide"]},
+
+    out_critical:{outcome:"critical",finalText:"A garden hose cannot hold a fire front in 68km/h gusts.\n\nThis is not a failure of courage. It takes nerve to stand your ground with a hose while embers fall around you. But the fire that moved through your street carried 180 hectares of energy behind it.\n\nThe most important lesson from this scenario is about what a fire at this speed actually means. At 600 metres every 10 minutes, the gap between manageable and life-threatening closes faster than feels possible.\n\nYou now know this. And knowing it — really knowing it — is the most valuable thing you can take from tonight.",
+      lessons:["Defending a home requires specific equipment, training, and the right type of fire — a running grass fire in high winds cannot be defended with a hose","Leave at the Watch and Act warning — this scenario illustrates exactly why that warning exists","The ember that landed on your hand was the warning. The correct response was to leave."]}
   }
+},
+
+// ================================================================
+// CYCLONE — CAIRNS QLD
+// Hidden path: Skip securing yard, go straight to shelter very early = perfect outcome
+// ================================================================
+cyclone:{
+  label:"CYCLONE // CAIRNS QLD",
+  maxDecisions:7,
+  maxScore:118,
+  scenes:{
+
+    s0:{loc:"CAIRNS QLD — MONDAY AFTERNOON",atmo:"calm",logTime:"",logSit:"",prompt:null,noLog:true,
+      text:"Your neighbour Ray has lived through four cyclones. He is 71, methodical, and almost never wrong about the weather.\n\nThis morning he knocked on your fence and said: 'This one is different.\' Then he went inside and started boarding up his windows.\n\nThat was at 10am. It is now 4pm. You have been watching the clouds build from the north for the last two hours.\n\nAt 4pm, BOM issues a Cyclone Warning for Cairns and surrounds. Category 3. Landfall projected at 10pm.",
+      choices:[{text:"Begin",next:"s1",score:0,logQ:"good",logEffect:"",noLog:true}]},
+
+    s1:{loc:"YOUR HOME — 4:00PM",atmo:"tense",logTime:"4:00pm",logSit:"A Cyclone Warning was issued for Cairns. Category 3. Six hours to landfall.",prompt:"Ray said this one is different. What do you do first?",
+      text:"Category 3. Winds to 165km/h, gusts to 200. Landfall at 10pm — six hours from now.\n\nYou live in a low-set timber house 1.2km from the Esplanade. You have lived in Cairns for 11 years. You have seen cyclone warnings before.\n\nMost of them turn.\n\nRay did not seem to think this one would.",
+      choices:[
+        {text:"Check BOM and the Queensland cyclone zone map right now",next:"s2a",score:14,logQ:"good",logEffect:"Knowing your zone gave you the information to make the right call while there was still time."},
+        {text:"Start securing the yard — Ray is already boarding up, you should be too",next:"s2b",score:9,logQ:"ok",logEffect:"Securing the yard was useful. But you did not yet know whether you were supposed to be leaving."},
+        {text:"Call Ray and ask him what he thinks you should do",next:"s2c",score:11,logQ:"ok",logEffect:"Ray knew what he was talking about. He told you three things that mattered."}
+      ]},
+
+    s2a:{loc:"BOM WEBSITE — 4:08PM",atmo:"tense",logTime:"4:08pm",logSit:"You checked the zone map. Your street is in Evacuation Zone B.",prompt:"Zone B. Category 3 or above. Evacuate to a Category C shelter.",
+      text:"The Queensland cyclone evacuation zone map loads.\n\nYour street: Zone B.\n\nZone B residents are directed to evacuate to a Category C shelter when a Cyclone Warning is issued for Category 3 or above.\n\nNearest shelter: Cairns State High School. 3.4km inland. Opened at 2pm.\n\nYou have six hours to landfall. Roads will start congesting in about two hours. After 7pm, emergency services advise that driving is not safe.\n\nThe window to leave calmly is right now.",
+      choices:[
+        {text:"Pack and go to the shelter immediately — do not wait",next:"s3_hidden",score:22,logQ:"perfect",logEffect:"You left at 4:20pm. Roads were clear. You had 5 and a half hours before landfall."},
+        {text:"Secure the house first, then leave in a couple of hours",next:"s3b",score:9,logQ:"ok",logEffect:"Securing took longer than planned. The roads were a different situation when you finally left."},
+        {text:"Zone B — but this house has been through cyclones before",next:"s3c",score:-5,logQ:"bad",logEffect:"Previous storms were Category 1. Ingrid was not Category 1."}
+      ]},
+
+    s2b:{loc:"YOUR YARD — 4:15PM",atmo:"tense",logTime:"4:15pm",logSit:"You started securing the yard. Ray leaned over the fence and told you something important.",prompt:"You are 20 minutes into securing the yard when Ray appears at the fence.",
+      text:"You work through it methodically. Bins into the garage. Outdoor furniture stacked and tied. Tools locked in the shed. The kids trampoline takes 20 minutes to disassemble and you almost leave it.\n\nRay appears at the fence. 'You checked your zone?\' he says.\n\nYou have not.\n\n'You are Zone B. My place is Zone A. We are both supposed to go to the high school shelter.\' He pauses. 'I am leaving at 5. You should come.\' \n\nHe goes back inside.",
+      choices:[
+        {text:"Check the zone map right now — then decide",next:"s2a",score:11,logQ:"ok",logEffect:"Late check — but you got the right information and still had time to act on it."},
+        {text:"If Ray is going, that settles it — start packing to leave with him at 5",next:"s3b_ray",score:14,logQ:"good",logEffect:"You trusted Ray. You were at the shelter by 5:30pm. The roads were still manageable."},
+        {text:"The yard is almost secured — finish it, then decide",next:"s3b",score:5,logQ:"ok",logEffect:"Another 30 minutes on the yard meant making the call under more pressure."}
+      ]},
+
+    s2c:{loc:"RAY S FRONT DOOR — 4:10PM",atmo:"tense",logTime:"4:10pm",logSit:"You knocked on Ray's door and asked him directly.",prompt:"Ray opens the door. He is holding a torch and a battery radio.",
+      text:"Ray listens to your question.\n\nThen he says three things.\n\nFirst: check your zone. Second: do not wait to see if it weakens. Third: the shelter at the high school has generators, food, and a doctor. He has been there before.\n\nHe adds: 'I am leaving at 5. You are welcome to come.\' \n\nHe closes the door.",
+      choices:[
+        {text:"Check your zone on the BOM site right now",next:"s2a",score:12,logQ:"good",logEffect:"Ray was right about everything. Checking confirmed it. You had all the information you needed."},
+        {text:"Trust Ray — start packing immediately, leave with him at 5",next:"s3b_ray",score:15,logQ:"good",logEffect:"You trusted the right person. At the shelter by 5:30. Roads still manageable."}
+      ]},
+
+    s3_hidden:{loc:"YOUR HOME — 4:12PM",atmo:"calm",logTime:"4:12pm",logSit:"You decided to go to the shelter immediately — before securing anything else.",prompt:null,
+      text:"You do not stop to board up windows. You do not finish the yard.\n\nYou pack the emergency kit — pre-packed from last October, sitting in the hall cupboard where you put it after you went to that community preparedness session. Three days of food, water for four people, all medications, documents, battery radio, phone chargers, cash.\n\nIt takes 8 minutes to get everyone in the car.\n\nRay is watching from his driveway as you reverse out. He raises a hand. You raise yours.\n\nThe roads are completely clear. It is 4:20pm and you are driving inland with five and a half hours to spare.",
+      choices:[{text:"Drive directly to Cairns State High shelter",next:"s4_hidden",score:18,logQ:"perfect",logEffect:"Arrived at 4:35pm. First dozen families in. Calm, well-positioned, and fully supplied."}]},
+
+    s3b_ray:{loc:"YOUR HOME — 4:50PM",atmo:"tense",logTime:"4:50pm",logSit:"You packed to leave with Ray at 5pm.",prompt:null,
+      text:"You have 50 minutes. You pack well — medications, documents, two days of food, water, phone chargers.\n\nNot everything. But the important things.\n\nAt 4:58pm you knock on Ray front door. He is already in his car with the engine running. He nods.\n\nYou drive in convoy to the shelter. The roads are busier than an hour ago but still moving.",
+      choices:[{text:"Drive to the shelter with Ray",next:"s4b",score:14,logQ:"good",logEffect:"Arrived at 5:25pm. Plenty of space. Ray sat two rows over from you all night."}]},
+
+    s3b:{loc:"YOUR HOME — 6:30PM",atmo:"critical",timer:15,logTime:"6:30pm",logSit:"Securing the house took hours. Category 4 upgrade. Emergency Warning issued.",prompt:"SES text: EVACUATE NOW Zone A and Zone B. Roads dangerous after 8pm.",
+      text:"Two hours of work. Windows boarded. Furniture away from exterior walls. Bath filled. Car moved to higher ground.\n\nAt 6:30pm, BOM upgrades Cyclone Ingrid to Category 4. Maximum winds 200km/h, gusts to 250. Track unchanged.\n\nAn Emergency Warning is issued.\n\nYour phone buzzes with an SES alert. Zone B. Evacuate now.\n\nThe shelter is 3.4km away. It is raining. Wind is already gusting to 60km/h.",
+      choices:[
+        {text:"Leave for the shelter right now — do not wait any longer",next:"s4c",score:12,logQ:"ok",logEffect:"Left at 6:35pm. Uncomfortable driving but you made it."},
+        {text:"The house is as secured as it can be — shelter in place",next:"s4d",score:-5,logQ:"bad",logEffect:"Securing a house does not change what zone it is in or what it is rated to withstand."}
+      ]},
+
+    s3c:{loc:"YOUR HOME — OVERNIGHT",atmo:"emergency",logTime:"10:00pm",logSit:"You decided to shelter in place in a Zone B timber house during Category 4.",prompt:"You shelter in the interior bathroom. Mattresses against the door.",
+      text:"You shelter in the interior bathroom. Mattresses against the door. Everyone in the bathtub.\n\nAt 10:22pm the eye wall arrives.\n\nThe noise is unlike anything you have experienced. Not wind — a sustained physical force. The roof structure groans. Something on the eastern side tears loose. Rain drives through horizontally.\n\nYou stay in the bathroom. You hold your family. You wait.\n\nAn hour later: silence. The eye is passing over.\n\nYou do not go outside.",
+      choices:[{text:"Stay in the bathroom until it is fully over — the eye is not the end",next:"out_survivable_c",score:10,logQ:"ok",logEffect:"Right call once committed to staying. The back half of the storm arrived 45 minutes later."}]},
+
+    s4_hidden:{loc:"CAIRNS STATE HIGH — 4:35PM",atmo:"calm",logTime:"4:35pm",logSit:"You arrived at the shelter at 4:35pm — among the first families in.",prompt:null,
+      text:"You check in at 4:35pm. There are maybe 15 families ahead of you.\n\nThe staff are relaxed at this point. There is time. There is space. There is order.\n\nYou pick a spot near the emergency exit, away from windows. Your bag goes down. The kids sit. You pull out the portable radio.\n\nThree days of food. Water for four. All medications. Documents. Battery bank. Cash.\n\nOutside, the sky is still blue.\n\nYou have five and a half hours before the eye wall arrives. You are going to spend them in a concrete building with a doctor on site.\n\nRay arrives at 5:05pm. He gives you a nod.",
+      choices:[{text:"Register with the coordinator and settle in",next:"out_perfect",score:14,logQ:"perfect",logEffect:"You listened to the man who knew. You left when you should have left. This is what it looks like when it goes right."}]},
+
+    s4b:{loc:"CAIRNS STATE HIGH — 5:25PM",atmo:"calm",logTime:"5:25pm",logSit:"You arrived at the shelter at 5:25pm with most of what you needed.",prompt:null,
+      text:"You check in at 5:25pm. Still plenty of room. You have medications, documents, food for two days, chargers, water.\n\nNot everything. But enough.\n\nThe relief of being in a concrete shelter, away from your timber house and its windows, is immediate and physical.\n\nRay is two rows over. He raises his thermos in your direction.",
+      choices:[{text:"Register and settle in for the night",next:"out_prepared_a",score:12,logQ:"good",logEffect:"A very good outcome. Leaving earlier would have meant less pressure. But you made it safely."}]},
+
+    s4c:{loc:"CAIRNS STATE HIGH — 6:50PM",atmo:"tense",logTime:"6:50pm",logSit:"You arrived at the shelter late, driving in 60km/h gusts.",prompt:null,
+      text:"You arrive at 6:50pm. The drive was tense — surface water on roads, wind gusts pushing the car sideways on exposed sections.\n\nThe shelter is nearly full. You find a spot in the back corner near the toilets.\n\nYou have some supplies. Not well-packed — grabbed quickly.\n\nOutside, the rain is increasing.",
+      choices:[{text:"Register and settle in for what is going to be a long night",next:"out_survivable_a",score:8,logQ:"ok",logEffect:"You made it safely. Earlier would have been a different experience entirely."}]},
+
+    s4d:{loc:"YOUR HOME — OVERNIGHT",atmo:"emergency",logTime:"11:00pm",logSit:"You sheltered in place. The storm arrived at Category 4.",
+      text:"You are in the interior bathroom when the power goes off at 9:15pm.\n\nAt 10:22pm the eye wall arrives over Cairns.\n\nSomething structural on the east side of the house fails. You hear it above the roar — a different sound from everything else. Something that was holding is no longer holding.\n\nThe roof stays. Mostly.\n\nYou stay in the bathroom until 3am, when it is quiet enough to check.",
+      choices:[{text:"Stay in the bathroom. Do not move until fully certain it is over.",next:"out_survivable_c",score:8,logQ:"bad",logEffect:"You survived. The house partially did. Zone B evacuation orders exist precisely for this reason."}]},
+
+    out_perfect:{outcome:"perfect",hiddenPath:true,hiddenText:"You left immediately when you had the information — before securing anything, before waiting to see if it weakened. Most players finish the yard first. The hidden path rewards leaving as soon as you know you should.",
+      finalText:"You left when you had the information. You did not wait for the yard to be finished, or for the sky to look worse, or for someone to tell you it was definitely time.\n\nYou arrived at the shelter with five hours to spare, fully equipped, in a concrete building with a doctor on site.\n\nCyclone Ingrid made landfall at Category 4. Maximum gusts 240km/h. Your street lost 11 roofs. You and your family were never on it.\n\nRay was right. This one was different.",
+      lessons:["The hidden path rewards leaving immediately on verified information — before the situation gets worse","Pre-packed emergency kits make immediate departure possible — there is no pause to decide what to take","Zone B exists because timber low-set homes are not engineered for Category 3 plus cyclones","Ray knew what he was talking about. In emergencies, trust the person with direct experience."]},
+
+    out_prepared_a:{outcome:"prepared",finalText:"You made the right calls. You trusted the right person. You arrived at the shelter with time, space, and most of what you needed.\n\nCyclone Ingrid made landfall at Category 4. You were already in a concrete shelter when the eye wall arrived.\n\nYour house lost part of the eastern wall. You were not in it.",
+      lessons:["Checking your cyclone zone before the season starts means you act on information, not guesswork","Trusting people with direct local experience is a legitimate emergency preparedness strategy","A pre-packed bag would have removed the 50-minute packing window — and the things you forgot"]},
+
+    out_survivable_a:{outcome:"survivable",finalText:"You made it to the shelter — late, in worsening conditions, with limited supplies.\n\nThe drive in 60km/h gusts was genuinely stressful. A police car was blocking one road by the time you passed.\n\nLeaving 90 minutes earlier would have been a completely different experience.",
+      lessons:["Leave at Watch and Act — not Emergency Warning. The roads in between are the problem.","Zone B evacuation orders reflect your structure engineering, not the severity of the weather at that moment","Early departure is almost always the right call in a low-set timber home in an evacuation zone"]},
+
+    out_survivable_c:{outcome:"survivable",finalText:"You survived a Category 4 cyclone in a Zone B timber home.\n\nThe interior bathroom was the right choice once you committed to staying. Not going outside during the eye was critical — the trailing wall arrived 45 minutes later.\n\nBut this outcome required things to go right that had no business going right. The partial roof failure on the east side could have been worse. You are aware of that.",
+      lessons:["Zone B evacuation orders exist because timber low-set homes are not designed for Category 3 plus","Never go outside during the calm of the eye — the trailing eye wall is often as bad as the lead","Interior room, away from windows, mattresses as protection: this is the shelter-in-place minimum if you cannot leave"]}
+  }
+},
+
+// ================================================================
+// FLOOD — LISMORE NSW
+// Hidden path: Monitor gauge from day 2 + pre-packed kit + leave at first advisory
+// ================================================================
+flood:{
+  label:"FLASH FLOOD // LISMORE NSW",
+  maxDecisions:7,
+  maxScore:120,
+  scenes:{
+
+    s0:{loc:"LISMORE NSW — SUNDAY NIGHT",atmo:"calm",logTime:"",logSit:"",prompt:null,noLog:true,
+      text:"You have checked the Wilson River gauge every morning for two days.\n\nNot because anyone told you to. Because after the 2022 floods — when 400 homes went under in a single morning — you decided that if it ever looked like that again, you were going to know about it early.\n\nYou have a note on the fridge: flood level 10.2m. Record: 14.4m (2022). Today the gauge read 7.8m when you checked at 7pm.\n\nYou go to bed with the rain still falling.",
+      choices:[{text:"Begin",next:"s1",score:0,logQ:"good",logEffect:"",noLog:true}]},
+
+    s1:{loc:"YOUR KITCHEN — TUESDAY 7:00AM",atmo:"calm",logTime:"7:00am",logSit:"Day 3 of rain. You checked the gauge at 7am.",prompt:"The gauge reads 8.6m. Flood level is 10.2m. What do you do?",
+      text:"Three days of rain. Not constant — relentless.\n\nYou make coffee and check the gauge. 8.6 metres. Up from 7.8 last night.\n\nThat is 80 centimetres overnight.\n\nThe BOM forecast shows another 80 to 100mm today. Possibly more. The creek at the end of your street is running hard — brown, fast, higher than yesterday.\n\nA Minor Flood Warning is in place.",
+      choices:[
+        {text:"Open the SES FloodSafe site and set up gauge alerts — watch it closely",next:"s2a",score:14,logQ:"good",logEffect:"You set alerts. When the gauge jumped 40cm in 30 minutes you knew before your phone buzzed."},
+        {text:"Start moving valuables to the upstairs rooms — furniture, electrics, documents",next:"s2b",score:12,logQ:"ok",logEffect:"Moving things upstairs was useful. But you did not yet know if the situation required evacuation."},
+        {text:"It is only Minor. The creek always looks like that in wet weather.",next:"s2c",score:0,logQ:"bad",logEffect:"Only Minor. The same reasoning used by many of the 400 households that flooded in 2022."}
+      ]},
+
+    s2a:{loc:"SES FLOODSAFE SITE — 7:15AM",atmo:"tense",logTime:"7:15am",logSit:"You watched the gauge rise 50cm in 30 minutes — faster than expected.",prompt:"The SES alert arrives: residents in low-lying areas should consider leaving now.",
+      text:"You set up the gauge alert and watch it.\n\n7:00am: 8.6m\n7:15am: 8.82m\n7:30am: 9.1m\n\nThat is 50 centimetres in 30 minutes. Rain upstream has not stopped.\n\nAt 7:45am an SES alert lands on your phone: residents in low-lying areas near Wilson River should consider leaving now. A Moderate to Major Flood Warning is now in effect.\n\nYour street is 200 metres from the river. At this rate, the gauge reaches flood level within 90 minutes.\n\nThis is the moment. Everything after this gets harder.",
+      choices:[
+        {text:"Leave now — get ahead of it before the roads are affected",next:"s3_hidden",score:22,logQ:"perfect",logEffect:"You left before the warning order. One of the best decisions you can make in a flood."},
+        {text:"Keep monitoring — prepare more but wait until it looks worse",next:"s3b",score:8,logQ:"ok",logEffect:"You watched for 2 more hours. By the time you moved, roads were already affected."},
+        {text:"Sandbags — get to the SES depot before the queue builds",next:"s3c",score:5,logQ:"bad",logEffect:"The queue was 45 minutes. By the time you returned, the sandbags were irrelevant."}
+      ]},
+
+    s2b:{loc:"YOUR HOME — 9:00AM",atmo:"tense",logTime:"9:00am",logSit:"You were moving things upstairs when the Emergency Alert arrived.",prompt:"SES EMERGENCY ALERT: EVACUATE NOW. Roads may become impassable within the hour.",
+      text:"90 minutes of moving things upstairs. Lounge suite. Television. Documents into a waterproof bag.\n\nAt 9:03am your phone buzzes with an Emergency Alert.\n\nEVACUATE NOW if you are in a low-lying area near Wilson River or Leycester Creek. Roads may become impassable within the hour.\n\nYou look out the front window. Water is visible at the end of your street. Not much — maybe 20 centimetres. But it was not there an hour ago.",
+      choices:[
+        {text:"Stop right now — get everyone in the car and drive out while you still can",next:"s3a_urgent",score:16,logQ:"good",logEffect:"You drove through 20cm with no issues. An hour later that road was a river."},
+        {text:"30 more minutes — you are nearly done moving everything",next:"s3d",score:2,logQ:"bad",logEffect:"30 more minutes was 30 minutes too many."}
+      ]},
+
+    s2c:{loc:"YOUR KITCHEN — 10:20AM",atmo:"emergency",timer:12,logTime:"10:20am",logSit:"You dismissed the warning. You woke up to floodwater in your backyard.",prompt:"Your car is in the driveway. The water is at your front gate.",
+      text:"You look out the back window at 10:20am.\n\nThe creek has burst its banks. Brown water covers the entire backyard. It is moving — fast enough to see the current pushing against the fence posts.\n\nYou check the front. Water is 15 centimetres deep at your front gate. Rising. A car is stopped at the end of the street — it tried to drive through and stalled.\n\nYour car is in the driveway. The exhaust pipe is still above the waterline.\n\nFor how long?",
+      choices:[
+        {text:"Get in the car and drive out immediately — 15cm is manageable",next:"s3e",score:6,logQ:"bad",logEffect:"15cm looks manageable. But 30cm of moving water can shift a small car. It was already 30cm at the end of the street."},
+        {text:"The car will not make it. Go to the second floor and call SES.",next:"s3f",score:12,logQ:"ok",logEffect:"Right call. Once the water is in the street, vertical evacuation is the correct answer."}
+      ]},
+
+    s3_hidden:{loc:"YOUR HOME — 7:50AM",atmo:"calm",logTime:"7:50am",logSit:"You decided to leave at the first advisory — before the situation worsened.",prompt:null,
+      text:"You have been watching this gauge for two days. You know what 50 centimetres in 30 minutes means.\n\nYou call to your partner: 'We are leaving. Now. The gauge is moving too fast.\' \n\nNo argument.\n\nThe emergency bag is in the upstairs wardrobe — you moved it there after the 2022 floods because you wanted it above any water line. Three days of food, water for four people, medications, documents, battery radio, cash.\n\nYou are in the car in 6 minutes. The roads are dry. The sky is grey and heavy but the streets are empty.\n\nYou are 90 minutes ahead of the first road closure.",
+      choices:[{text:"Drive north to family in Ballina — above flood level",next:"s4_hidden",score:18,logQ:"perfect",logEffect:"Arrived at 9:10am. The road you used closed to traffic at 10:30am."}]},
+
+    s3a_urgent:{loc:"YOUR CAR — 9:06AM",atmo:"tense",logTime:"9:06am",logSit:"You drove out through 20cm of water. An hour later the road was impassable.",prompt:null,
+      text:"You drive out through the water at the end of the street — 20 centimetres, slow, steady. The car handles it.\n\nYou are out.\n\nBehind you, a neighbour is standing in their front yard watching. You slow down. They wave you on.\n\nYou drive north.",
+      choices:[{text:"Drive north to Ballina — above flood level",next:"out_prepared_b",score:14,logQ:"good",logEffect:"Arrived at 9:50am. The road you took closed to traffic at 10:30am."}]},
+
+    s3b:{loc:"YOUR HOME — 10:10AM",atmo:"critical",timer:10,logTime:"10:10am",logSit:"You monitored for 2 more hours. The Emergency Alert arrived as water entered the street.",prompt:"The street has 40cm of moving water. Your car door sills are underwater.",
+      text:"You watch the gauge. It keeps climbing.\n\n9.1m. 9.8m. 10.2m. 10.9m. 11.4m — major flood level.\n\nAt 10:10am an Emergency Alert lands. You look out the front window.\n\nThe street has 40 centimetres of moving water. Your car door sills are underwater. A wheelie bin rolls slowly past in the current.\n\nDriving is no longer safe.",
+      choices:[
+        {text:"Driving is too dangerous — second floor, call SES 132 500",next:"s3f",score:14,logQ:"ok",logEffect:"Right call. Vertical evacuation was the correct answer once the water arrived."},
+        {text:"I will go slowly — there might still be a way through",next:"s3e",score:2,logQ:"bad",logEffect:"40cm of moving water in a street is enough to float a small car."}
+      ]},
+
+    s3c:{loc:"SES SANDBAG DEPOT — 8:00AM",atmo:"tense",logTime:"8:00am",logSit:"You joined the sandbag queue. 45 minutes. Returned to a flooded street.",prompt:null,
+      text:"The line at the SES sandbag depot is already long.\n\n45 minutes of waiting. Someone with a portable radio says the gauge is at 10.8m. \n\nYou make it back to your street at 9:10am with 20 sandbags.\n\nYour street has 30 centimetres of moving water. Your car is submerged to the door handles.",
+      choices:[{text:"Leave the car. Wade home. Get upstairs immediately.",next:"s3f",score:10,logQ:"ok",logEffect:"You waded home safely and reached the second floor. The sandbags stayed in the boot."}]},
+
+    s3d:{loc:"YOUR HOME — 9:35AM",atmo:"emergency",logTime:"9:35am",logSit:"You stayed to finish moving things. Water reached your front door.",prompt:null,
+      text:"A thin line of brown water pushes under the front door.\n\nThe driveway is submerged. Your car will flood.\n\nThere is no more time to move anything.",
+      choices:[{text:"Get to the highest point in the house — call SES 132 500",next:"s3f",score:10,logQ:"bad",logEffect:"Right move — just later than it needed to be."}]},
+
+    s3e:{loc:"YOUR STREET — FLOODED",atmo:"emergency",logTime:"10:25am",logSit:"You drove into the floodwater. The car stalled in 50cm of moving current.",prompt:null,
+      text:"The car enters the flood water.\n\n30 centimetres seems manageable. You have driven through puddles.\n\nBut this is not a puddle. This is a current.\n\nAt 50 centimetres the engine cuts out. The wheels lose traction. The car moves sideways — slowly, barely, but moves.\n\nYou feel the pressure of the water against the door.",
+      choices:[{text:"Get out of the car immediately — move to high ground on foot",next:"out_critical",score:4,logQ:"bad",logEffect:"You got out. The car did not. Never drive into floodwater."}]},
+
+    s3f:{loc:"YOUR SECOND FLOOR — 10:30AM",atmo:"tense",logTime:"10:30am",logSit:"You made it upstairs. The water outside is 1.1m and rising. SES is overwhelmed.",prompt:"How prepared are you to wait?",
+      text:"You are upstairs. The water outside is 1.1 metres and still rising.\n\nYour floors are dry — for now.\n\nYou call SES 132 500. They log your address. The operator says: 'We have you registered. We are overwhelmed right now. Please stay in place and stay visible.\' \n\nETA for rescue: unknown.\n\nThis is the moment where what you have with you — or do not have — becomes very real.",
+      choices:[
+        {text:"We have emergency supplies upstairs — water, food, medications. We can wait.",next:"out_survivable_a",score:16,logQ:"good",logEffect:"You waited 11 hours for rescue. Your supplies made it manageable rather than dangerous."},
+        {text:"We have almost nothing up here — we need rescue as soon as possible",next:"out_survivable_b",score:5,logQ:"bad",logEffect:"14 hours. No food, no water, a child who needed medication. Rescue came. But it was brutal."}
+      ]},
+
+    s4_hidden:{loc:"BALLINA — 9:10AM",atmo:"calm",logTime:"9:10am",logSit:"You arrived at family in Ballina 90 minutes ahead of the road closures.",prompt:null,
+      text:"You pull into your cousin driveway at 9:10am.\n\nThe kids pile out. Your cousin makes coffee. The emergency bag goes inside.\n\nAt 10:30am your phone shows the first road closure notification for the route you just drove.\n\nAt 11:45am: the second route.\n\nAt 1:30pm: Lismore gauge peaks at 12.8 metres. Your street goes under.\n\nYou watch the ABC flood coverage on your cousin television and you are glad you checked the gauge every morning for two days.",
+      choices:[{text:"Stay here until the situation stabilises",next:"out_perfect",score:14,logQ:"perfect",logEffect:"You watched the flood from somewhere safe. Your preparation and your attention made that possible."}]},
+
+    out_perfect:{outcome:"perfect",hiddenPath:true,hiddenText:"You had been watching the gauge for two days before the crisis. When the first advisory came, you had the context to know how serious it was — and you left before anyone told you to.",
+      finalText:"You left at the first advisory. Not the evacuation order. Not the Emergency Alert. The first advisory, at 7:45am, when the roads were dry and your car was in the driveway and you had 90 minutes of margin that nobody else on your street had.\n\nYou had that margin because you checked the gauge every morning. You knew what the numbers meant. When 50 centimetres in 30 minutes appeared on the screen, you did not need anyone to tell you what to do.\n\nYour street flooded to the gutters. Your house had water on the ground floor. You were in Ballina watching it on television.\n\nThis is what monitoring and preparation look like when they work.",
+      lessons:["The hidden path rewards two days of attention before the crisis — context makes the advisory mean something","Leaving at the first advisory, not the evacuation order, gives you dry roads and 90 minutes of margin","An emergency bag stored upstairs is above any water line — and it is ready when you are","Knowing your local flood gauge and what the numbers mean for your specific street is not paranoia. It is preparation."]},
+
+    out_prepared_b:{outcome:"prepared",finalText:"You acted on the Emergency Alert the moment it arrived and drove out through 20 centimetres of water before the road closed.\n\nThe route you used closed to traffic at 10:30am. You were already 40 kilometres north of Lismore.\n\nYour house flooded. You were somewhere dry with most of what you needed.",
+      lessons:["Acting on the first alert — not the second — gives you the window you need","Pre-packing an emergency bag means the decision to leave takes 6 minutes, not 25","Know your evacuation route before you need it — not while the water is rising"]},
+
+    out_survivable_a:{outcome:"survivable",finalText:"You made the right call getting upstairs and calling SES. Your emergency supplies stored upstairs meant that 11-hour wait was uncomfortable but never dangerous.\n\nWithout them it would have been genuinely life-threatening.",
+      lessons:["Emergency supplies stored upstairs are above any water that enters — they are there when you need them most","Vertical evacuation is the right call once the water is in the street","A 72-hour kit means 11 hours of waiting is manageable, not an emergency within an emergency"]},
+
+    out_survivable_b:{outcome:"survivable",finalText:"14 hours. No food. No water. A child who needed daily medication and did not get it.\n\nRescue came at 1:15am. The SES crew were exhausted and stretched across the entire flood plain.\n\nYou are safe. That is true. But those 14 hours were preventable.",
+      lessons:["Emergency supplies are as critical for waiting for rescue as they are for evacuating","Never drive into floodwater — once the water is in the street, vertical evacuation is the answer","The stress of having nothing is added to the stress of the emergency — preparation removes that second layer"]},
+
+    out_critical:{outcome:"critical",finalText:"You got out of the car safely. This time.\n\nFloodwater in an urban street is one of the most dangerous driving situations that exists. 30 centimetres of moving water can shift a small car sideways. 60 centimetres can float an SUV.\n\nIt looked like 15 centimetres from your driveway. It was 50 centimetres at the stall point.\n\nThe lesson from this scenario is not about bravery. It is about what moving water actually does to a vehicle.",
+      lessons:["If it is flooded, forget it — this SES slogan exists because people die driving into floodwater every year","If the water is in the street, the time to drive has passed — go upstairs and call SES","Leave early enough that this decision never has to be made"]}
+  }
+},
+
+// ================================================================
+// BLACKOUT — SE AUSTRALIA
+// Hidden path: Identify medication first AND have pre-packed kit with medical info
+// ================================================================
+blackout:{
+  label:"GRID FAILURE // SE AUSTRALIA",
+  maxDecisions:7,
+  maxScore:116,
+  scenes:{
+
+    s0:{loc:"YOUR HOME — THURSDAY AFTERNOON",atmo:"calm",logTime:"",logSit:"",prompt:null,noLog:true,
+      text:"Your mother-in-law has lived with you for three years. She is 74, sharp, and occasionally infuriating in the way that people who are almost always right tend to be.\n\nShe takes a daily injection. The medication lives in the fridge and must stay below 8 degrees Celsius. You have always known this. You have never had to act on it.\n\nAt 3:20pm on a Thursday, the power goes off.\n\nNot a flicker. A full cut. The fridge stops. The aircon stops. The television drops to black.",
+      choices:[{text:"Begin",next:"s1",score:0,logQ:"good",logEffect:"",noLog:true}]},
+
+    s1:{loc:"YOUR HOME — 3:20PM",atmo:"tense",logTime:"3:20pm",logSit:"Major grid failure. No ETA for restoration. The medication in the fridge is now at risk.",prompt:"What is your first move?",
+      text:"Energy Australia app: Major Network Incident. Estimated restoration time: UNKNOWN.\n\nABC News loads slowly on 4G: a fault at a major substation, cascading failures across three states. This is not a local issue.\n\nIt is 32 degrees outside. The house will warm quickly.\n\nYour mother-in-law appears in the kitchen doorway. She does not say anything about the medication. She does not need to. You are already thinking about it.",
+      choices:[
+        {text:"Think through the critical issues systematically before doing anything",next:"s2a",score:14,logQ:"good",logEffect:"Methodical thinking first. You had a priority list within 2 minutes and medication was at the top."},
+        {text:"Drive to the supermarket immediately — get ice and supplies before everyone else does",next:"s2b",score:8,logQ:"ok",logEffect:"Good instinct — but the medication was more time-sensitive than the shopping."},
+        {text:"Call the energy company for an update before deciding anything",next:"s2c",score:3,logQ:"bad",logEffect:"17 minutes on hold. The automated message said what the app already had."}
+      ]},
+
+    s2a:{loc:"YOUR KITCHEN — 3:22PM",atmo:"tense",logTime:"3:22pm",logSit:"You assessed the situation and identified medication as your top priority.",prompt:"What matters most, in order?",
+      text:"You sit down and work through it.\n\n1. The medication. Must stay below 8 degrees. The fridge will hold temperature for about 4 hours if you do not open it. After that, the vial inside is at risk.\n2. Phone battery — 71%. Car charger available.\n3. Water — town water, no pump issue yet. If outage extends, water towers can lose pressure.\n4. Food — 2 to 3 days in the pantry. More in the fridge.\n5. Cash — $60 in wallet. No EFTPOS if shops have no power.\n\nThe medication is the only item with a hard time limit. Everything else has hours.\n\nYou have approximately 4 hours on the fridge clock.",
+      choices:[
+        {text:"Call the pharmacy right now — medication is the only urgent issue",next:"s3a",score:22,logQ:"good",logEffect:"The pharmacy picked up immediately. Generator running. Medication sorted in 25 minutes."},
+        {text:"Charge all devices from the car first — then deal with the medication",next:"s3b",score:9,logQ:"ok",logEffect:"Charging was sensible. But the medication waited an extra 20 minutes it did not need to."},
+        {text:"Fill every container with water in case the pumping pressure drops",next:"s3c",score:10,logQ:"ok",logEffect:"Good thinking on water. But the medication still needed to come first."}
+      ]},
+
+    s2b:{loc:"LOCAL SUPERMARKET — 3:45PM",atmo:"tense",logTime:"3:45pm",logSit:"The supermarket was already chaotic. Cash only. Ice was sold out.",prompt:"You are back home at 4:30pm. The medication has been unrefrigerated for 70 minutes.",
+      text:"The IGA is busy when you arrive at 3:45pm. Word travels fast.\n\nCash only — no EFTPOS. You have $60.\n\nIce: sold out. Torches: gone. You find canned food, bottled water, batteries.\n\nTotal: $54.\n\nYou drive home. It is 4:30pm. The fridge has been off for 70 minutes. The medication is still within the safe window — just.",
+      choices:[
+        {text:"Call the pharmacy right now — the medication cannot wait any longer",next:"s3a_late",score:14,logQ:"ok",logEffect:"70 minutes in. Still within the window — but only just."},
+        {text:"Check the fridge temperature first — then decide next steps",next:"s3a",score:16,logQ:"good",logEffect:"The fridge was at 11 degrees. Still retrievable. You moved quickly."}
+      ]},
+
+    s2c:{loc:"YOUR LOUNGE — 3:37PM",atmo:"critical",logTime:"3:37pm",logSit:"You spent 17 minutes on hold. The outage is confirmed for 24 to 72 hours.",prompt:"The fridge has been off for 37 minutes. The medication window is ticking.",
+      text:"17 minutes on hold.\n\nThe automated message confirms: major network incident, multiple states affected, estimated restoration 24 to 72 hours.\n\nYou hang up.\n\nThe fridge has been off for 37 minutes. In 32-degree ambient temperature, the medication is safe for approximately 4 hours from the moment of power loss. You have used 37 minutes getting information you could have found on the app.\n\nYou have roughly 3 hours and 20 minutes of safe window left.",
+      choices:[
+        {text:"Call the pharmacy immediately — the medication is the priority",next:"s3a",score:16,logQ:"ok",logEffect:"37 minutes lost. But still well within the safe window if you move now."},
+        {text:"Drive to a friend who lives in a suburb with power",next:"s3d",score:14,logQ:"good",logEffect:"Smart. Move the problem to where the solution is."}
+      ]},
+
+    s3a:{loc:"YOUR PHONE — 3:25PM",atmo:"tense",logTime:"3:25pm",logSit:"You called the pharmacy. They had a generator and offered secure cold storage.",prompt:null,
+      text:"The pharmacy picks up on the third ring.\n\nYes, generator running. Yes, they can store the medication. Bring it in now.\n\nYou take the vial from the fridge, wrap it in a cool damp cloth, and drive 2 kilometres.\n\nThe pharmacist signs it in and hands you a receipt with their after-hours number.\n\nMedication: sorted. 25 minutes total.\n\nYou drive home to deal with everything else.",
+      choices:[
+        {text:"Set up the household for what could be a 24 to 72 hour outage",next:"s4a",score:18,logQ:"good",logEffect:"With the critical issue resolved, you set everything else up calmly."}
+      ]},
+
+    s3a_late:{loc:"YOUR PHONE — 4:31PM",atmo:"critical",logTime:"4:31pm",logSit:"You called the pharmacy at 4:31pm. The medication was at 70 minutes unrefrigerated.",prompt:null,
+      text:"The pharmacy answers. Generator running, cold storage available.\n\nThe pharmacist checks the vial when you bring it in. Seventy minutes. He tilts his head.\n\n'Limit in these conditions is about 3 to 4 hours. You have got time. But not much.\' \n\nHe adds: 'For next time — we have a list of pharmacies with backup generators. And the hospital pharmacy stores emergency medication for situations like this. Worth knowing.\' \n\nIt is worth knowing.",
+      choices:[{text:"Return home and set up for an extended outage",next:"s4a",score:12,logQ:"ok",logEffect:"Medication sorted — later than ideal but within the window."}]},
+
+    s3b:{loc:"YOUR CAR — 3:25PM",atmo:"tense",logTime:"3:25pm",logSit:"You charged devices from the car. The medication waited an extra 20 minutes.",prompt:null,
+      text:"USB cable from the 12V socket. Phone charging. You find an old inverter in the glovebox.\n\nUseful.\n\nBut it is now 3:45pm. The medication has been in an unpowered fridge for 25 minutes. Still within the safe window — but every 20 minutes narrows it.",
+      choices:[{text:"Call the pharmacy now — the medication cannot wait",next:"s3a",score:16,logQ:"ok",logEffect:"25-minute delay on the medication but still comfortably within the window."}]},
+
+    s3c:{loc:"YOUR HOME — 3:30PM",atmo:"tense",logTime:"3:30pm",logSit:"You stored water. Good thinking — but the medication still needed to come first.",prompt:null,
+      text:"You fill the bathtub, all large pots, every spare container. About 90 litres.\n\n20 minutes. Good call — extended outages can drop water tower pressure.\n\nBut it is now 3:40pm. The medication has been unrefrigerated for 20 minutes.",
+      choices:[{text:"Call the pharmacy about cold storage for the medication",next:"s3a",score:16,logQ:"ok",logEffect:"20-minute delay on the medication. Still well within the window."}]},
+
+    s3d:{loc:"FRIEND HOUSE — NEARBY SUBURB",atmo:"calm",logTime:"4:00pm",logSit:"You moved the household to a friend in a powered suburb.",prompt:null,
+      text:"Your friend suburb — 4 kilometres away, different grid section — still has power.\n\nYou call ahead. Of course, they say. Bring whatever you need.\n\nThe medication goes straight into their fridge. Your mother-in-law has a cup of tea. Every device charges.\n\nSometimes the solution is to move toward the resources rather than wait for them to come to you.",
+      choices:[{text:"Stay here until the grid is restored",next:"out_prepared_b",score:16,logQ:"good",logEffect:"52 hours later the power came back. You were barely inconvenienced."}]},
+
+    s4a:{loc:"YOUR HOME — 4:30PM",atmo:"tense",logTime:"4:30pm",logSit:"Medication sorted. You set up the household for a long outage.",prompt:"The outage is confirmed for 24 to 72 hours. What does your household actually have?",
+      text:"Medication sorted. Now: the household.\n\nFood: pasta, canned goods, crackers, peanut butter, tinned fish. Gas hob still works. 4 to 5 days if you are careful.\n\nWater: if you stored it earlier, 90 litres. If not, town water still running but pressure may drop.\n\nLighting: one torch, phone torches, three candles.\n\nCommunications: battery radio — do you have one? Phone charger via car.\n\nThe question is whether you have dedicated emergency supplies beyond the regular pantry.",
+      choices:[
+        {text:"Yes — 72-hour emergency kit with long-shelf-life food and water",next:"out_prepared_a",score:16,logQ:"good",logEffect:"The 52-hour outage was genuinely manageable. You were prepared for something far worse."},
+        {text:"No — maybe 24 hours of pantry food without the fridge",next:"out_survivable_a",score:8,logQ:"ok",logEffect:"Day 2 was harder. Shops had cash-only policies and empty shelves."},
+        {text:"No — we usually rely on the fridge and takeaway for most meals",next:"out_survivable_b",score:3,logQ:"bad",logEffect:"Shops ran out of basics by day 2. Two meals were skipped. The kids were upset."}
+      ]},
+
+    out_perfect:{outcome:"perfect",hiddenPath:false,
+      finalText:"",
+      lessons:[]},
+
+    out_prepared_a:{outcome:"prepared",finalText:"A methodical, effective response to a scenario that catches most households completely unprepared.\n\nMedication first — the right priority. The pharmacy call sorted it in 25 minutes. The 72-hour emergency kit meant the 52-hour outage was inconvenient but never harmful.\n\nYour mother-in-law got her medication. The household ate properly. The battery radio kept you informed.\n\nThis is what a prepared household looks like during a grid failure.",
+      lessons:["Medical needs are always Priority 1 in any emergency — know who in your household has them and what they need","Know which pharmacies have backup generators before you need that information","A 72-hour emergency kit with long-shelf-life food means a 2-day outage is simply a different kind of weekend","Battery radio, charged devices, and cash are the three non-negotiables for extended grid failure"]},
+
+    out_prepared_b:{outcome:"prepared",finalText:"Excellent flexible thinking — moving toward the solution rather than waiting for it to arrive.\n\nYour mother-in-law was safe throughout the 52-hour outage. You were comfortable. You barely noticed it.\n\nKnowing that a friend four kilometres away was on a different grid section was, on this particular Thursday, worth more than anything else you could have prepared.",
+      lessons:["Knowing which friends or family are on a different grid section is legitimate emergency preparation","Medical needs in emergencies are one of the most overlooked household planning gaps","Sometimes the best preparation is knowing your network — who has a generator, who is on a different grid","Medication management requires knowing the safe window before the emergency, not during it"]},
+
+    out_survivable_a:{outcome:"survivable",finalText:"The medication was handled correctly — that was the critical success of this scenario.\n\nBut 24 hours of food in a 52-hour outage made day 2 uncomfortable. Shops had cash-only policies, queues, and empty shelves by mid-morning.\n\nYour mother-in-law was fine. The rest of the household was not particularly.",
+      lessons:["Emergency food supplements regular pantry food — it is not either/or","A 72-hour emergency food kit with long shelf life costs less than a restaurant meal for four and lasts for years","Extended outages empty supermarket shelves in hours — you cannot shop your way out after day 1","Keep $100 or more in cash at home — EFTPOS fails when the power does"]},
+
+    out_survivable_b:{outcome:"survivable",finalText:"The medication was sorted. That mattered.\n\nBut limited food and a household built around the fridge and takeaway meant days 2 and 3 were genuinely difficult. Two meals skipped. The kids miserable by the second evening.\n\nThe 52-hour outage tested something you had not previously thought much about.",
+      lessons:["Emergency food and water are not paranoia — this exact scenario is why they exist","A 52-hour outage reveals every gap in household preparation with perfect clarity","Long-shelf-life emergency food with a 20 plus year shelf life is the most cost-effective insurance you can buy","The medication was right. The rest of the preparation was not there."]}
+  }
+}
+
+}; // end SCENARIOS
+
+// ── ENGINE ─────────────────────────────────────────────────────────────────
+
+let G = {
+  scenario: null, sceneId: null, score: 0, decisions: 0,
+  log: [], hiddenPath: false, hiddenText: '',
+  timerID: null, timerVal: 0, timerMax: 0, typeID: null
 };
 
-// ─── GAME STATE ──────────────────────────────────────────────────────────────
-
-let state = {
-  scenario: null,
-  currentScene: 's1',
-  score: 0,
-  decisions: 0,
-  timerInterval: null,
-  timerValue: 0,
-  timerMax: 0,
-  timerExpired: false,
-  typing: false,
-  typeInterval: null
+const TIERS = {
+  perfect:    { icon:'⭐', label:'PERFECTLY PREPARED', title:'Textbook Response' },
+  prepared:   { icon:'🛡️', label:'PREPARED',           title:'Well Handled' },
+  survivable: { icon:'⚠️', label:'SURVIVABLE',          title:'You Made It' },
+  critical:   { icon:'💀', label:'CRITICAL',            title:'Lessons Learned' }
 };
-
-// ─── ENGINE ──────────────────────────────────────────────────────────────────
 
 function startScenario(id) {
-  state.scenario = SCENARIOS[id];
-  state.currentScene = 's1';
-  state.score = 0;
-  state.decisions = 0;
-
+  G = { scenario: SCENARIOS[id], sceneId: null, score: 0, decisions: 0, log: [], hiddenPath: false, hiddenText: '', timerID: null, timerVal: 0, timerMax: 0, typeID: null };
   document.getElementById('screen-title').style.display = 'none';
   document.getElementById('screen-game').style.display = 'block';
-  document.getElementById('game-scenario-label').textContent = state.scenario.label;
-  document.getElementById('decision-total').textContent = state.scenario.totalDecisions;
-
-  renderScene('s1');
+  document.getElementById('screen-outcome').style.display = 'none';
+  document.getElementById('game-label').textContent = G.scenario.label;
+  document.getElementById('d-tot').textContent = G.scenario.maxDecisions;
+  renderScene('s0');
 }
 
-function renderScene(sceneId) {
-  // Handle direct outcome shortcuts
-  if (sceneId === 'outcome_critical' || sceneId === 'outcome_survivable_c' || sceneId === 'outcome_prepared_a' || sceneId === 'outcome_prepared_b') {
-    const scenes = state.scenario.scenes;
-    if (scenes[sceneId]) {
-      showOutcome(sceneId);
-      return;
-    }
-  }
+function renderScene(id) {
+  const sc = G.scenario.scenes[id];
+  if (!sc) { console.error('Missing scene:', id); return; }
+  if (sc.outcome !== undefined) { showOutcome(id); return; }
 
-  const scenes = state.scenario.scenes;
-  const scene = scenes[sceneId];
-  if (!scene) { console.error('Scene not found:', sceneId); return; }
-
-  // Check if this is an outcome
-  if (scene.outcome) { showOutcome(sceneId); return; }
-
-  // Check if choices lead to outcome
-  if (scene.next && (!scene.choices || scene.choices.length === 0)) {
-    showOutcome(scene.next); return;
-  }
-
-  state.currentScene = sceneId;
-  state.decisions++;
-
-  // Update header
-  document.getElementById('decision-num').textContent = Math.min(state.decisions, state.scenario.totalDecisions);
-
-  // Atmosphere
-  const strip = document.getElementById('atmo-strip');
-  strip.className = 'atmo-strip ' + (scene.atmo || 'calm');
-
-  // Location
-  document.getElementById('scene-location').textContent = scene.location || '';
-
-  // Typewriter text
-  typeText(scene.text, () => {
-    renderChoices(scene.choices || []);
-    if (scene.timer) startTimer(scene.timer, scene.choices);
-  });
-
-  // Clear choices during typing
-  document.getElementById('choices-container').innerHTML = '';
+  G.sceneId = id;
+  if (!sc.noLog && sc.logSit) G.decisions++;
+  document.getElementById('d-num').textContent = Math.min(G.decisions, G.scenario.maxDecisions);
+  document.getElementById('atmo').className = 'atmo ' + (sc.atmo || 'calm');
+  document.getElementById('scene-loc').textContent = sc.loc || '';
+  document.getElementById('consequence').className = 'consequence';
+  document.getElementById('scene-prompt').className = 'scene-prompt';
+  document.getElementById('choices').innerHTML = '';
   stopTimer();
-}
 
-function typeText(text, callback) {
-  if (state.typeInterval) clearInterval(state.typeInterval);
-  const el = document.getElementById('scene-text');
-  el.textContent = '';
-
-  // Parse for special formatting
-  const formatted = text
-    .replace(/🔴[^\n]*/g, m => `<span class="danger">${m}</span>`)
-
-  let i = 0;
-  const chars = text.split('');
-  state.typeInterval = setInterval(() => {
-    if (i < chars.length) {
-      el.textContent += chars[i];
-      i++;
-    } else {
-      clearInterval(state.typeInterval);
-      state.typeInterval = null;
-      if (callback) callback();
+  typeText(sc.text, () => {
+    if (sc.prompt) {
+      const p = document.getElementById('scene-prompt');
+      p.textContent = sc.prompt;
+      p.className = 'scene-prompt show';
     }
-  }, 18);
+    buildChoices(sc.choices || [], sc);
+    if (sc.timer) startTimer(sc.timer, sc.choices);
+  });
 }
 
-function renderChoices(choices) {
-  const container = document.getElementById('choices-container');
-  container.innerHTML = '';
-  const letters = ['A', 'B', 'C', 'D'];
+function buildChoices(choices, sc) {
+  const el = document.getElementById('choices');
+  el.innerHTML = '';
+  const L = ['A','B','C','D'];
   choices.forEach((c, i) => {
     const btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.innerHTML = `<span class="choice-letter">[${letters[i]}]</span>${c.text}`;
-    btn.onclick = () => makeChoice(c);
-    container.appendChild(btn);
+    btn.className = 'cbtn';
+    if (c.noLog) {
+      btn.innerHTML = '<span class="cl" style="color:var(--gl)">&#9658;</span>' + c.text;
+    } else {
+      btn.innerHTML = '<span class="cl">[' + L[i] + ']</span>' + c.text;
+    }
+    btn.onclick = () => choose(c, sc);
+    el.appendChild(btn);
   });
 }
 
-function makeChoice(choice) {
+function choose(choice, sc) {
   stopTimer();
-  state.score += (choice.score || 0);
+  document.querySelectorAll('.cbtn').forEach(b => b.disabled = true);
+  G.score += (choice.score || 0);
 
-  // Disable all buttons
-  document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+  if (!choice.noLog && sc.logSit) {
+    G.log.push({
+      time: sc.logTime || '',
+      sit: sc.logSit || '',
+      choiceText: choice.text,
+      effect: choice.logEffect || '',
+      quality: choice.logQ || 'ok'
+    });
+  }
 
-  // Brief pause then next scene
-  setTimeout(() => {
-    const next = choice.next;
-    const scenes = state.scenario.scenes;
-    if (!scenes[next] || scenes[next].outcome) {
-      showOutcome(next);
-    } else {
-      renderScene(next);
-    }
-  }, 300);
+  if (choice.logQ === 'perfect') G.hiddenPath = true;
+
+  const cEl = document.getElementById('consequence');
+  if (choice.logEffect && !choice.noLog) {
+    cEl.textContent = choice.logEffect;
+    const cls = choice.logQ === 'bad' ? 'bad' : choice.logQ === 'ok' ? 'warn' : '';
+    cEl.className = 'consequence show ' + cls;
+    setTimeout(() => { cEl.className = 'consequence'; advance(choice.next); }, 1600);
+  } else {
+    setTimeout(() => advance(choice.next), 200);
+  }
 }
 
-function startTimer(seconds, choices) {
-  state.timerMax = seconds;
-  state.timerValue = seconds;
-  state.timerExpired = false;
+function advance(next) {
+  if (!next) return;
+  const sc = G.scenario.scenes[next];
+  if (!sc) { console.error('Missing next:', next); return; }
+  if (sc.outcome !== undefined) { showOutcome(next); return; }
+  renderScene(next);
+}
 
-  const wrap = document.getElementById('timer-wrap');
-  const fill = document.getElementById('timer-fill');
-  const count = document.getElementById('timer-count');
+function typeText(text, cb) {
+  if (G.typeID) clearInterval(G.typeID);
+  const el = document.getElementById('scene-body');
+  el.textContent = '';
+  const chars = text.split('');
+  let i = 0;
+  G.typeID = setInterval(() => {
+    if (i < chars.length) { el.textContent += chars[i++]; }
+    else { clearInterval(G.typeID); G.typeID = null; if (cb) cb(); }
+  }, 13);
+}
 
+function startTimer(sec, choices) {
+  G.timerMax = sec; G.timerVal = sec;
+  const wrap = document.getElementById('timer');
+  const fill = document.getElementById('t-fill');
+  const num = document.getElementById('t-n');
   wrap.classList.add('active');
   fill.style.width = '100%';
-  count.textContent = seconds;
-
-  state.timerInterval = setInterval(() => {
-    state.timerValue--;
-    const pct = (state.timerValue / state.timerMax) * 100;
-    fill.style.width = pct + '%';
-    count.textContent = state.timerValue;
-
-    if (state.timerValue <= 0) {
+  num.textContent = sec;
+  G.timerID = setInterval(() => {
+    G.timerVal--;
+    fill.style.width = (G.timerVal / G.timerMax * 100) + '%';
+    num.textContent = G.timerVal;
+    if (G.timerVal <= 0) {
       stopTimer();
-      // Time's up — make the worst choice automatically
-      if (choices && choices.length > 0) {
-        const worst = choices.reduce((a, b) => (a.score <= b.score ? a : b));
-        document.body.classList.add('flash-danger');
-        setTimeout(() => document.body.classList.remove('flash-danger'), 700);
-        makeChoice({ ...worst, score: Math.max(0, worst.score - 5) });
-      }
+      document.body.classList.add('flash');
+      setTimeout(() => document.body.classList.remove('flash'), 800);
+      const worst = (choices || []).reduce((a, b) => ((a.score||0) <= (b.score||0) ? a : b), {score:0,next:null,text:'',logQ:'bad'});
+      const scene = G.scenario.scenes[G.sceneId];
+      choose({ ...worst, score: Math.max(0, (worst.score||0) - 5), logEffect: 'Time ran out \u2014 the decision was made without you.', logQ: 'bad' }, scene);
     }
   }, 1000);
 }
 
 function stopTimer() {
-  if (state.timerInterval) { clearInterval(state.timerInterval); state.timerInterval = null; }
-  document.getElementById('timer-wrap').classList.remove('active');
+  if (G.timerID) { clearInterval(G.timerID); G.timerID = null; }
+  document.getElementById('timer').classList.remove('active');
 }
 
-function showOutcome(outcomeId) {
+function showOutcome(id) {
   stopTimer();
-  if (state.typeInterval) clearInterval(state.typeInterval);
+  if (G.typeID) { clearInterval(G.typeID); G.typeID = null; }
 
-  const scenes = state.scenario.scenes;
-  const outcome = scenes[outcomeId];
+  const sc = G.scenario.scenes[id] || {};
+  const pct = Math.min(100, Math.max(0, Math.round((G.score / G.scenario.maxScore) * 100)));
 
-  const maxScore = state.scenario.maxScore;
-  const pct = Math.round((state.score / maxScore) * 100);
-  const clampedPct = Math.min(100, Math.max(0, pct));
-
-  let tier, icon, ratingLabel, titleText, bodyText;
-
-  if (outcome && outcome.outcome) {
-    tier = outcome.outcome;
-  } else {
-    // Determine from score
-    if (clampedPct >= 70) tier = 'prepared';
-    else if (clampedPct >= 40) tier = 'survivable';
-    else tier = 'critical';
+  let tier = sc.outcome;
+  if (!tier || tier === 'perfect' && !G.hiddenPath) {
+    tier = pct >= 80 ? 'prepared' : pct >= 45 ? 'survivable' : 'critical';
   }
+  if (G.hiddenPath && sc.outcome === 'perfect') tier = 'perfect';
 
-  if (tier === 'prepared') {
-    icon = '🛡️'; ratingLabel = 'PREPARED'; titleText = 'Well Handled';
-    bodyText = outcome ? outcome.finalText : "Your decisions reflected solid preparation and clear thinking under pressure.";
-  } else if (tier === 'survivable') {
-    icon = '⚠️'; ratingLabel = 'SURVIVABLE'; titleText = 'You Made It';
-    bodyText = outcome ? outcome.finalText : "You got through — but there were gaps in your preparation that made it harder than it needed to be.";
-  } else {
-    icon = '💀'; ratingLabel = 'CRITICAL'; titleText = 'Lessons Learned';
-    bodyText = outcome ? outcome.finalText : "This scenario highlighted serious gaps in your emergency preparedness. The good news: this is the time to find out, not during a real emergency.";
-  }
+  const t = TIERS[tier] || TIERS.survivable;
 
-  // Lessons
-  const lessons = outcome && outcome.lessons ? outcome.lessons : [
-    "Review your emergency plan with your family",
-    "Build a 72-hour emergency kit for your household",
-    "Know your local evacuation zones and routes",
-    "Store emergency food and water at home"
-  ];
-
-  // Render
   document.getElementById('screen-game').style.display = 'none';
-  const outcomeScreen = document.getElementById('screen-outcome');
-  outcomeScreen.style.display = 'block';
+  document.getElementById('screen-outcome').style.display = 'block';
 
-  document.getElementById('outcome-icon').textContent = icon;
+  document.getElementById('out-icon').textContent = t.icon;
+  const tierEl = document.getElementById('out-tier');
+  tierEl.textContent = t.label; tierEl.className = 'out-tier ' + tier;
+  document.getElementById('out-title').textContent = t.title;
+  document.getElementById('out-text').textContent = sc.finalText || '';
 
-  const ratingEl = document.getElementById('outcome-rating');
-  ratingEl.textContent = ratingLabel;
-  ratingEl.className = 'outcome-rating ' + tier;
+  const sv = document.getElementById('out-score');
+  sv.textContent = pct + '%'; sv.className = 'sbox-val ' + tier;
+  document.getElementById('out-tier-sub').textContent = t.label;
+  document.getElementById('out-decisions').textContent = G.log.length;
 
-  document.getElementById('outcome-title').textContent = titleText;
-  document.getElementById('outcome-text').textContent = bodyText;
+  const badge = document.getElementById('hidden-badge');
+  const hiddenTextEl = document.getElementById('hidden-text');
+  if (G.hiddenPath && sc.hiddenText) {
+    hiddenTextEl.textContent = sc.hiddenText;
+    badge.classList.add('show');
+  } else {
+    badge.classList.remove('show');
+  }
 
-  const scoreEl = document.getElementById('outcome-score');
-  scoreEl.textContent = clampedPct + '%';
-  scoreEl.className = 'score-number ' + tier;
-  document.getElementById('outcome-max').textContent = 'PREPAREDNESS RATING';
+  const logEl = document.getElementById('story-log');
+  logEl.innerHTML = G.log.map(entry => {
+    const dot = entry.quality === 'perfect' ? '★' : entry.quality === 'good' ? '✓' : entry.quality === 'bad' ? '✗' : '→';
+    return '<div class="story-entry"><div class="story-dot ' + entry.quality + '">' + dot + '</div><div class="story-content"><div class="story-time">' + entry.time + '</div><div class="story-sit">' + entry.sit + '</div><div class="story-choice">You chose: &ldquo;' + entry.choiceText + '&rdquo;</div>' + (entry.effect ? '<div class="story-effect">' + entry.effect + '</div>' : '') + '</div></div>';
+  }).join('');
 
-  const lessonsList = document.getElementById('lessons-list');
-  lessonsList.innerHTML = lessons.map(l => `<div class="lesson-item"><span class="lesson-dot">▸</span><span>${l}</span></div>`).join('');
+  const lessons = sc.lessons || ['Build a 72-hour emergency kit', 'Know your local evacuation zones', 'Have a family emergency plan', 'Store emergency food and water at home'];
+  document.getElementById('lessons-list').innerHTML = lessons.map(l =>
+    '<div class="lesson"><span class="lesson-arrow">&#9658;</span><span>' + l + '</span></div>'
+  ).join('');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function resetGame() {
-  state = { scenario: null, currentScene: 's1', score: 0, decisions: 0, timerInterval: null, timerValue: 0, timerMax: 0, timerExpired: false, typing: false, typeInterval: null };
   stopTimer();
+  if (G.typeID) clearInterval(G.typeID);
+  G = { scenario: null, sceneId: null, score: 0, decisions: 0, log: [], hiddenPath: false, hiddenText: '', timerID: null, timerVal: 0, timerMax: 0, typeID: null };
   document.getElementById('screen-outcome').style.display = 'none';
   document.getElementById('screen-game').style.display = 'none';
-  document.getElementById('screen-title').style.display = 'block';
-  document.getElementById('screen-title').style.animation = 'none';
-  setTimeout(() => document.getElementById('screen-title').style.animation = 'fadein .6s ease', 10);
+  const t = document.getElementById('screen-title');
+  t.style.display = 'block';
+  t.style.animation = 'none';
+  setTimeout(() => t.style.animation = 'fadein .7s ease', 10);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
 </body>
