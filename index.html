@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free Emergency Preparedness Tools — Survival Storehouse Australia</title>
-<meta name="description" content="Free interactive emergency preparedness tools for Australians. AI preparedness adviser, 72-hour checklist, kit finder, live emergency dashboard, disaster history and location-based preparedness planner.">
+<meta name="description" content="Free interactive emergency preparedness tools for Australians. Survival scenario simulator, 72-hour checklist, kit finder, live emergency dashboard, disaster history and location-based preparedness planner.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -57,22 +57,31 @@ body::before { content:''; position:fixed; inset:0; background:
 .tool-card.featured { border-color:rgba(200,90,0,.35); background:rgba(200,90,0,.06); }
 .tool-card.featured:hover { border-color:rgba(200,90,0,.6); }
 .tool-card.featured::before { background:radial-gradient(ellipse 200px 100px at 0% 0%, rgba(200,90,0,.08), transparent); opacity:1; }
+.tool-card.simulator { border-color:rgba(230,57,70,.3); background:rgba(230,57,70,.05); }
+.tool-card.simulator:hover { border-color:rgba(230,57,70,.6); transform:translateY(-3px); }
+.tool-card.simulator::before { background:radial-gradient(ellipse 300px 150px at 0% 0%, rgba(230,57,70,.06), transparent); opacity:1; }
 .card-tag { display:inline-flex; align-items:center; gap:6px; font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:16px; padding:4px 10px; border-radius:100px; }
 .tag-new { background:rgba(200,90,0,.15); border:1px solid rgba(200,90,0,.35); color:var(--or); }
+.tag-hot { background:rgba(230,57,70,.12); border:1px solid rgba(230,57,70,.3); color:#e63946; }
 .tag-live { background:rgba(82,183,136,.12); border:1px solid rgba(82,183,136,.3); color:var(--gb); }
 .tag-live::before { content:''; display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--gb); animation:pulse 1.5s ease infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 .tag-free { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); color:rgba(255,255,255,.6); }
 .card-icon { font-size:32px; margin-bottom:14px; }
 .card-title { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:900; text-transform:uppercase; letter-spacing:.02em; line-height:1; margin-bottom:10px; color:#fff; }
-.tool-card.featured .card-title { color:#fff; }
 .card-desc { font-size:14px; font-weight:300; color:rgba(255,255,255,.65); line-height:1.6; margin-bottom:18px; }
 .card-features { display:flex; flex-direction:column; gap:5px; margin-bottom:20px; }
 .card-feature { font-size:12px; color:rgba(255,255,255,.5); display:flex; align-items:center; gap:7px; }
 .card-feature::before { content:'→'; color:var(--gb); font-weight:600; }
+.simulator .card-feature::before { color:#e63946; }
 .card-cta { display:inline-flex; align-items:center; gap:8px; font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--or); transition:var(--tr); }
+.simulator .card-cta { color:#e63946; }
 .tool-card:hover .card-cta { gap:12px; }
 .card-cta-arrow { font-size:16px; transition:var(--tr); }
+
+/* SCENARIO SCENARIOS ROW */
+.scenario-scenarios { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+.scenario-pill { font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:3px 10px; border-radius:100px; border:1px solid rgba(230,57,70,.25); background:rgba(230,57,70,.08); color:rgba(255,255,255,.6); }
 
 /* STRIP */
 .strip { background:rgba(82,183,136,.06); border:1.5px solid rgba(82,183,136,.18); border-radius:12px; padding:32px 36px; margin-bottom:60px; display:grid; grid-template-columns:1fr auto; gap:24px; align-items:center; }
@@ -128,7 +137,7 @@ body::before { content:''; position:fixed; inset:0; background:
       Prepare.<br>
       <span class="line2">Not panic.</span>
     </h1>
-    <p class="hero-sub">Five free interactive tools to help ordinary Australians understand their risk, check their readiness and plan ahead. No account. No email. No purchase required.</p>
+    <p class="hero-sub">Six free interactive tools to help ordinary Australians understand their risk, check their readiness and plan ahead. No account. No email. No purchase required.</p>
     <div class="hero-badges">
       <div class="badge"><div class="badge-dot"></div>100% free</div>
       <div class="badge"><div class="badge-dot"></div>No sign-up required</div>
@@ -140,7 +149,7 @@ body::before { content:''; position:fixed; inset:0; background:
   <!-- TOOLS -->
   <div class="tools-title">The Tools</div>
 
-  <!-- Featured — location tool top full width -->
+  <!-- Row 1: My Area + Checklist -->
   <div class="tools-grid" style="margin-bottom:16px">
 
     <a href="my-area.html" class="tool-card featured">
@@ -174,6 +183,38 @@ body::before { content:''; position:fixed; inset:0; background:
 
   </div>
 
+  <!-- Row 2: Scenario Simulator — full width featured -->
+  <div style="margin-bottom:16px">
+    <a href="scenario.html" class="tool-card simulator">
+      <div class="card-tag tag-hot">🔥 New — Interactive Training</div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:240px;">
+          <div class="card-icon">🎮</div>
+          <div class="card-title">Survival Scenario Simulator</div>
+          <div class="card-desc">Real Australian emergencies, timed decisions, branching consequences. Every choice changes the story. At the end you get a personalised account of exactly how it played out — and where your preparation gaps are.</div>
+          <div class="scenario-scenarios">
+            <span class="scenario-pill">🔥 Bushfire</span>
+            <span class="scenario-pill">🌀 Cyclone</span>
+            <span class="scenario-pill">🌊 Flash Flood</span>
+            <span class="scenario-pill">⚡ Grid Failure</span>
+          </div>
+          <div class="card-cta">Start simulator <span class="card-cta-arrow">→</span></div>
+        </div>
+        <div style="flex:1;min-width:200px;">
+          <div class="card-features" style="margin-bottom:0;">
+            <div class="card-feature">Second person present tense — you are in it</div>
+            <div class="card-feature">Timed decisions with real pressure</div>
+            <div class="card-feature">Branching story — choices actually matter</div>
+            <div class="card-feature">Hidden paths reward genuine preparation</div>
+            <div class="card-feature">Personalised story recap at the end</div>
+            <div class="card-feature">Lessons tied to your specific decisions</div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Row 3: Kit Finder + Disaster History + Emergency Dashboard -->
   <div class="tools-grid-3">
 
     <a href="kit_builder.html" class="tool-card">
@@ -243,7 +284,7 @@ body::before { content:''; position:fixed; inset:0; background:
         <div class="about-stat-label">Free survival<br>wiki guides</div>
       </div>
       <div class="about-stat">
-        <div class="about-stat-num">5</div>
+        <div class="about-stat-num">6</div>
         <div class="about-stat-label">Free interactive<br>tools</div>
       </div>
       <div class="about-stat">
