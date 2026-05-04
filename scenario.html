@@ -187,130 +187,605 @@ const SCENARIOS = {
 
 // ================================================================
 // BUSHFIRE — CENTRAL COAST NSW
-// Hidden path: Wake family first + pre-packed bag = perfect outcome
+// Rewritten incorporating findings from:
+//   2009 Victorian Bushfires Royal Commission (Black Saturday)
+//   2020 Royal Commission into National Natural Disaster Arrangements
+//   2020 NSW Bushfire Inquiry
 // ================================================================
 bushfire:{
   label:"BUSHFIRE // CENTRAL COAST NSW",
-  maxDecisions:7,
-  maxScore:116,
+  maxDecisions:6,
+  maxScore:128,
   scenes:{
 
-    s0:{loc:"YOUR HOME — JUST BEFORE 2:14AM",atmo:"calm",logTime:"",logSit:"",prompt:null,noLog:true,
-      text:"Your daughter drew a picture of your house last week.\n\nShe used dark green crayon for the hills behind it. Pressed hard, the way kids do when they mean something. It is stuck to the fridge with a strawberry magnet.\n\nThe hills behind your house are not dark green tonight.\n\nAt 2:14am, your smoke alarm goes off.",
-      choices:[{text:"Begin",next:"s1",score:0,logQ:"good",logEffect:"",noLog:true}]},
+// ── HOOK ──────────────────────────────────────────────────────────────────
+s0:{
+  loc:"CENTRAL COAST NSW — BEFORE 2:14AM",
+  atmo:"calm",logTime:"",logSit:"",prompt:null,noLog:true,
+  text:`Fire Danger Rating: CATASTROPHIC.
 
-    s1:{loc:"YOUR BEDROOM — 2:14AM",atmo:"tense",logTime:"2:14am",logSit:"The smoke alarm went off at 2:14am.",prompt:"What is your first move?",
-      text:"Your partner grabs your arm in the dark.\n\nYou sit up. You take a breath — no smoke inside. Not yet. Through the curtains the night sky is black. The alarm keeps screaming.\n\nYour youngest is 6. She is asleep down the hall. Your partner is already half out of bed.\n\nYou have one second to decide what matters most right now.",
-      choices:[
-        {text:"Your phone is on the bedside table — check the Fires Near Me app",next:"s2a",score:12,logQ:"good",logEffect:"Live data in 60 seconds. You know the distance, the wind speed, and how long you have."},
-        {text:"Go straight to the kids — get them moving before you know anything else",next:"s2b",score:10,logQ:"ok",logEffect:"You woke the family first. The next 90 seconds would depend entirely on what you had ready."},
-        {text:"Open the back door — you need to see it yourself",next:"s2c",score:8,logQ:"ok",logEffect:"The back door told you everything. But it cost 90 seconds you could not get back."}
-      ]},
+The Bureau of Meteorology issued the rating at 6am yesterday. The Central Coast had not seen a Catastrophic day in eleven years. The radio said it twice, then moved on to traffic.
 
-    s2a:{loc:"YOUR PHONE — 2:15AM",atmo:"critical",timer:22,logTime:"2:15am",logSit:"The Fires Near Me app showed a Watch and Act warning 2.4km from your street.",prompt:"Your partner is in the doorway. How bad?",
-      text:"A red polygon covers the ridge to your north.\n\nWATCH AND ACT — Peats Ridge Rd, Calga NSW\nWind: 44km/h gusting to 68. Bearing: south-southeast.\nDistance to your street: 2.4km.\n\nAt 68km/h gusts, fire travels 600 metres every ten minutes.\n\nThe maths is simple. The answer is not.",
-      choices:[
-        {text:"Get the kids. We go now — activate the plan you made in September",next:"s3a",score:20,logQ:"good",logEffect:"Your plan meant no one had to think. The family was at the front door in 2 minutes."},
-        {text:"Bad. Really bad. Help me start grabbing the important things.",next:"s3b",score:8,logQ:"ok",logEffect:"No plan meant making decisions under extreme pressure. Some things were forgotten."},
-        {text:"Wait — let me call 000. They will tell us whether we actually need to go.",next:"s3c",score:3,logQ:"bad",logEffect:"The line was overwhelmed. 2 minutes on hold before a dispatcher said what the app already showed."}
-      ]},
+You had heard it. You had thought: probably nothing will happen.
 
-    s2b:{loc:"YOUR KIDS ROOMS — 2:15AM",atmo:"tense",logTime:"2:15am",logSit:"You went straight to wake the family before knowing anything else.",prompt:"Your family is in the hallway. Your partner looks at you.",
-      text:"You go to your daughter first. You turn on the light.\n\nShe opens her eyes and looks at you and she knows. Kids always know. Is it fire? she asks. You do not answer, which is an answer.\n\nYour son is already awake in the next room. He is 9. He gets up without being asked.\n\nNinety seconds after the alarm started, all four of you are in the hallway. Shoes on. The alarm is still going. Nobody has looked outside yet.\n\nEveryone is waiting for you.",
-      choices:[
-        {text:"The emergency bag is in the hall cupboard — grab it and go straight to the car",next:"s3_hidden",score:22,logQ:"perfect",logEffect:"The bag was there because you had prepared. Instinct and preparation working together."},
-        {text:"You need to know what you are dealing with — check the app, then move",next:"s3b_check",score:10,logQ:"ok",logEffect:"Checking added 60 seconds. The information was useful. Whether it was worth those 60 seconds is hard to say."},
-        {text:"Look through the front window — see how close it actually is",next:"s2c_window",score:6,logQ:"ok",logEffect:"The front window told you enough. But 90 seconds had already passed in the hallway."}
-      ]},
+Your daughter is six. Before bed she had asked if the sky would turn orange. You told her no.
 
-    s2c:{loc:"YOUR BACK DOOR — 2:15AM",atmo:"critical",timer:18,logTime:"2:15am",logSit:"You opened the back door. An ember landed on the back of your hand.",prompt:"Your partner appears in the doorway behind you.",
-      text:"The back door opens and the smell hits you — eucalyptus smoke, hot and sharp in a way that is different from a campfire.\n\nThe ridge to the north glows orange. Not a glow on the horizon. A moving line.\n\nAn ember lands on the back of your hand. Small. It burns for just a second before you shake it off.\n\nThere are more drifting across the yard. One settles on the dry grass near the trampoline.\n\nYou have seen enough.",
-      choices:[
-        {text:"Get the bag from the hall cupboard. Car. Now. — it has been packed since September",next:"s3a",score:20,logQ:"good",logEffect:"That decision — made on a quiet September afternoon — is protecting your family right now."},
-        {text:"Wake the kids while I start the hose — we need to wet down the yard",next:"s3d",score:3,logQ:"bad",logEffect:"The hose felt proactive. In 68km/h gusts a garden hose is not a plan."},
-        {text:"Split up — you get the kids, I will grab what I can from the bedroom",next:"s3b",score:7,logQ:"ok",logEffect:"You covered more ground. It cost 6 minutes and left gaps in what you grabbed."}
-      ]},
+The hills behind your house are dark green in daylight. She drew a picture of them last week and pressed the crayon hard, the way she does when she means something.
 
-    s2c_window:{loc:"YOUR FRONT WINDOW — 2:17AM",atmo:"critical",logTime:"2:17am",logSit:"You looked through the front window. The ridge was fully lit.",prompt:"Two minutes have passed. Your family is still in the hallway.",
-      text:"Through the front window the ridge to the north is fully alight.\n\nNot a distant glow. A bright, moving orange line that was not there an hour ago.\n\nA car moves fast down the next street. No headlights. Someone who has already decided.\n\nYour partner puts a hand on your shoulder.",
-      choices:[
-        {text:"The bag is in the hall cupboard. Grab it and go.",next:"s3a",score:16,logQ:"good",logEffect:"Two minutes later than ideal — but the preparation held."},
-        {text:"Start grabbing things — documents, medication, chargers, go",next:"s3b",score:7,logQ:"ok",logEffect:"Going room by room without a plan is how important things get left behind."}
-      ]},
+At 2:14am, your smoke alarm goes off.`,
+  choices:[{text:"Begin",next:"s1",score:0,logQ:"good",logEffect:"",noLog:true}]},
 
-    s3_hidden:{loc:"YOUR FRONT DOOR — 2:16AM",atmo:"calm",logTime:"2:16am",logSit:"The pre-packed bag was in the hall cupboard. It was exactly where you left it in September.",prompt:null,
-      text:"The bag is there.\n\nIt has always been there — since the evening in September when you sat at the kitchen table and thought: I should actually do this properly. Water. Food for three days. Medications. Copies of every document that matters. Phone charger. Battery radio. Cash. Two hours of a quiet Sunday afternoon.\n\nYour daughter had helped. She put a drawing in the bag — the house, the dark green hills. You had left it in.\n\nYou pick it up. It is heavier than you remembered, and it is exactly what you need.\n\nEveryone is in the car in 90 seconds. You do not have to decide what to take, because you already decided.",
-      choices:[{text:"Drive south on the route you agreed on after the 2019 fires",next:"out_hidden",score:18,logQ:"perfect",logEffect:"On the highway 4 minutes after the alarm. Instinct and preparation covered each other perfectly."}]},
+// ── DECISION 1: FIRST MOVE ─────────────────────────────────────────────────
+s1:{
+  loc:"YOUR BEDROOM — 2:14AM",
+  atmo:"tense",
+  logTime:"2:14am",logSit:"The smoke alarm went off on a Catastrophic fire danger day.",
+  prompt:"Your phone is on the bedside table. The bedroom is completely dark.",
+  text:`Your partner grabs your arm before you are fully awake.
 
-    s3b_check:{loc:"YOUR PHONE — 2:16AM",atmo:"critical",logTime:"2:16am",logSit:"You checked the app while your family waited in the hallway.",prompt:"Red polygon. 2.4km. The screen tells you what you already knew in your gut.",
-      text:"The app loads. Red polygon. Wind gusting 68. 2.4km from the front.\n\nYour family is in the hallway behind you. They have been there for 90 seconds while you confirmed information you could have acted on without.\n\nYou know what to do now. You knew before you checked.",
-      choices:[{text:"Grab the bag from the hall cupboard. Car. Now.",next:"s3a",score:14,logQ:"ok",logEffect:"60 seconds spent checking the app. The bag was still there. You made it out — with a tighter window."}]},
+You sit up. You breathe — no smoke inside. Not yet. The curtains are closed. The alarm keeps going.
 
-    s3a:{loc:"YOUR HALLWAY — 2:16AM",atmo:"tense",logTime:"2:16am",logSit:"You activated your bushfire plan. The family was moving in under 2 minutes.",prompt:"Everyone has shoes on. The bag is in your hand.",
-      text:"Your partner is already moving before you finish the sentence.\n\nThe bags are in the hall cupboard. You put them there in September after a long evening at the kitchen table. 72-hour kit. Water, food, medication, documents, radio, cash. Two hours of a quiet Sunday afternoon that is paying off right now at 2:16am.\n\nYour daughter comes out of her room already dressed. She heard the alarm and put her shoes on herself.\n\nYou do not have to tell anyone twice.\n\nTwo minutes after the alarm, all four of you are at the front door.",
-      choices:[
-        {text:"Load the car and take the route south — straight through, no detours",next:"s4a",score:18,logQ:"good",logEffect:"On the highway heading south within 5 minutes. The route was exactly as planned."},
-        {text:"The photo albums. Three minutes. You know exactly where they are.",next:"s4b",score:8,logQ:"ok",logEffect:"You got the albums. Those 3 minutes put you on the road with the fire 700m away."}
-      ]},
+A Catastrophic rating means conditions in which no home can reliably be defended. You had known that this morning. You had gone to bed anyway because it is always hard to know when tonight is the night.
 
-    s3b:{loc:"YOUR BEDROOM AND KITCHEN — 2:16AM",atmo:"emergency",timer:16,logTime:"2:16am",logSit:"You went room to room grabbing things. No plan. Extreme pressure.",prompt:"You have been inside 6 minutes. The smoke smell is stronger.",
-      text:"Passports. Laptop. The kids medications from the bathroom cabinet. The insurance folder from the study — where is that folder —\n\nYour partner is in the bedroom. Your son is in the hallway in his school shoes asking questions you do not have time to answer.\n\nA car alarm goes off somewhere outside. Then stops.\n\nYou have an armful of things. You have not found the car keys yet and nobody has their shoes sorted.",
-      choices:[
-        {text:"Leave now — take what is in your arms. Keys are in your pocket.",next:"s4c",score:12,logQ:"ok",logEffect:"You left with most of the important things. Not everything. But you left."},
-        {text:"One more room. The hard drive. Two more minutes.",next:"s4d",score:0,logQ:"bad",logEffect:"Two minutes put the fire front within 400 metres of your house as you finally left."}
-      ]},
+Tonight might be the night.
 
-    s3c:{loc:"YOUR PHONE — 2:16AM",atmo:"critical",logTime:"2:16am",logSit:"You called 000. The line was overwhelmed. Nearly 3 minutes on hold.",prompt:"The dispatcher says: evacuate immediately. Do not delay.",
-      text:"Hold music.\n\nYou pace the hallway. 30 seconds. A minute. A minute and a half.\n\nYour partner appears: What are you doing?\nWaiting for 000.\nA pause. The app said Watch and Act. We need to go.\nI know. I just —\n\nThen the dispatcher picks up.\n\nShe tells you what the app showed you nearly 3 minutes ago. She uses the word immediately. Twice.",
-      choices:[
-        {text:"Hang up. Tell the family to get in the car. Leave now.",next:"s4c",score:10,logQ:"ok",logEffect:"Still got out — but 3 minutes on hold put a different pressure on the drive south."},
-        {text:"Ask her: is the Watch and Act likely to become an Emergency Warning?",next:"s4d",score:-5,logQ:"bad",logEffect:"She does not have that information. You have spent another minute inside."}
-      ]},
+Your daughter is asleep down the hall. Your partner is out of bed.
 
-    s3d:{loc:"YOUR BACKYARD — 2:16AM",atmo:"emergency",timer:12,logTime:"2:16am",logSit:"You ran the hose on the back fence while embers fell around you.",prompt:"Your neighbour drives past out front, leaning on the horn.",
-      text:"You unroll the hose and point it at the back fence. The water hits dry hardwood and runs off.\n\nAn ember lands on the fence post. Then another on the roof.\n\nYou can feel the radiant heat from the ridge. Not warmth — actual heat, the kind that makes you squint even at this distance.\n\nYour partner appears at the back door with both kids behind them. Their faces say everything about what this looks like from where they are standing.\n\nThe gust hits. You feel it in your chest before you hear it.",
-      choices:[
-        {text:"Drop the hose. Get to the car. This was a mistake.",next:"s4c",score:8,logQ:"ok",logEffect:"Right call, late. You left with minutes to spare and nothing packed."},
-        {text:"The fence will go and then the house — keep the hose going",next:"out_critical",score:-20,logQ:"bad",logEffect:"A garden hose cannot hold a fire front moving at 68km/h. It never could."}
-      ]},
+You have one second.`,
+  choices:[
+    {text:"Phone is right there — check the Fires Near Me app",next:"s2a",score:12,logQ:"good",logEffect:"Live fire data in under 60 seconds. You know the distance, wind speed, and rating before you make any other decision."},
+    {text:"Go straight to your daughter — get the family moving before you know anything",next:"s2b",score:10,logQ:"ok",logEffect:"You went to the kids first. The next decision depended entirely on what you had ready."},
+    {text:"Open the back door — you need to see it yourself",next:"s2c",score:8,logQ:"ok",logEffect:"The back door told you everything. It also cost you 90 seconds."}
+  ]},
 
-    s4a:{loc:"YOUR STREET — 2:21AM",atmo:"calm",logTime:"2:21am",logSit:"You drove south on your planned evacuation route.",prompt:null,
-      text:"You turn south onto the main road.\n\nAn RFS volunteer is at the end of your street with a torch, waving traffic through. He does not look panicked. That helps.\n\nIn the rear-view mirror, the ridge is fully alight. A long bright orange line across the dark hillside. Moving.\n\nYour daughter is watching it through the back window.\n\nIt is eating our hill, she says.\nYeah, your son says. But we are not on it.\n\nYou drive. Battery radio on. Emergency kit in the boot.",
-      choices:[{text:"Stay on the planned route — no detours, no looking back",next:"out_prepared_a",score:14,logQ:"good",logEffect:"Arrived at your sister in Gosford 28 minutes later. Safe, fed, and self-sufficient."}]},
+// ── PATH A: APP ─────────────────────────────────────────────────────────────
+s2a:{
+  loc:"YOUR PHONE — 2:15AM",
+  atmo:"critical",timer:22,
+  logTime:"2:15am",logSit:"The Fires Near Me app showed a Watch and Act warning. Fire 2.4km north, moving south.",
+  prompt:"Watch and Act means: if you are in a vulnerable location, leave now.",
+  text:`The app loads.
 
-    s4b:{loc:"YOUR GARAGE — 2:20AM",atmo:"tense",logTime:"2:20am",logSit:"You loaded photo albums before leaving. It took 3 extra minutes.",prompt:null,
-      text:"Three photo albums. The laptop. Your daughter school bag because she asked and this was not the moment to say no.\n\nYour partner has started the car. Headlights on.\n\nYou take one last look at the house from the driveway. Every room dark. Fifteen years of mortgage. The strawberry magnet still on the fridge.\n\nYou get in. You close the door.",
-      choices:[{text:"Drive south. Do not stop.",next:"out_prepared_b",score:12,logQ:"good",logEffect:"Made it out. The extra 3 minutes put you on the road with the fire 700m away. But you made it."}]},
+WATCH AND ACT — Peats Ridge Rd, Calga NSW
+Active fire. Size: approx 220 hectares and growing.
+Wind: 44km/h gusting to 72. Bearing: south-southeast.
+Distance to your street: 2.4km.
 
-    s4c:{loc:"YOUR CAR — 2:22AM",atmo:"tense",logTime:"2:22am",logSit:"You left with what you had. No emergency kit.",prompt:null,
-      text:"You put what you grabbed in the back seat and get in.\n\nPassports. Laptop. A charger. Some drawings your daughter made that you picked up without thinking.\n\nNo water. No food. No medications. No radio.\n\nYou drive. The street behind you glows.",
-      choices:[{text:"Head south to the Gosford evacuation centre",next:"out_survivable_a",score:8,logQ:"ok",logEffect:"You got out safely. At the centre you would rely on what they had for everything."}]},
+At 72km/h gusts, a grass fire travels 600 metres every eight minutes.
 
-    s4d:{loc:"YOUR HALLWAY — 2:24AM",atmo:"emergency",logTime:"2:24am",logSit:"You stayed inside too long. The front windows started glowing amber.",prompt:null,
-      text:"You are still inside.\n\nThe front windows pulse amber. Not the amber of streetlights — a moving amber that was not there two minutes ago.\n\nSomething outside catches with a crack and then a rushing roar. Hot air pushes under the front door.\n\nYour eyes water. Your youngest is coughing.\n\nThere is nothing in your arms that matters.",
-      choices:[{text:"Leave. Everything. Now. Car. Drive.",next:"out_survivable_b",score:5,logQ:"bad",logEffect:"You made it out by seconds. The driveway was lit as you reversed."}]},
+You do the maths. You have ten to fourteen minutes before the fire front reaches your street.
 
-    out_hidden:{outcome:"perfect",hiddenPath:true,hiddenText:"You chose instinct over information — and your preparation made that the best possible choice. Most players check the app first. The hidden path rewards the person who prepared so well that they did not need to.",
-      finalText:"You made every decision correctly — including the one that looked wrong.\n\nYou went to your family before you knew anything. It should have been chaotic. Instead it was the fastest, calmest evacuation possible, because the bag was packed and everyone understood what the bag meant.\n\nYour daughter drawing is in the boot. The house is probably gone. Everything that matters is in that car.\n\nThis is what genuine preparedness looks like.",
-      lessons:["The hidden path rewards people whose preparation was thorough enough to make their instinct the right answer","A pre-packed bag by the door turns a panicked first move into the optimal response","A family plan means even an imperfect first decision leads somewhere good — because the next step is already known","Preparation is not just what you pack. It is the 30 seconds of calm that follows when you realise you do not have to decide."]},
+Watch and Act is the second of three warning levels. The third is Emergency Warning. By the time an Emergency Warning is issued, the threat is immediate and it may already be too late to leave safely.
 
-    out_prepared_a:{outcome:"prepared",finalText:"You read the situation correctly from the first alarm, activated a plan made on a quiet Sunday in September, and drove south with 72 hours of supplies and a clear head.\n\nThe house was lost. The RFS confirmed it two days later — the fire reached your street at 2:31am. You were on the highway at 2:21am.\n\nYou had 10 minutes to spare. The plan gave you those 10 minutes.",
-      lessons:["A pre-packed emergency bag removes every decision from the worst moment of your life","A bushfire plan with a nominated rally point means no one has to ask where are we going at 2am","The decision to prepare — made on a calm afternoon — is the most important decision in this scenario","Your house can be rebuilt. The plan you made meant your family was never at risk."]},
+Your partner is in the doorway.`,
+  choices:[
+    {text:"We have a plan. Activate it. Everyone up, bags by the door, car in two minutes.",next:"s3_plan",score:22,logQ:"good",logEffect:"Your plan was made on a calm evening in September. That decision is paying off right now."},
+    {text:"Our bushfire plan is to shelter in the interior bathroom — it is the safest room in the house.",next:"s3_shelter",score:-8,logQ:"bad",logEffect:"The Victorian Bushfires Royal Commission documented this exact decision. The outcome appears later in your story."},
+    {text:"Start grabbing things — passports, medications, laptop, go room by room.",next:"s3_grab",score:7,logQ:"ok",logEffect:"No plan meant deciding under maximum pressure what mattered most. Some things were forgotten."},
+    {text:"Call 000 first — they will confirm whether we actually need to go.",next:"s3_000",score:3,logQ:"bad",logEffect:"Emergency lines were overwhelmed. 2 minutes 40 seconds on hold before a dispatcher said what the app already showed."}
+  ]},
 
-    out_prepared_b:{outcome:"prepared",finalText:"You got out with your emergency kit and your family — with a narrow margin.\n\nThe RFS confirmed the fire reached your street at 2:27am. You reversed out of your driveway at 2:23am. Four minutes.\n\nThe photo albums came because those 3 minutes happened to be available. On a faster-moving night, they would not have been.",
-      lessons:["Pre-packed bags mean the photo album debate never happens — because there is no debate","Once the decision to leave is made, execute it — every extra minute is a margin you are spending","Tonight the margin was there. Next time may be different."]},
+// ── PATH B: KIDS FIRST ─────────────────────────────────────────────────────
+s2b:{
+  loc:"YOUR DAUGHTERS ROOM — 2:15AM",
+  atmo:"tense",
+  logTime:"2:15am",logSit:"You went to the kids before knowing anything. The family was in the hallway in 90 seconds.",
+  prompt:"Everyone is in the hallway. Your partner looks at you.",
+  text:`You go to your daughter first.
 
-    out_survivable_a:{outcome:"survivable",finalText:"You got out safely — and that is what matters most.\n\nBut the night at the evacuation centre was harder than it needed to be. No medications. No food. One phone between four people. Your daughter cried twice because she was hungry and you had nothing.\n\nThe centre was overwhelmed. Volunteers did everything they could. But you could not stop thinking about the Sunday afternoon you did not spend.",
-      lessons:["A 72-hour emergency kit changes everything about what comes after the escape","Evacuation centres are not hotels — supplies are limited, especially for specific needs","The decision to prepare costs two hours on a quiet afternoon. The decision not to costs something harder to measure."]},
+She opens her eyes and looks at you and she already knows. She is six but she is not a fool. Is it fire she says. You don't answer which is an answer.
 
-    out_survivable_b:{outcome:"survivable",finalText:"You made it out by seconds.\n\nThe driveway was on fire as you reversed. Your youngest had her eyes closed and her hands over her ears.\n\nYou are safe. Your family is safe. You are at Gosford Showground at 2:47am with nothing — no food, no water, no change of clothes.\n\nYou are safe. Tonight that has to be enough.",
-      lessons:["Leave at Watch and Act — not Emergency Warning — and this scene never happens","The time you spent inside was time the fire used to close the gap","A pre-packed bag means just one more thing is never a temptation — because there is nothing more to decide"]},
+Your son is nine and already awake. He gets up without being asked and puts his shoes on.
 
-    out_critical:{outcome:"critical",finalText:"A garden hose cannot hold a fire front in 68km/h gusts.\n\nThis is not a failure of courage. It takes nerve to stand your ground with a hose while embers fall around you. But the fire that moved through your street carried 180 hectares of energy behind it.\n\nThe most important lesson from this scenario is about what a fire at this speed actually means. At 600 metres every 10 minutes, the gap between manageable and life-threatening closes faster than feels possible.\n\nYou now know this. And knowing it — really knowing it — is the most valuable thing you can take from tonight.",
-      lessons:["Defending a home requires specific equipment, training, and the right type of fire — a running grass fire in high winds cannot be defended with a hose","Leave at the Watch and Act warning — this scenario illustrates exactly why that warning exists","The ember that landed on your hand was the warning. The correct response was to leave."]}
-  }
-},
+Ninety seconds after the alarm started, all four of you are in the hallway. Nobody has looked outside. Nobody knows how close it is.
 
+Everyone is waiting for you.`,
+  choices:[
+    {text:"The emergency bag is in the hall cupboard — the one you packed in September. Grab it and go.",next:"s3_hidden",score:24,logQ:"perfect",logEffect:"The bag was there because you had done the work in advance. Preparation made your instinct the right answer."},
+    {text:"You need information — check the app quickly, then you will know what to do.",next:"s3_grab_check",score:9,logQ:"ok",logEffect:"The app confirmed what you suspected. It took 75 seconds you did not know you had."},
+    {text:"Look through the front window first — see how close it actually is.",next:"s2c_window",score:6,logQ:"ok",logEffect:"The front window told you enough. Two minutes had already passed."}
+  ]},
+
+// ── PATH C: BACK DOOR ─────────────────────────────────────────────────────
+s2c:{
+  loc:"YOUR BACK DOOR — 2:15AM",
+  atmo:"critical",timer:18,
+  logTime:"2:15am",logSit:"You opened the back door. An ember landed on the back of your hand.",
+  prompt:"Your partner appears behind you.",
+  text:`The back door opens and the smell is immediate — eucalyptus smoke but hot and sharp in a way a campfire never is.
+
+The ridge to the north glows orange. A moving line, not a distant smudge.
+
+An ember lands on the back of your hand. Small. It burns for one second before you shake it off.
+
+You look at the yard. More embers are drifting in — landing on the dry grass, on the trampoline, on the shed roof. Ember attacks can ignite a house well before the fire front arrives. Research from the Victorian Bushfires Royal Commission found that ember attack — not direct flame — is responsible for the majority of house ignitions in fast-moving fires.
+
+The embers are already here.
+
+You have seen enough.`,
+  choices:[
+    {text:"Get the bag from the hall cupboard and go. It has been packed since September.",next:"s3_plan",score:20,logQ:"good",logEffect:"That September decision — two hours on a quiet evening — is what this moment needed."},
+    {text:"Wake your partner's side: you get the kids, I will start the hose on the yard.",next:"s3_hose",score:2,logQ:"bad",logEffect:"The hose felt like doing something. In 72km/h gusts it was not doing something."},
+    {text:"Split up: partner gets the kids, you start grabbing documents and medications.",next:"s3_grab",score:7,logQ:"ok",logEffect:"You covered ground but created two separate scrambles instead of one clear move."}
+  ]},
+
+// ── FRONT WINDOW (from kids path) ─────────────────────────────────────────
+s2c_window:{
+  loc:"YOUR FRONT WINDOW — 2:17AM",
+  atmo:"critical",
+  logTime:"2:17am",logSit:"You looked through the front window. Two minutes had passed. The ridge was fully lit.",
+  prompt:"Your family is still in the hallway.",
+  text:`Through the front window the ridge to the north is fully alight.
+
+A bright moving orange line. A car moves fast through the street two blocks over, no headlights, someone who has already made their decision.
+
+Your partner puts a hand on your shoulder.
+
+Two minutes have passed since the alarm went off. You have maybe ten left.`,
+  choices:[
+    {text:"The bag is in the hall cupboard. Grab it and go.",next:"s3_plan",score:16,logQ:"good",logEffect:"Two minutes later than ideal. The bag was still there. The preparation still held."},
+    {text:"Start grabbing things — you need documents, phones, medications at minimum.",next:"s3_grab",score:6,logQ:"ok",logEffect:"Room by room without a plan is how important things get left behind."}
+  ]},
+
+// ── PLAN ACTIVATED ──────────────────────────────────────────────────────────
+s3_plan:{
+  loc:"YOUR HALLWAY — 2:16AM",
+  atmo:"tense",
+  logTime:"2:16am",logSit:"You activated your bushfire plan. Bag in hand. Family at the door.",
+  prompt:"Everyone has shoes on. The bag is in your hand. The car is in the driveway.",
+  text:`The bag is in the hall cupboard where you put it in September.
+
+72-hour kit. Water, food for three days, all medications, copies of every document that matters, phone charger, battery radio, two hundred dollars cash, first aid kit. You had spent two hours on a Sunday evening packing it while your daughter sat at the table helping to sort the batteries.
+
+Your partner takes the bag without a word. Your son takes his sister's hand.
+
+Two minutes after the alarm started, all four of you are at the front door.
+
+You are about to go to the car when your partner stops.
+
+Where is the dog.
+
+Barley. The border collie. He is not in the house. The back door was closed. He must have been outside when this started.
+
+The Victorian Bushfires Royal Commission research found that pets are the single strongest documented barrier to evacuation in Australian bushfires. More people delay because of pets than any other reason. Some of those delays cost lives.`,
+  choices:[
+    {text:"Leave now. You cannot find Barley in the dark in time. The family comes first.",next:"s4_calm",score:18,logQ:"good",logEffect:"The hardest decision of the night. The right one. You drove south with the bag and your family."},
+    {text:"Three minutes to find him — you know where he usually shelters when scared.",next:"s4_pet_delay",score:8,logQ:"ok",logEffect:"Three minutes. The fire front moved 375 metres while you searched."}
+  ]},
+
+// ── PET DELAY ─────────────────────────────────────────────────────────────
+s4_pet_delay:{
+  loc:"YOUR YARD — 2:19AM",
+  atmo:"critical",
+  logTime:"2:19am",logSit:"You searched for the dog for 3 minutes. The Watch and Act has become an Emergency Warning.",
+  prompt:"Your phone buzzes. Emergency Warning. Not Watch and Act. Emergency Warning.",
+  text:`You find Barley under the back deck. You clip the lead. Your son grabs him.
+
+Your phone buzzes.
+
+EMERGENCY WARNING — Peats Ridge Rd and surrounds.
+This is the highest level of warning.
+You are in danger and need to act immediately.
+
+Watch and Act is the time to leave. Emergency Warning means the threat is here.
+
+You are three minutes past the time you should have left.
+
+You run to the car.`,
+  choices:[
+    {text:"Drive south immediately — no detours, straight through on the planned route.",next:"s4_tight",score:12,logQ:"ok",logEffect:"You left under Emergency Warning conditions. The road south was clear — just."},
+    {text:"The route might be compromised — drive to the nearest evacuation centre instead.",next:"s4_tight",score:10,logQ:"ok",logEffect:"The evacuation centre route added 8 minutes. The main route south was still open when you reached it."}
+  ]},
+
+// ── HIDDEN PATH ─────────────────────────────────────────────────────────────
+s3_hidden:{
+  loc:"YOUR FRONT DOOR — 2:16AM",
+  atmo:"calm",
+  logTime:"2:16am",logSit:"The pre-packed bag was in the hall cupboard where you left it in September.",
+  prompt:null,
+  text:`The bag is there.
+
+It has always been there — since the evening in September when you sat at the kitchen table with a list from the NSW RFS website and two hours of a quiet Sunday afternoon. Water. Food for three days. Every medication in the house. Photocopies of the insurance policy, the passports, the mortgage documents. Phone charger. Battery radio. Cash. First aid kit.
+
+Your daughter had helped you sort the batteries into sizes and put them in a zip-lock bag. She put one of her drawings in the kit — the house with the dark green hills — and you left it in because you could not think of a reason not to.
+
+You pick up the bag. Your partner takes it. Your son takes his sister's hand.
+
+You do not have to decide what to take. You already decided.
+
+Ninety seconds after you woke your daughter, all four of you are in the car with the engine running.`,
+  choices:[{text:"Drive south on the route you agreed on after the 2019 fires.",next:"out_hidden",score:20,logQ:"perfect",logEffect:"On the highway 4 minutes after the alarm. Your instinct and your preparation covered each other perfectly."}]},
+
+// ── APP CHECK FROM KIDS PATH ───────────────────────────────────────────────
+s3_grab_check:{
+  loc:"YOUR HALLWAY — 2:16AM",
+  atmo:"critical",
+  logTime:"2:16am",logSit:"You checked the app while your family waited. Watch and Act. 2.4km. 10-14 minutes.",
+  prompt:"The screen tells you what you already knew.",
+  text:`Watch and Act. 2.4km. Wind 72km/h gusting. South-southeast.
+
+Your family has been standing in the hallway for 75 seconds while you confirmed information you could have acted on without.
+
+You know what to do now. You knew before you checked.`,
+  choices:[{text:"Grab the bag from the hall cupboard. Car. Now.",next:"s3_plan",score:13,logQ:"ok",logEffect:"75 seconds spent confirming what your gut already knew. The bag was still there. You still made it."}]},
+
+// ── BATHROOM SHELTER (FATAL FLAW) ───────────────────────────────────────────
+s3_shelter:{
+  loc:"YOUR INTERIOR BATHROOM — 2:16AM",
+  atmo:"tense",
+  logTime:"2:16am",logSit:"Your bushfire plan was to shelter in the interior bathroom. You activated it.",
+  prompt:"The family is in the bathroom. The door is closed. Mattresses against the door.",
+  text:`This was the plan.
+
+You had read that the safest place in a house during a bushfire is an interior room — away from windows, with minimal air gaps. The bathroom. You had told your partner this. You had felt prepared.
+
+The Victorian Bushfires Royal Commission examined 172 civilian deaths on Black Saturday. 113 of those people died inside houses. Of those deaths, researchers identified a pattern of "fatal flaw" fire plans — plans that put people in interior rooms with no situational awareness and no way to exit when the house caught fire.
+
+The bathroom has no window. You cannot see what is happening to the rest of the house.
+
+You can hear something outside. A crackling that is getting louder.
+
+Your daughter asks if the noise is getting closer.
+
+You do not know. You cannot know. That is the problem.`,
+  choices:[
+    {text:"Stay in the bathroom — this is the plan, you have to trust it.",next:"out_critical_passive",score:-10,logQ:"bad",logEffect:"113 of 173 Black Saturday victims were found inside houses. The Commission called plans like this a fatal flaw."},
+    {text:"Something is wrong — this room has no way out. Get everyone to the front door now.",next:"s4_bathroom_escape",score:5,logQ:"ok",logEffect:"You recognised the flaw in time. The next 90 seconds would determine whether it mattered."}
+  ]},
+
+// ── ROOM BY ROOM GRABBING ────────────────────────────────────────────────────
+s3_grab:{
+  loc:"YOUR BEDROOM AND KITCHEN — 2:16AM",
+  atmo:"emergency",timer:16,
+  logTime:"2:16am",logSit:"You started going room by room without a plan. 6 minutes inside.",
+  prompt:"You have been inside 6 minutes. The smoke smell is stronger.",
+  text:`Passports — kitchen drawer. Laptop — bedroom desk. The medications from the bathroom cabinet. The insurance folder — where is that folder —
+
+Your partner is in the bedroom. Your son is in the hallway in his school shoes asking questions you do not have time to answer.
+
+A car alarm goes off somewhere outside. Then stops.
+
+You have an armful of things. No bag to put them in. The car keys are in your jacket which is in the bedroom which you have not been to yet.
+
+Research from the Bushfire CRC found that people without prepared fire plans were significantly more likely to delay under threatening conditions and to leave late — or not at all.`,
+  choices:[
+    {text:"Leave now — take what is in your arms. Keys must be somewhere.",next:"s4_late",score:10,logQ:"ok",logEffect:"You left with most of the important things. You found the keys in your jacket. You left."},
+    {text:"One more room — 90 more seconds — there are things you will need.",next:"s4_verylate",score:0,logQ:"bad",logEffect:"90 seconds put the fire front within 300 metres of your house as you finally got to the car."}
+  ]},
+
+// ── CALLED 000 ────────────────────────────────────────────────────────────
+s3_000:{
+  loc:"YOUR PHONE — 2:16AM",
+  atmo:"critical",
+  logTime:"2:16am",logSit:"You called 000 and waited 2 minutes 40 seconds on hold.",
+  prompt:"The dispatcher says: evacuate immediately. Do not delay. Do not go back inside.",
+  text:`Hold music.
+
+You pace the hallway. 30 seconds. A minute. Your partner: what are you doing. Calling 000. A pause. The app said Watch and Act. We need to go.
+
+Two minutes and forty seconds before a dispatcher picks up.
+
+She tells you to evacuate immediately. She uses the word immediately twice. She says do not go back inside for any reason.
+
+She tells you what the app showed you 2 minutes and 40 seconds ago.
+
+The NSW Bushfire Inquiry found consistent warning about delays caused by overloaded emergency lines during major fire events.`,
+  choices:[
+    {text:"Hang up. Tell the family to get in the car. Go.",next:"s4_late",score:8,logQ:"ok",logEffect:"2 minutes 40 seconds on hold. You still made it out. With a different window than you needed."},
+    {text:"Ask the dispatcher: is the Watch and Act likely to become Emergency Warning?",next:"s4_verylate",score:-5,logQ:"bad",logEffect:"She does not have that information. You spent another 90 seconds inside."}
+  ]},
+
+// ── HOSE ──────────────────────────────────────────────────────────────────
+s3_hose:{
+  loc:"YOUR BACKYARD — 2:16AM",
+  atmo:"emergency",timer:12,
+  logTime:"2:16am",logSit:"You started the hose on the yard while embers fell around you.",
+  prompt:"Your partner appears at the back door with both kids. Their faces say everything.",
+  text:`You point the hose at the fence and the roof and the dry grass.
+
+The water hits and steams slightly off the timber.
+
+More embers are landing. On the roof. On the shed. One on the trampoline which begins to blister.
+
+The radiant heat from the ridge is now noticeable even at this distance — not warmth, actual heat, the kind that makes you squint.
+
+The Bushfire CRC research from Black Saturday found that 26 of the 172 people who died were defending a house or property. Many of them had good intentions and had prepared their properties. But a running grass fire in high winds generating 72km/h gusts cannot be held with domestic water pressure.
+
+The fire is not a campfire you can douse. It is 220 hectares of energy moving at speed.`,
+  choices:[
+    {text:"Drop the hose. Get to the car. Leave.",next:"s4_late",score:8,logQ:"ok",logEffect:"Right call, very late. You left with nothing packed and minutes to spare."},
+    {text:"The fence is starting to go — keep the hose on it.",next:"out_critical_hose",score:-15,logQ:"bad",logEffect:"The fire was already in the embers landing on your roof. The fence was not the problem."}
+  ]},
+
+// ── BATHROOM ESCAPE ─────────────────────────────────────────────────────────
+s4_bathroom_escape:{
+  loc:"YOUR HALLWAY — 2:22AM",
+  atmo:"emergency",
+  logTime:"2:22am",logSit:"You left the bathroom and got to the front door. Smoke visible in the house.",
+  prompt:"The front door is right there.",
+  text:`You get everyone out of the bathroom.
+
+The hallway has smoke in it now — not thick, but visible, a grey layer near the ceiling that was not there when you went in.
+
+The front door is ten metres away.
+
+Your daughter is not panicking. She is holding her brother's hand and walking fast and not looking at the smoke.`,
+  choices:[
+    {text:"Front door — car — drive south. Nothing else matters.",next:"out_survivable_bathroom_escape",score:8,logQ:"ok",logEffect:"You got out. The house caught fire 4 minutes after you left. You were already driving."}
+  ]},
+
+// ── CAR — CALM ────────────────────────────────────────────────────────────
+s4_calm:{
+  loc:"YOUR CAR — 2:19AM",
+  atmo:"calm",
+  logTime:"2:19am",logSit:"You left without Barley. The car is loaded. The route is planned.",
+  prompt:null,
+  text:`You back out of the driveway.
+
+Your son is looking out the rear window. Barley is not there.
+
+The ridge to the north is fully alight now. A long bright orange line across the dark hillside. Moving.
+
+You turn south onto the main road. An RFS volunteer at the end of your street waves traffic through with a torch. He does not look panicked.
+
+The battery radio is on. The emergency kit is in the boot. You have water, food, medications, documents, and two hundred dollars in cash.
+
+Your daughter asks where Barley is.
+
+Your partner says: he will be okay. You say nothing because you are driving.`,
+  choices:[
+    {text:"Stay on the planned route south — no detours.",next:"out_prepared_a",score:16,logQ:"good",logEffect:"Arrived at your sister in Gosford 28 minutes later. Safe, fed, and self-sufficient."}
+  ]},
+
+// ── TIGHT WINDOW (after pet delay or albums) ───────────────────────────────
+s4_tight:{
+  loc:"YOUR CAR — 2:22AM",
+  atmo:"critical",
+  logTime:"2:22am",logSit:"Emergency Warning. You are leaving three minutes later than you should have.",
+  prompt:null,
+  text:`You are in the car with the dog. The emergency kit is in the boot.
+
+The Emergency Warning is still showing on your phone.
+
+The road south is ahead of you. It is 2:22am.
+
+The fire front is approximately 900 metres away.
+
+In the rear-view mirror, the ridge is no longer a line — it is a wall.`,
+  choices:[
+    {text:"Drive south. Do not stop.",next:"out_prepared_b",score:14,logQ:"ok",logEffect:"You made it. The three-minute pet search was within the margin — just. Barley is in the back seat."}
+  ]},
+
+// ── LATE LEAVING ───────────────────────────────────────────────────────────
+s4_late:{
+  loc:"YOUR CAR — 2:24AM",
+  atmo:"emergency",timer:15,
+  logTime:"2:24am",logSit:"Emergency Warning. You are leaving with minimal supplies under immediate threat.",
+  prompt:"The road south is ahead. You can smell smoke through the car vents.",
+  text:`You are in the car.
+
+Passports in the back seat. Laptop. One phone charger. Medications — some of them.
+
+Emergency Warning is on your phone. This is not Watch and Act. Emergency Warning means the fire is at or near your location.
+
+You pull onto the main road heading south.
+
+Two hundred metres ahead, visibility drops. A wall of smoke is crossing the road. Not thick — you can see maybe forty metres through it. But there are embers in it, and you cannot see what is on the other side.
+
+The NSW Bushfire Inquiry found that people who left at Emergency Warning — rather than Watch and Act — frequently encountered compromised road conditions.`,
+  choices:[
+    {text:"Drive through slowly — keep your headlights on and do not stop.",next:"s4_road_smoke",score:10,logQ:"ok",logEffect:"You drove into the smoke at 20km/h. 90 metres of near-zero visibility. Then it cleared."},
+    {text:"Turn back — the road is not safe, go back to the house and shelter properly.",next:"out_survivable_turnback",score:6,logQ:"ok",logEffect:"You turned back. The house was the only option now. How you sheltered would determine everything."}
+  ]},
+
+// ── VERY LATE ─────────────────────────────────────────────────────────────
+s4_verylate:{
+  loc:"YOUR CAR — 2:27AM",
+  atmo:"emergency",
+  logTime:"2:27am",logSit:"You got in the car with 90 seconds before the fire front reached your street.",
+  prompt:null,
+  text:`You are in the car.
+
+The driveway behind you is lit amber as you reverse. The front fence catches.
+
+You drive.
+
+Your youngest has her eyes closed and her hands over her ears. You do not look in the mirror again.`,
+  choices:[
+    {text:"Drive south. Eyes forward.",next:"out_survivable_seconds",score:6,logQ:"bad",logEffect:"You made it out by approximately 90 seconds. The driveway was on fire as you left."}
+  ]},
+
+// ── SMOKE ON THE ROAD ─────────────────────────────────────────────────────
+s4_road_smoke:{
+  loc:"YOUR CAR — HEADING SOUTH — 2:25AM",
+  atmo:"emergency",
+  logTime:"2:25am",logSit:"You drove through smoke and embers on the road south. 90 metres of near-zero visibility.",
+  prompt:null,
+  text:`You drive into it.
+
+Headlights on. 20km/h. Your partner has a hand on the dashboard.
+
+You can see four car lengths ahead. Maybe less. The embers are hitting the windscreen. One catches on the wipers and drags.
+
+Forty metres. Sixty. Eighty.
+
+Then it clears.
+
+The road ahead is dark and clear and you drive.
+
+Your son says: we are through.`,
+  choices:[
+    {text:"Keep driving south. Do not stop until Gosford.",next:"out_survivable_road",score:12,logQ:"ok",logEffect:"You drove through the smoke and out the other side. 90 metres. It felt like a kilometre."}
+  ]},
+
+// ═══ OUTCOMES ════════════════════════════════════════════════════════════════
+
+out_hidden:{
+  outcome:"perfect",hiddenPath:true,
+  hiddenText:"You woke the family before knowing anything — which looks like the wrong move. But the bag was packed, everyone knew what the bag meant, and you were in the car before most people had decided what to do. The hidden path rewards people whose preparation was thorough enough to make their instinct the optimal response.",
+  finalText:`You made every decision correctly — including the one that looked wrong.
+
+You went to your daughter before you knew anything. It should have been chaotic. Instead it was the fastest, calmest evacuation possible — because the bag was packed and everyone understood what the bag meant.
+
+Your daughter's drawing is in the boot. The house is probably gone. Everything that matters is in that car.
+
+This is what genuine preparedness looks like — not just the kit, but the habit, the plan, and the family that knows what to do when the alarm goes off at 2:14am on a Catastrophic day.`,
+  lessons:[
+    "The hidden path rewards people whose preparation was thorough enough to make their instinct the optimal response — the bag makes 'panic and get everyone moving' into the best possible first decision",
+    "Packing your emergency kit on a calm September evening is the most important decision in this entire scenario — it happens weeks before the alarm goes off",
+    "The 2020 Royal Commission found individual preparedness is not optional — governments cannot protect people who have not prepared themselves",
+    "A Catastrophic fire danger rating means no home can reliably be defended — the only safe response is to leave before the threat arrives"
+  ]},
+
+out_prepared_a:{
+  outcome:"prepared",
+  finalText:`You left at Watch and Act — not Emergency Warning — with a pre-packed kit, a planned route, and a clear head.
+
+The decision to leave the dog was the right one. It was also the hardest thing you did tonight.
+
+The RFS confirmed the fire reached your street at 2:31am. You were on the highway at 2:19am. Twelve minutes of margin. The plan gave you those twelve minutes.
+
+The NSW Bushfire Inquiry found that early departure — at Watch and Act, not Emergency Warning — was consistently the safest response in 2019-20. Most of the people who died or were seriously injured had delayed their decision.
+
+Your house was assessed as a total loss. The insurance folder was in the emergency kit. That folder took four minutes to copy on that September Sunday.`,
+  lessons:[
+    "Leave at Watch and Act — not Emergency Warning. By Emergency Warning the threat is at or near your location and road conditions may be compromised",
+    "Pets are the single strongest documented barrier to evacuation in Australian bushfire research — the decision to leave without them may be the decision that saves your family",
+    "A pre-packed 72-hour kit removes every decision from the worst moment — it was made on a calm evening and paid off at 2:14am on a Catastrophic day",
+    "The 2009 Victorian Bushfires Royal Commission found that being well-prepared to evacuate is the safest option — more so than defending, more so than sheltering"
+  ]},
+
+out_prepared_b:{
+  outcome:"prepared",
+  finalText:`You left under Emergency Warning conditions with Barley in the back seat and the emergency kit in the boot.
+
+The three minutes searching for the dog put you on the road with a 900-metre margin. You did not know that at the time. You know it now.
+
+You made it. The route south was still open. The kit meant you arrived self-sufficient.
+
+The research is consistent: pets are the strongest barrier to evacuation. Some of the people who delayed for pets in Australian bushfires did not make it. Tonight the margin was there. Next time it may not be.`,
+  lessons:[
+    "Three minutes searching for a pet can be the difference between leaving at Watch and Act and leaving under Emergency Warning — and those warning levels represent fundamentally different risk levels",
+    "Making a plan for your pet before fire season — a secure outdoor shelter, a plan for if they are not inside — is part of bushfire preparation",
+    "Emergency kits make late departures survivable — arriving at the evacuation centre with supplies, medications and documents matters even when the departure was too close",
+    "Leave at Watch and Act — this scenario shows exactly what the difference between warning levels means at 2am on a Catastrophic fire day"
+  ]},
+
+out_survivable_road:{
+  outcome:"survivable",
+  finalText:`You drove through 90 metres of smoke and embers and out the other side.
+
+You made it. Your family made it. The car has a blistered wiper blade and a small scorch mark on the bonnet.
+
+But you left at Emergency Warning, not Watch and Act. You drove through compromised road conditions with no emergency kit, minimal supplies, and children in the back seat.
+
+The NSW Bushfire Inquiry specifically noted that people who leave late frequently encounter compromised road conditions. Some of those encounters do not end the way yours did.
+
+The road was clear on the other side. Tonight. This road. This fire.`,
+  lessons:[
+    "Leaving at Watch and Act means you almost certainly avoid compromised roads — leaving at Emergency Warning means you may not",
+    "The smoke on the road tonight was 90 metres. Some people who evacuated late in the 2019-20 fires encountered kilometres of smoke and embers on roads that then closed behind them",
+    "Without an emergency kit you arrived at the evacuation centre dependent on what was available — which may not include your specific medications or dietary needs",
+    "The 2020 Royal Commission found consistent evidence that early departure is always the safer option — this scenario illustrates why"
+  ]},
+
+out_survivable_turnback:{
+  outcome:"survivable",
+  finalText:`You turned back.
+
+The house was the only option. You went inside and sheltered correctly — interior room, NOT a bathroom without an exit, but the hallway under the stairs with the front door accessible if you needed to move.
+
+The fire passed over your property at 2:31am. The back of the house was damaged. The front held.
+
+At 6am an RFS crew found you and your family sheltering in the hallway. They gave you water and a blanket.
+
+The 2009 Victorian Bushfires Royal Commission found that people who sheltered in houses during Black Saturday had mixed outcomes — some survived, many did not. The difference was often whether they had a way to monitor conditions and a way to escape.
+
+You had both. Tonight that was enough.`,
+  lessons:[
+    "If you cannot safely get away, sheltering inside is better than being in a car on a smoke-filled road — but the room matters enormously",
+    "The Victorian Bushfires Royal Commission found that bathroom sheltering is a documented fatal flaw — no window, no situational awareness, no escape if the house catches",
+    "The correct shelter-in-place position: interior room OR hallway, near an external door, with a way to monitor what is happening outside",
+    "Leaving at Watch and Act makes this entire decision irrelevant — you are never in a car approaching smoke, never choosing between driving through it and turning back"
+  ]},
+
+out_survivable_seconds:{
+  outcome:"survivable",
+  finalText:`You made it out by approximately 90 seconds.
+
+Your youngest had her eyes closed and her hands over her ears the whole way. Your son watched the fire take the driveway as you left.
+
+You are at the Gosford evacuation centre at 3am with a laptop, some passports, and whatever was in your jacket pockets. No food. No water. No medications. One phone at 18 percent battery.
+
+The volunteers do everything they can. But the centre is running short on specific things. One of your medications is not available. You will need to call the hospital in the morning.
+
+You are safe. That is true. The rest of tonight is going to be hard.`,
+  lessons:[
+    "Leave at Watch and Act — not Emergency Warning — and this scene never happens",
+    "The time you spent inside was time the fire used to close from 2.4km to your driveway",
+    "A pre-packed emergency kit means the evacuation centre is a place to rest, not a place to start solving problems you could have solved in September",
+    "The 2009 Victorian Bushfires Royal Commission found inadequate planning and the tendency to wait until directly threatened were the major factors in late — and fatal — evacuation decisions"
+  ]},
+
+out_survivable_bathroom_escape:{
+  outcome:"survivable",
+  finalText:`You got out of the bathroom in time.
+
+The house caught fire four minutes after you left. The bathroom — the room you had planned to shelter in — was in the section of the house that burned first. The back eastern corner. Where the embers had been landing in the yard.
+
+The 2009 Victorian Bushfires Royal Commission examined the circumstances of 172 civilian deaths. Researchers identified a pattern of what they called "fatal flaw" fire plans. Plans where people sheltered in interior rooms with no windows and no exit. When the house caught fire, they had no way to know and no way to leave.
+
+You had the same plan. You recognised something was wrong in time.
+
+That recognition was not guaranteed.`,
+  lessons:[
+    "113 of 173 Black Saturday deaths occurred inside houses — passive interior sheltering is one of the most dangerous responses to a fast-moving fire",
+    "The Victorian Bushfires Royal Commission identified bathroom shelter as a documented fatal flaw: no window, no situational awareness, no escape route if the house ignites",
+    "A fire plan must include a way to monitor what is happening outside and a clear exit if the plan fails",
+    "Leave early — at Watch and Act or before — and the shelter-in-place decision never has to be made"
+  ]},
+
+out_critical_passive:{
+  outcome:"critical",
+  finalText:`The bathroom had no window.
+
+That was the plan — interior room, away from glass, seal the gaps. It sounded right. You had read it somewhere and it had felt like preparation.
+
+The 2009 Victorian Bushfires Royal Commission examined the circumstances surrounding each of the 172 civilian deaths on Black Saturday. 113 of those people died inside houses. Researchers reviewing the fatality data identified a pattern they called "fatal flaw" fire plans — plans that placed people in interior rooms with no way to know what was happening to the rest of the house and no way to escape when it caught fire.
+
+The bathroom: no window. No situational awareness. No exit when the back of the house ignited.
+
+You now know this. And knowing it — really knowing it, in a way that the words on a website do not quite convey — is the most valuable thing you can take from tonight.
+
+The most important thing this scenario wants you to do is to go to tools.survivalstorehouse.com/checklist.html and make a real plan. Not a bathroom plan. A plan with a bag by the door, a route to a rally point, and a decision made in advance about what Watch and Act means for your household.`,
+  lessons:[
+    "113 of 173 Black Saturday deaths occurred inside houses — the 2009 Victorian Bushfires Royal Commission called passive interior shelter one of the most dangerous responses to extreme fire",
+    "Bathroom shelter is a documented fatal flaw: no window means no situational awareness; no exit means no escape when the house ignites",
+    "A legitimate shelter-in-place position requires: a room you can monitor conditions from, a clear exit path, and a pre-agreed trigger for when to move",
+    "Leave early at Watch and Act — this is the recommendation of every major Australian bushfire inquiry since 2009. This scenario is why."
+  ]},
+
+out_critical_hose:{
+  outcome:"critical",
+  finalText:`A domestic hose cannot hold a fire front moving through 220 hectares in 72km/h gusts.
+
+This is not about courage. It takes genuine nerve to stand in your yard with a hose while embers fall around you. But the fire that moved through your street was carrying the energy of 220 hectares of burning bush behind it. The radiant heat alone at the fire front is enough to ignite exposed skin at 10 metres.
+
+The 2009 Victorian Bushfires Royal Commission examined 172 deaths. 26 people died defending a house or property. Many of them had prepared. Many of them had the right equipment. But the conditions on that day — as on Catastrophic days generally — exceeded what any household defence is designed for.
+
+The 2020 Royal Commission was explicit: the policy of "stay and defend or leave early" was developed for fires in manageable conditions. On a Catastrophic rating day, in a fast-moving grass fire with 72km/h gusts, no home can reliably be defended.
+
+The safest decision was made in September, not in the yard at 2:16am.`,
+  lessons:[
+    "The 2020 Royal Commission explicitly stated that hazard reduction and household defence are not effective in extreme fire conditions — 'it is not a panacea'",
+    "A Catastrophic fire danger rating means conditions in which no home can reliably be defended — the rating exists specifically to communicate this",
+    "26 of 172 Black Saturday deaths occurred while people were defending property — many of those people had prepared well and had the right equipment",
+    "Leave at Watch and Act — that is the finding of every major Australian bushfire inquiry. The hose is not the plan.",
+    "The Royal Commission found that 90% of buildings in bushfire prone areas have not been built to bushfire planning and construction regulations — the structure you are defending was most likely never rated to withstand this."
+  ]}
+
+  } // end scenes
+} // end bushfire,
 // ================================================================
 // CYCLONE — CAIRNS QLD
 // Hidden path: Skip securing yard, go straight to shelter very early = perfect outcome
