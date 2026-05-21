@@ -14,6 +14,7 @@
     --mu: rgba(255,255,255,0.5);
     --tr: all 0.2s cubic-bezier(0.4,0,0.2,1);
     --red: #e03030; --amber: #f0a500; --green: #52b788;
+    --blue: #3b8bd4; --blue-dim: rgba(59,139,212,.15); --blue-border: rgba(59,139,212,.35);
   }
   html { scroll-behavior: smooth; }
   body { font-family: 'Barlow', sans-serif; background: var(--gd); color: #fff; min-height: 100vh; overflow-x: hidden; }
@@ -41,14 +42,28 @@
   .state-btn:hover { border-color: rgba(255,255,255,.3); color: #fff; }
   .state-btn.active { border-color: var(--or); color: var(--or); background: rgba(200,90,0,.1); }
 
-  /* ALERT BANNER */
-  .alert-banner { display: none; background: rgba(224,48,48,.1); border: 1.5px solid rgba(224,48,48,.4); border-radius: 8px; padding: 14px 20px; margin-bottom: 24px; }
+  /* ALERT BANNERS */
+  .alert-banner { display: none; border-radius: 8px; padding: 14px 20px; margin-bottom: 16px; }
   .alert-banner.show { display: flex; align-items: center; gap: 12px; }
   .alert-icon { font-size: 24px; flex-shrink: 0; }
   .alert-text { font-size: 14px; color: rgba(255,255,255,.85); line-height: 1.5; flex: 1; }
   .alert-text strong { color: #fff; }
   .alert-link { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--red); text-decoration: none; white-space: nowrap; }
   .alert-link:hover { text-decoration: underline; }
+
+  /* amber alert */
+  .alert-banner.amber { background: rgba(224,48,48,.1); border: 1.5px solid rgba(224,48,48,.4); margin-bottom: 16px; }
+
+  /* AusAlert blue banner */
+  .alert-banner.ausalert { background: var(--blue-dim); border: 1.5px solid var(--blue-border); margin-bottom: 24px; align-items: flex-start; }
+  .alert-banner.ausalert .alert-text { font-size: 13px; }
+  .alert-banner.ausalert .alert-link { color: var(--blue); }
+  .ausalert-actions { display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+  .ausalert-btn { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; padding: 5px 12px; border-radius: 4px; transition: var(--tr); }
+  .ausalert-btn.primary { background: rgba(59,139,212,.2); border: 1px solid rgba(59,139,212,.5); color: var(--blue); }
+  .ausalert-btn.primary:hover { background: rgba(59,139,212,.35); }
+  .ausalert-btn.secondary { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.15); color: rgba(255,255,255,.65); }
+  .ausalert-btn.secondary:hover { background: rgba(255,255,255,.1); color: #fff; }
 
   /* GRID */
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 28px; }
@@ -59,19 +74,20 @@
   .card-top { padding: 16px 18px 14px; border-bottom: 1px solid rgba(255,255,255,.06); }
   .card-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
   .card-type { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
-  .card-type.fire { background: rgba(224,85,32,.15); color: #e05520; }
-  .card-type.flood { background: rgba(59,139,212,.15); color: #3b8bd4; }
+  .card-type.fire    { background: rgba(224,85,32,.15);  color: #e05520; }
+  .card-type.flood   { background: rgba(59,139,212,.15); color: #3b8bd4; }
   .card-type.weather { background: rgba(123,94,167,.15); color: #9b7ec7; }
-  .card-type.cyclone { background: rgba(200,90,0,.15); color: #c85a00; }
-  .card-type.all { background: rgba(82,183,136,.15); color: #52b788; }
-  .card-type.fuel { background: rgba(240,165,0,.15); color: #f0a500; }
+  .card-type.cyclone { background: rgba(200,90,0,.15);   color: #c85a00; }
+  .card-type.all     { background: rgba(82,183,136,.15); color: #52b788; }
+  .card-type.fuel    { background: rgba(240,165,0,.15);  color: #f0a500; }
+  .card-type.new     { background: rgba(59,139,212,.2);  color: #5ba8e0; border: 1px solid rgba(59,139,212,.3); }
   .card-state { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; color: var(--mu); letter-spacing: .06em; }
   .card-title { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1.1; margin-bottom: 4px; }
   .card-desc { font-size: 12px; font-weight: 300; color: var(--mu); line-height: 1.5; }
   .card-bottom { padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .card-status { display: flex; align-items: center; gap: 7px; font-size: 12px; color: rgba(255,255,255,.65); }
   .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .status-dot.live { background: var(--green); animation: pulse 2s ease infinite; }
+  .status-dot.live     { background: var(--green); animation: pulse 2s ease infinite; }
   .status-dot.official { background: var(--gb); }
   .card-link { display: inline-flex; align-items: center; gap: 5px; padding: 7px 14px; background: rgba(200,90,0,.12); border: 1px solid rgba(200,90,0,.3); border-radius: 5px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--or); text-decoration: none; transition: var(--tr); white-space: nowrap; }
   .card-link:hover { background: rgba(200,90,0,.22); }
@@ -100,16 +116,15 @@
   .disclaimer { margin-top: 32px; font-size: 11px; color: rgba(255,255,255,.3); line-height: 1.7; text-align: center; }
   .disclaimer a { color: rgba(255,255,255,.45); }
 
-  /* Cards visible by default */
-  .card[data-states] { display: block; }
-
   @media (max-width: 500px) {
     .grid { grid-template-columns: 1fr; }
     .app-section { flex-direction: column; }
+    .alert-banner.show { flex-wrap: wrap; }
   }
 </style>
 </head>
 <body>
+
   <!-- TOOLS NAV -->
   <div style="background:rgba(0,0,0,.25);border-bottom:1px solid rgba(255,255,255,.07);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:relative;z-index:10;">
     <a href="https://tools.survivalstorehouse.com" style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#52b788;text-decoration:none;">← All Tools</a>
@@ -122,341 +137,391 @@
       <a href="https://survivalstorehouse.com" style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);text-decoration:none;">Shop →</a>
     </div>
   </div>
-<div class="wrap">
 
-  <div class="hdr">
-    <div class="hdr-brand">Survival Storehouse Australia — Est. 2009</div>
-    <h1 class="hdr-title">Australian<br><span>Emergency</span> Dashboard</h1>
-    <p class="hdr-sub">Every official Australian emergency warning and incident source in one place. Updated in real time by the authoritative agencies.</p>
-  </div>
+  <div class="wrap">
 
-  <div class="live-bar">
-    <div class="live-pill">
-      <div class="live-dot"></div>
-      <div class="live-text">Links to live official sources</div>
+    <div class="hdr">
+      <div class="hdr-brand">Survival Storehouse Australia — Est. 2009</div>
+      <h1 class="hdr-title">Australian<br><span>Emergency</span> Dashboard</h1>
+      <p class="hdr-sub">Every official Australian emergency warning and incident source in one place. Updated in real time by the authoritative agencies.</p>
     </div>
-    <div class="updated" id="updated-time">Loading current time...</div>
-  </div>
 
-  <!-- STATE FILTER -->
-  <div class="state-bar">
-    <button class="state-btn active" onclick="filterState('all',this)">All States</button>
-    <button class="state-btn" onclick="filterState('NSW',this)">NSW</button>
-    <button class="state-btn" onclick="filterState('VIC',this)">VIC</button>
-    <button class="state-btn" onclick="filterState('QLD',this)">QLD</button>
-    <button class="state-btn" onclick="filterState('WA',this)">WA</button>
-    <button class="state-btn" onclick="filterState('SA',this)">SA</button>
-    <button class="state-btn" onclick="filterState('TAS',this)">TAS</button>
-    <button class="state-btn" onclick="filterState('NT',this)">NT</button>
-    <button class="state-btn" onclick="filterState('NAT',this)">National</button>
-  </div>
-
-  <!-- ALERT BANNER — shown during active emergencies -->
-  <div class="alert-banner show" id="alert-banner">
-    <div class="alert-icon">⚠️</div>
-    <div class="alert-text"><strong>Active emergency period — April 2026.</strong> Fuel shortage recovery ongoing. Cyclone Narelle recovery active in QLD, NT and WA. Check official sources below for your area.</div>
-    <a href="https://www.emergency.gov.au" class="alert-link" target="_blank">National Alert →</a>
-  </div>
-
-  <!-- SOURCE CARDS -->
-  <div class="grid" id="cards-grid">
-
-    <!-- NATIONAL -->
-    <div class="card" data-states="NAT">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type all">National</span><span class="card-state">All States</span></div>
-        <div class="card-title">Australia.gov.au Emergency</div>
-        <div class="card-desc">Official Australian Government emergency hub — all national alerts, disaster declarations and emergency contacts.</div>
+    <div class="live-bar">
+      <div class="live-pill">
+        <div class="live-dot"></div>
+        <div class="live-text">Links to live official sources</div>
       </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot official"></div>Official source</div>
-        <a href="https://www.australia.gov.au/content/emergencies" class="card-link" target="_blank">Open →</a>
+      <div class="updated" id="updated-time">Loading current time...</div>
+    </div>
+
+    <!-- STATE FILTER -->
+    <div class="state-bar">
+      <button class="state-btn active" onclick="filterState('all',this)">All States</button>
+      <button class="state-btn" onclick="filterState('NSW',this)">NSW</button>
+      <button class="state-btn" onclick="filterState('VIC',this)">VIC</button>
+      <button class="state-btn" onclick="filterState('QLD',this)">QLD</button>
+      <button class="state-btn" onclick="filterState('WA',this)">WA</button>
+      <button class="state-btn" onclick="filterState('SA',this)">SA</button>
+      <button class="state-btn" onclick="filterState('TAS',this)">TAS</button>
+      <button class="state-btn" onclick="filterState('NT',this)">NT</button>
+      <button class="state-btn" onclick="filterState('ACT',this)">ACT</button>
+      <button class="state-btn" onclick="filterState('NAT',this)">National</button>
+    </div>
+
+    <!-- ACTIVE CONDITIONS BANNER -->
+    <div class="alert-banner amber show">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-text"><strong>Active conditions — May 2026.</strong> Cyclone Narelle recovery ongoing in QLD, NT and WA. National fuel shortage — supply disruptions continue in some regions. Check official sources below for your area.</div>
+      <a href="https://www.nema.gov.au" class="alert-link" target="_blank" rel="noopener">National Alert →</a>
+    </div>
+
+    <!-- AUSALERT BANNER -->
+    <div class="alert-banner ausalert show">
+      <div class="alert-icon">📱</div>
+      <div class="alert-text">
+        <strong>New — AusAlert launches October 2026.</strong> Australia's new national emergency warning system uses cell-broadcast technology to reach every compatible phone within 160m of a tower — even when mobile networks are congested, replacing the old SMS system. <strong>National test: Monday 27 July 2026 at 2pm AEST.</strong> Every compatible phone in Australia will receive a test alert. No action needed — it is a test.
+        <div class="ausalert-actions">
+          <a href="https://www.ausalert.gov.au" target="_blank" rel="noopener" class="ausalert-btn primary">About AusAlert →</a>
+          <a href="https://wiki.survivalstorehouse.com/wiki/AusAlert_and_the_Australian_Warning_System" target="_blank" rel="noopener" class="ausalert-btn secondary">Wiki guide →</a>
+        </div>
       </div>
     </div>
 
-    <div class="card" data-states="NAT">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type weather">Weather</span><span class="card-state">National</span></div>
-        <div class="card-title">BOM National Warnings</div>
-        <div class="card-desc">Bureau of Meteorology — all active weather warnings across Australia including cyclones, severe storms, floods and heatwaves.</div>
+    <!-- SOURCE CARDS -->
+    <div class="grid" id="cards-grid">
+
+      <!-- NATIONAL -->
+      <div class="card" data-states="NAT">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type new">New 2026</span><span class="card-state">National</span></div>
+          <div class="card-title">AusAlert</div>
+          <div class="card-desc">Australia's new cell-broadcast emergency warning system — reaches every compatible phone within 160m of a tower simultaneously, even when networks are congested. Replaces the old SMS system. Fully operational October 2026.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot official"></div>Official — NEMA</div>
+          <a href="https://www.ausalert.gov.au" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
       </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live updates</div>
-        <a href="https://www.bom.gov.au/australia/warnings/" class="card-link" target="_blank">Open →</a>
+
+      <div class="card" data-states="NAT">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type all">National</span><span class="card-state">All States</span></div>
+          <div class="card-title">HazardWatch</div>
+          <div class="card-desc">National hazard warnings portal — view warnings issued by Australian emergency services across all states and territories in one map.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live warnings</div>
+          <a href="https://www.hazardwatch.gov.au" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <div class="card" data-states="NAT">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type all">National</span><span class="card-state">All States</span></div>
+          <div class="card-title">Australia.gov.au Emergency</div>
+          <div class="card-desc">Official Australian Government emergency hub — all national alerts, disaster declarations and emergency contacts.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot official"></div>Official source</div>
+          <a href="https://www.australia.gov.au/content/emergencies" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <div class="card" data-states="NAT">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type weather">Weather</span><span class="card-state">National</span></div>
+          <div class="card-title">BOM National Warnings</div>
+          <div class="card-desc">Bureau of Meteorology — all active weather warnings across Australia including cyclones, severe storms, floods and heatwaves.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live updates</div>
+          <a href="https://www.bom.gov.au/australia/warnings/" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <div class="card" data-states="NAT">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type all">National</span><span class="card-state">All States</span></div>
+          <div class="card-title">NEMA — National Emergency</div>
+          <div class="card-desc">National Emergency Management Agency — federal disaster declarations, national coordination and recovery updates.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot official"></div>Official source</div>
+          <a href="https://www.nema.gov.au" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <div class="card" data-states="NAT">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type fuel">Fuel</span><span class="card-state">National</span></div>
+          <div class="card-title">PetrolSpy</div>
+          <div class="card-desc">Real-time fuel availability and pricing across Australia. Essential during supply disruptions to find stations with stock.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live updates</div>
+          <a href="https://www.petrolspy.com.au" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <div class="card" data-states="NAT">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type fuel">Fuel</span><span class="card-state">National</span></div>
+          <div class="card-title">FuelMap Australia</div>
+          <div class="card-desc">Live fuel availability map across Australia. During supply crises, shows which stations have stock before you drive there.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live updates</div>
+          <a href="https://www.fuelmap.com.au" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <!-- NSW -->
+      <div class="card" data-states="NSW">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type all">All Hazards</span><span class="card-state">NSW</span></div>
+          <div class="card-title">Hazards Near Me NSW</div>
+          <div class="card-desc">Official NSW Government app and web portal — bushfire, flood and tsunami warnings in one place. Set up Watch Zones for your home, workplace and school.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live updates</div>
+          <a href="https://www.rfs.nsw.gov.au/fire-information/fires-near-me" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <div class="card" data-states="NSW">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type fire">Bushfire</span><span class="card-state">NSW</span></div>
+          <div class="card-title">NSW RFS — Fires Near Me</div>
+          <div class="card-desc">NSW Rural Fire Service live fire incident map. All active bushfires, hazard reductions and emergency warnings across NSW.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live incidents</div>
+          <a href="https://www.rfs.nsw.gov.au/fire-information/fires-near-me" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <div class="card" data-states="NSW">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type flood">Flood</span><span class="card-state">NSW</span></div>
+          <div class="card-title">NSW SES Warnings</div>
+          <div class="card-desc">NSW State Emergency Service — active flood, storm and tsunami warnings. Evacuation orders and shelter-in-place advice.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live warnings</div>
+          <a href="https://www.ses.nsw.gov.au/news/warnings" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <!-- VIC -->
+      <div class="card" data-states="VIC">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type all">All Hazards</span><span class="card-state">VIC</span></div>
+          <div class="card-title">VicEmergency</div>
+          <div class="card-desc">Victoria's official emergency hub — live incident map, warnings and evacuation orders for bushfire, flood, storm and more.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live incidents</div>
+          <a href="https://emergency.vic.gov.au" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <!-- QLD -->
+      <div class="card" data-states="QLD">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type all">All Hazards</span><span class="card-state">QLD</span></div>
+          <div class="card-title">QLD Disaster Management</div>
+          <div class="card-desc">Queensland Government disaster dashboard — active warnings, evacuation orders, road closures and recovery updates by local government area.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live updates</div>
+          <a href="https://www.disaster.qld.gov.au" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <div class="card" data-states="QLD">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type fire">Bushfire</span><span class="card-state">QLD</span></div>
+          <div class="card-title">QLD Fire Department</div>
+          <div class="card-desc">Queensland Fire Department — current bushfire warnings and incidents across Queensland.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live incidents</div>
+          <a href="https://www.fire.qld.gov.au/Current-Incidents" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <div class="card" data-states="QLD">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type flood">Flood</span><span class="card-state">QLD</span></div>
+          <div class="card-title">QLD Flood Updates</div>
+          <div class="card-desc">Queensland SES and BOM flood warnings, road closures and river height data for Queensland communities.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live warnings</div>
+          <a href="https://www.ses.qld.gov.au/news-media/current-warnings" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <!-- WA -->
+      <div class="card" data-states="WA">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type all">All Hazards</span><span class="card-state">WA</span></div>
+          <div class="card-title">Emergency WA</div>
+          <div class="card-desc">Western Australia's official emergency warnings portal — bushfire, cyclone, storm, flood and tsunami warnings for all WA regions.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live incidents</div>
+          <a href="https://www.emergency.wa.gov.au" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <div class="card" data-states="WA">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type cyclone">Cyclone</span><span class="card-state">WA</span></div>
+          <div class="card-title">BOM WA Cyclone Tracker</div>
+          <div class="card-desc">Bureau of Meteorology Western Australia cyclone tracking — active systems, predicted paths and wind warning zones.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live tracking</div>
+          <a href="https://www.bom.gov.au/cyclone/about/western.shtml" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <div class="card" data-states="WA">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type fuel">Fuel</span><span class="card-state">WA</span></div>
+          <div class="card-title">FuelWatch WA</div>
+          <div class="card-desc">Western Australia Government fuel price and availability monitoring. Updated daily — essential during fuel shortages.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot official"></div>Official — WA Govt</div>
+          <a href="https://www.fuelwatch.wa.gov.au" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <!-- SA — URL fixed to alertsa.com.au -->
+      <div class="card" data-states="SA">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type all">All Hazards</span><span class="card-state">SA</span></div>
+          <div class="card-title">Alert SA</div>
+          <div class="card-desc">South Australia's official emergency warning platform managed by SAFECOM — CFS bushfire warnings, SES flood and storm alerts for all SA communities.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live warnings</div>
+          <a href="https://www.alertsa.com.au" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <!-- TAS -->
+      <div class="card" data-states="TAS">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type all">All Hazards</span><span class="card-state">TAS</span></div>
+          <div class="card-title">TasAlert</div>
+          <div class="card-desc">Tasmania's official emergency alert system — active bushfire, flood and severe weather warnings for all Tasmanian regions.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live warnings</div>
+          <a href="https://www.tasalert.com.au" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <!-- NT -->
+      <div class="card" data-states="NT">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type cyclone">All Hazards</span><span class="card-state">NT</span></div>
+          <div class="card-title">NT Emergency Services</div>
+          <div class="card-desc">Northern Territory Emergency Services — cyclone warnings, flood alerts and emergency contacts for all NT communities.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live warnings</div>
+          <a href="https://securent.nt.gov.au/warnings" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <div class="card" data-states="NT QLD WA">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type cyclone">Cyclone</span><span class="card-state">NT · QLD · WA</span></div>
+          <div class="card-title">BOM Cyclone Tracker</div>
+          <div class="card-desc">Bureau of Meteorology national cyclone tracking — all active systems in Australian waters with predicted paths and intensity forecasts.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live tracking</div>
+          <a href="https://www.bom.gov.au/cyclone/" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+      <!-- ACT — new -->
+      <div class="card" data-states="ACT">
+        <div class="card-top">
+          <div class="card-meta"><span class="card-type all">All Hazards</span><span class="card-state">ACT</span></div>
+          <div class="card-title">ACT Emergency Services Agency</div>
+          <div class="card-desc">ACT Emergency Services Agency — active incident warnings, bushfire alerts and flood information for the Australian Capital Territory.</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-status"><div class="status-dot live"></div>Live warnings</div>
+          <a href="https://www.esa.act.gov.au" class="card-link" target="_blank" rel="noopener">Open →</a>
+        </div>
+      </div>
+
+    </div><!-- /grid -->
+
+    <!-- APP CALLOUT -->
+    <div class="app-section">
+      <div class="app-icon">📲</div>
+      <div class="app-content">
+        <div class="app-title">No signal? The Survival Storehouse App works offline</div>
+        <div class="app-text">When emergencies hit, networks fail first. The Survival Storehouse App caches survival guides, maps and emergency plans to your phone — accessible without internet or mobile signal. Download before you need it.</div>
+      </div>
+      <div class="app-links">
+        <a href="https://apps.apple.com/us/app/survival-storehouse/id6744917490" class="app-link" target="_blank" rel="noopener">App Store</a>
+        <a href="https://play.google.com/store/apps/details?id=com.mycompany.survivalstorehouse" class="app-link" target="_blank" rel="noopener">Google Play</a>
       </div>
     </div>
 
-    <div class="card" data-states="NAT">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type all">National</span><span class="card-state">All States</span></div>
-        <div class="card-title">NEMA — National Emergency</div>
-        <div class="card-desc">National Emergency Management Agency — federal disaster declarations, national coordination and recovery updates.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot official"></div>Official source</div>
-        <a href="https://www.nema.gov.au" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <div class="card" data-states="NAT">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type fuel">Fuel</span><span class="card-state">National</span></div>
-        <div class="card-title">GasBuddy / PetrolSpy</div>
-        <div class="card-desc">Real-time fuel availability and pricing across Australia. Essential during supply disruptions to find stations with stock.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live updates</div>
-        <a href="https://www.petrolspy.com.au" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <!-- NSW -->
-    <div class="card" data-states="NSW">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type fire">Bushfire</span><span class="card-state">NSW</span></div>
-        <div class="card-title">NSW RFS — Fires Near Me</div>
-        <div class="card-desc">NSW Rural Fire Service live fire incident map. All active bushfires, hazard reductions and emergency warnings across NSW.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live incidents</div>
-        <a href="https://www.rfs.nsw.gov.au/fire-information/fires-near-me" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <div class="card" data-states="NSW">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type flood">Flood</span><span class="card-state">NSW</span></div>
-        <div class="card-title">NSW SES Warnings</div>
-        <div class="card-desc">NSW State Emergency Service — active flood, storm and tsunami warnings. Evacuation orders and shelter-in-place advice.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live warnings</div>
-        <a href="https://www.ses.nsw.gov.au/news/warnings" class="card-link" target="_blank">Open →</a>
+    <!-- PREPAREDNESS LINKS -->
+    <div class="prep-section">
+      <div class="prep-title">Prepare before the next emergency</div>
+      <div class="prep-grid">
+        <a href="https://survivalstorehouse.com/72-hour-checklist" class="prep-card">
+          <div class="prep-card-icon">✅</div>
+          <div class="prep-card-title">72-Hour Checklist</div>
+          <div class="prep-card-desc">See your preparedness score and print your results</div>
+        </a>
+        <a href="https://survivalstorehouse.com/kit-finder" class="prep-card">
+          <div class="prep-card-icon">🎯</div>
+          <div class="prep-card-title">Kit Finder</div>
+          <div class="prep-card-desc">4 questions — personalised kit recommendation</div>
+        </a>
+        <a href="https://survivalstorehouse.com/disaster-history" class="prep-card">
+          <div class="prep-card-icon">📅</div>
+          <div class="prep-card-title">Disaster History</div>
+          <div class="prep-card-desc">Every major Australian emergency since 2000</div>
+        </a>
+        <a href="https://wiki.survivalstorehouse.com" class="prep-card">
+          <div class="prep-card-icon">📖</div>
+          <div class="prep-card-title">Survival Wiki</div>
+          <div class="prep-card-desc">195+ Australian survival guides — free and offline</div>
+        </a>
+        <a href="https://survivalstorehouse.com/shop-1/ols/products/battle-box-long-term-survival-kit-in-authentic-military-ammo-tin" class="prep-card">
+          <div class="prep-card-icon">🎒</div>
+          <div class="prep-card-title">Battle Box</div>
+          <div class="prep-card-desc">Complete 72-hour emergency kit — $150 delivered</div>
+        </a>
+        <a href="https://survivalstorehouse.com/shop-1" class="prep-card">
+          <div class="prep-card-icon">🛒</div>
+          <div class="prep-card-title">Shop All Kits</div>
+          <div class="prep-card-desc">Battle Box, Ready Kit, Tactical Tin, Biscuits</div>
+        </a>
       </div>
     </div>
 
-    <div class="card" data-states="NSW">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type all">All Hazards</span><span class="card-state">NSW</span></div>
-        <div class="card-title">Hazards Near Me NSW</div>
-        <div class="card-desc">Official NSW Government app and web portal — bushfire, flood and tsunami warnings in one place. Formerly Fires Near Me.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live updates</div>
-        <a href="https://www.hazardsnearme.com.au" class="card-link" target="_blank">Open →</a>
-      </div>
+    <div class="disclaimer">
+      This dashboard links to official Australian Government emergency services. Survival Storehouse is not affiliated with any government agency.<br>
+      Always follow advice from your local emergency services. In an emergency call <strong>000</strong>.<br>
+      <a href="https://survivalstorehouse.com">survivalstorehouse.com</a> · Australian owned since 2009 · Erina, NSW Central Coast
     </div>
 
-    <!-- VIC -->
-    <div class="card" data-states="VIC">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type all">All Hazards</span><span class="card-state">VIC</span></div>
-        <div class="card-title">VicEmergency</div>
-        <div class="card-desc">Victoria's official emergency hub — live incident map, warnings and evacuation orders for bushfire, flood, storm and more.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live incidents</div>
-        <a href="https://emergency.vic.gov.au" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <!-- QLD -->
-    <div class="card" data-states="QLD">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type all">All Hazards</span><span class="card-state">QLD</span></div>
-        <div class="card-title">QLD Disaster Management</div>
-        <div class="card-desc">Queensland Government disaster dashboard — active warnings, evacuation orders, road closures and recovery updates by local government area.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live updates</div>
-        <a href="https://www.disaster.qld.gov.au" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <div class="card" data-states="QLD">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type fire">Bushfire</span><span class="card-state">QLD</span></div>
-        <div class="card-title">QLD Fire Department</div>
-        <div class="card-desc">Queensland Fire Department — current bushfire warnings and incidents across Queensland.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live incidents</div>
-        <a href="https://www.fire.qld.gov.au/Current-Incidents" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <div class="card" data-states="QLD">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type flood">Flood</span><span class="card-state">QLD</span></div>
-        <div class="card-title">QLD Flood Updates</div>
-        <div class="card-desc">Queensland SES and BOM flood warnings, road closures and river height data for Queensland communities.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live warnings</div>
-        <a href="https://www.ses.qld.gov.au/news-media/current-warnings" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <!-- WA -->
-    <div class="card" data-states="WA">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type all">All Hazards</span><span class="card-state">WA</span></div>
-        <div class="card-title">Emergency WA</div>
-        <div class="card-desc">Western Australia's official emergency warnings portal — bushfire, cyclone, storm, flood and tsunami warnings for all WA regions.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live incidents</div>
-        <a href="https://www.emergency.wa.gov.au" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <div class="card" data-states="WA">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type cyclone">Cyclone</span><span class="card-state">WA</span></div>
-        <div class="card-title">BOM WA Cyclone Tracker</div>
-        <div class="card-desc">Bureau of Meteorology Western Australia cyclone tracking — active systems, predicted paths and wind warning zones.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live tracking</div>
-        <a href="https://www.bom.gov.au/cyclone/about/western.shtml" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <!-- SA -->
-    <div class="card" data-states="SA">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type all">All Hazards</span><span class="card-state">SA</span></div>
-        <div class="card-title">SA Emergency Warnings</div>
-        <div class="card-desc">South Australia emergency warning system — CFS bushfire warnings, SES flood and storm alerts for all SA communities.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live warnings</div>
-        <a href="https://www.emergencySA.com.au" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <!-- TAS -->
-    <div class="card" data-states="TAS">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type all">All Hazards</span><span class="card-state">TAS</span></div>
-        <div class="card-title">TasAlert</div>
-        <div class="card-desc">Tasmania's official emergency alert system — active bushfire, flood and severe weather warnings for all Tasmanian regions.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live warnings</div>
-        <a href="https://www.tasalert.com.au" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <!-- NT -->
-    <div class="card" data-states="NT">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type cyclone">Cyclone</span><span class="card-state">NT</span></div>
-        <div class="card-title">NT Emergency Services</div>
-        <div class="card-desc">Northern Territory Emergency Services — cyclone warnings, flood alerts and emergency contacts for all NT communities.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live warnings</div>
-        <a href="https://securent.nt.gov.au/warnings" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <div class="card" data-states="NT QLD WA">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type cyclone">Cyclone</span><span class="card-state">NT · QLD · WA</span></div>
-        <div class="card-title">BOM Cyclone Tracker</div>
-        <div class="card-desc">Bureau of Meteorology national cyclone tracking — all active systems in Australian waters with predicted paths and intensity forecasts.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live tracking</div>
-        <a href="https://www.bom.gov.au/cyclone/" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <!-- APPS -->
-    <div class="card" data-states="NAT">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type fuel">Fuel</span><span class="card-state">National</span></div>
-        <div class="card-title">FuelMap Australia</div>
-        <div class="card-desc">Live fuel availability map across Australia. During supply crises, shows which stations have stock before you drive there.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot live"></div>Live updates</div>
-        <a href="https://www.fuelmap.com.au" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-    <div class="card" data-states="WA">
-      <div class="card-top">
-        <div class="card-meta"><span class="card-type fuel">Fuel</span><span class="card-state">WA</span></div>
-        <div class="card-title">FuelWatch WA</div>
-        <div class="card-desc">Western Australia Government fuel price and availability monitoring. Updated daily — essential during fuel shortages.</div>
-      </div>
-      <div class="card-bottom">
-        <div class="card-status"><div class="status-dot official"></div>Official — WA Govt</div>
-        <a href="https://www.fuelwatch.wa.gov.au" class="card-link" target="_blank">Open →</a>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- APP CALLOUT -->
-  <div class="app-section">
-    <div class="app-icon">📲</div>
-    <div class="app-content">
-      <div class="app-title">No signal? The Survival Storehouse App works offline</div>
-      <div class="app-text">When emergencies hit, networks fail first. The Survival Storehouse App caches survival guides, maps and emergency plans to your phone — accessible without internet or mobile signal. Download before you need it.</div>
-    </div>
-    <div class="app-links">
-      <a href="https://apps.apple.com/us/app/survival-storehouse/id6744917490" class="app-link" target="_blank">App Store</a>
-      <a href="https://play.google.com/store/apps/details?id=com.mycompany.survivalstorehouse" class="app-link" target="_blank">Google Play</a>
-    </div>
-  </div>
-
-  <!-- PREPAREDNESS LINKS -->
-  <div class="prep-section">
-    <div class="prep-title">Prepare before the next emergency</div>
-    <div class="prep-grid">
-      <a href="https://survivalstorehouse.com/72-hour-checklist" class="prep-card">
-        <div class="prep-card-icon">✅</div>
-        <div class="prep-card-title">72-Hour Checklist</div>
-        <div class="prep-card-desc">See your preparedness score and print your results</div>
-      </a>
-      <a href="https://survivalstorehouse.com/kit-finder" class="prep-card">
-        <div class="prep-card-icon">🎯</div>
-        <div class="prep-card-title">Kit Finder</div>
-        <div class="prep-card-desc">4 questions — personalised kit recommendation</div>
-      </a>
-      <a href="https://survivalstorehouse.com/disaster-history" class="prep-card">
-        <div class="prep-card-icon">📅</div>
-        <div class="prep-card-title">Disaster History</div>
-        <div class="prep-card-desc">Every major Australian emergency since 2000</div>
-      </a>
-      <a href="https://wiki.survivalstorehouse.com" class="prep-card">
-        <div class="prep-card-icon">📖</div>
-        <div class="prep-card-title">Survival Wiki</div>
-        <div class="prep-card-desc">170+ Australian survival guides — free and offline</div>
-      </a>
-      <a href="https://survivalstorehouse.com/shop-1/ols/products/battle-box-long-term-survival-kit-in-authentic-military-ammo-tin" class="prep-card">
-        <div class="prep-card-icon">🎒</div>
-        <div class="prep-card-title">Battle Box</div>
-        <div class="prep-card-desc">Complete 72-hour emergency kit — $150 delivered</div>
-      </a>
-      <a href="https://survivalstorehouse.com/shop-1" class="prep-card">
-        <div class="prep-card-icon">🛒</div>
-        <div class="prep-card-title">Shop All Kits</div>
-        <div class="prep-card-desc">Battle Box, Ready Kit, Tactical Tin, Biscuits</div>
-      </a>
-    </div>
-  </div>
-
-  <div class="disclaimer">
-    This dashboard links to official Australian Government emergency services. Survival Storehouse is not affiliated with any government agency.<br>
-    Always follow advice from your local emergency services. In an emergency call <strong>000</strong>.<br>
-    <a href="https://survivalstorehouse.com">survivalstorehouse.com</a> · Australian owned since 2009 · Erina, NSW Central Coast
-  </div>
-
-</div>
+  </div><!-- /wrap -->
 
 <script>
   // Update time
