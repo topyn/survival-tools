@@ -229,9 +229,8 @@ input,select,textarea{font-family:inherit}
     <div class="prog-step active" data-step="1"><div class="prog-dot">1</div><div class="prog-label">Household</div></div>
     <div class="prog-step" data-step="2"><div class="prog-dot">2</div><div class="prog-label">Hazards</div></div>
     <div class="prog-step" data-step="3"><div class="prog-dot">3</div><div class="prog-label">Needs</div></div>
-    <div class="prog-step" data-step="4"><div class="prog-dot">4</div><div class="prog-label">Contacts</div></div>
-    <div class="prog-step" data-step="5"><div class="prog-dot">5</div><div class="prog-label">Rally Points</div></div>
-    <div class="prog-step" data-step="6"><div class="prog-dot">6</div><div class="prog-label">Generate</div></div>
+    <div class="prog-step" data-step="4"><div class="prog-dot">4</div><div class="prog-label">Rally Points</div></div>
+    <div class="prog-step" data-step="5"><div class="prog-dot">5</div><div class="prog-label">Generate</div></div>
   </div>
 
   <!-- STEP 1: HOUSEHOLD -->
@@ -387,58 +386,10 @@ input,select,textarea{font-family:inherit}
     </div>
   </div>
 
-  <!-- STEP 4: CONTACTS -->
+  <!-- STEP 4: RALLY POINTS -->
+
   <div class="step" id="step-4">
-    <div class="step-eyebrow">Step 4 of 6</div>
-    <h1 class="step-title">Emergency Contacts</h1>
-    <p class="step-desc">Add three household emergency contacts, plus one out-of-area coordinator. Research consistently shows you need someone outside the affected zone as a central contact point.</p>
-
-    <div class="contact-card">
-      <div class="contact-card-title">Contact 1</div>
-      <div class="field-row">
-        <div class="field"><label class="field-label">Name</label><input class="field-input" id="c1name" type="text" placeholder="Full name"></div>
-        <div class="field"><label class="field-label">Phone</label><input class="field-input" id="c1phone" type="tel" placeholder="04xx xxx xxx"></div>
-      </div>
-      <div class="field"><label class="field-label">Relationship</label><input class="field-input" id="c1rel" type="text" placeholder="e.g. Partner, Parent, Neighbour"></div>
-    </div>
-
-    <div class="contact-card">
-      <div class="contact-card-title">Contact 2</div>
-      <div class="field-row">
-        <div class="field"><label class="field-label">Name</label><input class="field-input" id="c2name" type="text" placeholder="Full name"></div>
-        <div class="field"><label class="field-label">Phone</label><input class="field-input" id="c2phone" type="tel" placeholder="04xx xxx xxx"></div>
-      </div>
-      <div class="field"><label class="field-label">Relationship</label><input class="field-input" id="c2rel" type="text" placeholder="e.g. Parent, Sibling, Friend"></div>
-    </div>
-
-    <div class="contact-card">
-      <div class="contact-card-title">Contact 3</div>
-      <div class="field-row">
-        <div class="field"><label class="field-label">Name</label><input class="field-input" id="c3name" type="text" placeholder="Full name"></div>
-        <div class="field"><label class="field-label">Phone</label><input class="field-input" id="c3phone" type="tel" placeholder="04xx xxx xxx"></div>
-      </div>
-      <div class="field"><label class="field-label">Relationship</label><input class="field-input" id="c3rel" type="text" placeholder="e.g. Sibling, Friend, Neighbour"></div>
-    </div>
-
-    <div class="contact-card" style="border-color:rgba(200,90,0,.25);">
-      <div class="contact-card-title" style="color:var(--gl)">Out-of-Area Coordinator</div>
-      <p style="font-size:13px;color:var(--dim);margin-bottom:14px;line-height:1.5">Someone who lives well outside your region — they become the central contact point if your household gets separated. Everyone calls this person first.</p>
-      <div class="field-row">
-        <div class="field"><label class="field-label">Name</label><input class="field-input" id="ooacname" type="text" placeholder="Full name"></div>
-        <div class="field"><label class="field-label">Phone</label><input class="field-input" id="ooacphone" type="tel" placeholder="Their number"></div>
-      </div>
-      <div class="field"><label class="field-label">Their location (city/town)</label><input class="field-input" id="ooacloc" type="text" placeholder="e.g. Melbourne, VIC"></div>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn-back" onclick="goStep(3)">← Back</button>
-      <button class="btn-next" onclick="goStep(5)">Next → Rally Points</button>
-    </div>
-  </div>
-
-  <!-- STEP 5: RALLY POINTS -->
-  <div class="step" id="step-5">
-    <div class="step-eyebrow">Step 5 of 6</div>
+    <div class="step-eyebrow">Step 4 of 5</div>
     <h1 class="step-title">Rally Points</h1>
     <p class="step-desc">Two places your household will meet if you get separated. Choose them now — not during an emergency.</p>
 
@@ -475,14 +426,14 @@ input,select,textarea{font-family:inherit}
     </div>
 
     <div class="btn-row">
-      <button class="btn-back" onclick="goStep(4)">← Back</button>
-      <button class="btn-next" onclick="goStep(6)">Next → Review</button>
+      <button class="btn-back" onclick="goStep(3)">← Back</button>
+      <button class="btn-next" onclick="goStep(5)">Next → Review</button>
     </div>
   </div>
 
   <!-- STEP 6: REVIEW -->
-  <div class="step" id="step-6">
-    <div class="step-eyebrow">Step 6 of 6</div>
+  <div class="step" id="step-5">
+    <div class="step-eyebrow">Step 5 of 5</div>
     <h1 class="step-title">Ready to Generate</h1>
     <p class="step-desc">Your personalised emergency plan is ready. It includes hazard-specific action sequences, your contacts, rally points, go-bag checklist, and official numbers. Print it and put it on the fridge.</p>
 
@@ -493,7 +444,7 @@ input,select,textarea{font-family:inherit}
     <div id="review-summary" style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:8px;font-size:14px;color:var(--dim);line-height:1.9"></div>
 
     <div class="btn-row">
-      <button class="btn-back" onclick="goStep(5)">← Back</button>
+      <button class="btn-back" onclick="goStep(4)">← Back</button>
       <button class="btn-generate" onclick="generatePlan()">Generate My Plan →</button>
     </div>
   </div>
@@ -520,12 +471,7 @@ let S = {
   adults: 1, children: 0, pets: [],
   hazard1: '', hazard2: '',
   needs: { insulin:false, device:false, mobility:false, elderly:false, infant:false, s8:false },
-  contacts: [
-    {name:'',phone:'',rel:''},
-    {name:'',phone:'',rel:''},
-    {name:'',phone:'',rel:''}
-  ],
-  ooac: {name:'',phone:'',loc:''},
+
   rp1: {name:'',addr:''}, rp2: {name:'',addr:''},
   route1:'', route2:''
 };
@@ -601,7 +547,7 @@ function goStep(n) {
     s.classList.toggle('done', sn < n);
     s.classList.toggle('active', sn === n);
   });
-  document.getElementById('nav-step').textContent = `Step ${n} of 6`;
+  document.getElementById('nav-step').textContent = `Step ${n} of 5`;
   if (n === 6) buildReviewSummary();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -609,12 +555,7 @@ function goStep(n) {
 function collectCurrentStep() {
   const v = id => document.getElementById(id)?.value?.trim()||'';
   S.suburb = v('suburb');
-  S.contacts = [
-    {name:v('c1name'),phone:v('c1phone'),rel:v('c1rel')},
-    {name:v('c2name'),phone:v('c2phone'),rel:v('c2rel')},
-    {name:v('c3name'),phone:v('c3phone'),rel:v('c3rel')}
-  ];
-  S.ooac = {name:v('ooacname'),phone:v('ooacphone'),loc:v('ooacloc')};
+
   S.rp1 = {name:v('rp1name'),addr:v('rp1addr')};
   S.rp2 = {name:v('rp2name'),addr:v('rp2addr')};
   S.route1 = v('route1'); S.route2 = v('route2');
@@ -775,15 +716,7 @@ function generatePlan() {
       </div>
     </div>` : '';
 
-  const contactRows = S.contacts.filter(c=>c.name).map(c=>`
-    <tr><td>${c.name}</td><td>${c.phone}</td><td>${c.rel}</td></tr>`).join('');
 
-  const ooacRow = S.ooac.name ? `
-    <tr style="background:#fff9f0">
-      <td><strong>${S.ooac.name}</strong> <span style="font-size:11px;color:#c85a00">OUT-OF-AREA COORDINATOR</span></td>
-      <td><strong>${S.ooac.phone}</strong></td>
-      <td>${S.ooac.loc}</td>
-    </tr>` : '';
 
   const needsList = [];
   if (S.needs.insulin) needsList.push({icon:'💊',t:'Refrigerated medication: move to cooler bag with ice immediately when power fails. 2-hour fridge window.'});
@@ -849,20 +782,30 @@ function generatePlan() {
         <div class="doc-section-title">If Separated — Communication Protocol</div>
         <div class="comms-box">
           <div class="comms-title">When you cannot reach each other directly:</div>
-          <div class="comms-step"><span class="comms-num">1</span><span>Each person calls the <strong style="color:#52b788">out-of-area coordinator</strong> (${S.ooac.name||'[set in step 4]'}, ${S.ooac.phone||'[phone]'}, ${S.ooac.loc||''}) to report their location and status.</span></div>
+          <div class="comms-step"><span class="comms-num">1</span><span>Each person calls the <strong style="color:#52b788">out-of-area coordinator</strong> (write their name and number in the contacts table above) to report their location and status.</span></div>
           <div class="comms-step"><span class="comms-num">2</span><span>The coordinator relays information between household members. Everyone calls <em>them</em> — they call <em>each other</em>.</span></div>
           <div class="comms-step"><span class="comms-num">3</span><span>If phone networks are down: go to the local meeting point (${S.rp1.name||'[local meeting point]'}) and wait. Leave a note on the door with your destination.</span></div>
           <div class="comms-step"><span class="comms-num">4</span><span>Register on the <strong style="color:#52b788">National Registration and Inquiry System</strong> at register.redcross.org.au or 1800 REDCROSS so family can find you.</span></div>
         </div>
       </div>
 
-      <!-- CONTACTS -->
+      <!-- CONTACTS - write-in -->
       <div class="doc-section">
-        <div class="doc-section-title">Emergency Contacts</div>
+        <div class="doc-section-title">Emergency Contacts — Write In</div>
         <table class="contacts-table">
-          <thead><tr><th>Name</th><th>Phone</th><th>Relationship</th></tr></thead>
-          <tbody>${ooacRow}${contactRows}</tbody>
+          <thead><tr><th style="width:35%">Name</th><th style="width:30%">Phone</th><th>Relationship</th></tr></thead>
+          <tbody>
+            <tr style="height:36px"><td style="border-bottom:1px solid #ccc"></td><td style="border-bottom:1px solid #ccc"></td><td style="border-bottom:1px solid #ccc"></td></tr>
+            <tr style="height:36px"><td style="border-bottom:1px solid #ccc"></td><td style="border-bottom:1px solid #ccc"></td><td style="border-bottom:1px solid #ccc"></td></tr>
+            <tr style="height:36px"><td style="border-bottom:1px solid #ccc"></td><td style="border-bottom:1px solid #ccc"></td><td style="border-bottom:1px solid #ccc"></td></tr>
+            <tr style="background:#fff9f0;height:40px">
+              <td style="border-bottom:1px solid #ccc"><span style="font-size:10px;color:#c85a00;font-family:monospace;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:2px">Out-of-area coordinator</span></td>
+              <td style="border-bottom:1px solid #ccc"></td>
+              <td style="border-bottom:1px solid #ccc"><span style="font-size:10px;color:#888">Their location:</span></td>
+            </tr>
+          </tbody>
         </table>
+        <div style="font-size:11px;color:#888;margin-top:6px;font-style:italic">Out-of-area coordinator: someone who lives outside your region. Everyone calls them first if separated — they relay messages between household members.</div>
       </div>
 
       <!-- OFFICIAL NUMBERS -->
@@ -942,17 +885,11 @@ function backToWizard() {
   // Restore text inputs
   const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val||''; };
   setVal('suburb', S.suburb);
-  if (S.contacts) {
-    ['c1','c2','c3'].forEach((pre,i)=>{
-      const c = S.contacts[i]||{};
-      setVal(pre+'name',c.name); setVal(pre+'phone',c.phone); setVal(pre+'rel',c.rel);
-    });
-  }
-  if (S.ooac) { setVal('ooacname',S.ooac.name); setVal('ooacphone',S.ooac.phone); setVal('ooacloc',S.ooac.loc); }
+
   if (S.rp1) { setVal('rp1name',S.rp1.name); setVal('rp1addr',S.rp1.addr); }
   if (S.rp2) { setVal('rp2name',S.rp2.name); setVal('rp2addr',S.rp2.addr); }
   setVal('route1',S.route1); setVal('route2',S.route2);
-  document.getElementById('nav-step').textContent = `Step 1 of 6`;
+  document.getElementById('nav-step').textContent = `Step 1 of 5`;
 })();
 </script>
 </body>
