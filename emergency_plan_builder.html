@@ -655,41 +655,59 @@ function getChecklist() {
   const total = S.adults + S.children;
   const days = 3;
   const water = total * 4 * days;
-  const base = [
+
+  // PACK NOW — permanent kit items
+  const packNow = [
     `Water — ${water} litres (4L/person/day for ${days} days)`,
     `Non-perishable food — ${days}-day supply for ${total} people`,
-    'All prescription medications — minimum 7-day supply',
-    'First aid kit — current and stocked',
-    `Copies of key documents — ID, insurance, Medicare`,
-    'Phone chargers and a portable battery bank',
-    'Battery-powered or hand-crank radio',
+    'First aid kit — current and fully stocked',
+    'Battery radio — hand-crank or with spare batteries',
     'Torch and spare batteries',
-    `Cash — at least $200 in small notes`,
-    'Change of clothes for each person',
-    'Sturdy shoes for everyone',
-    'Blankets or sleeping bags',
+    'Candles and waterproof matches or lighter',
+    'Cash — minimum $200 in small notes (EFTPOS fails in outages)',
+    'Spare keys for home and vehicles',
+    'Local printed maps (for if GPS and phone fail)',
+    'Whistle — for signalling if trapped or injured',
+    'Sturdy gloves and dust masks',
     'Sunscreen, insect repellent, hand sanitiser',
-    'Cooler bag and ice packs (for refrigerated medications)',
+    'Soap, dental care, toilet paper, sanitary items',
+    'Change of clothes and underwear for each person',
+    'Sturdy shoes for everyone in the household',
+    'Blankets or sleeping bags for each person',
+    'Cooler bag with ice packs (for refrigerated medications)',
+    'Can opener (manual)',
     'Important phone numbers printed on paper',
   ];
+
+  // ADD BEFORE LEAVING — items to grab at departure
+  const addBefore = [
+    'All prescription medications — 5-day supply minimum',
+    'Medicare card and any health care cards',
+    'Phone, laptop and chargers',
+    'Portable battery/power bank — fully charged',
+    'Photos, jewellery and irreplaceable personal items',
+    'Hard drive or USB with important digital files',
+  ];
+
   if (S.pets.length) {
-    base.push('Pet food and water (3-day supply)');
-    base.push('Pet carrier or lead for each animal');
-    base.push('Vaccination records for each pet');
+    packNow.push('Pet food and water — 3-day supply');
+    packNow.push('Pet carrier or lead for each animal');
+    addBefore.push('Pet vaccination and microchip records');
   }
   if (S.needs.infant) {
-    base.push('Formula, nappies and wipes — 3-day supply');
-    base.push('Baby medications and thermometer');
+    packNow.push('Formula, nappies and wipes — 3-day supply');
+    addBefore.push('Baby medications and thermometer');
   }
   if (S.needs.device) {
-    base.push('CPAP battery pack or 12V car adaptor');
-    base.push('Spare batteries for any powered medical device');
+    packNow.push('CPAP battery pack or 12V car adaptor');
+    packNow.push('Spare batteries for any powered medical device');
   }
   if (S.needs.s8) {
-    base.push('Controlled medication buffer — 2-week supply minimum');
-    base.push('Prescriber after-hours contact number on paper');
+    addBefore.push('Controlled medication — 2-week buffer supply');
+    addBefore.push('Prescriber after-hours contact number on paper');
   }
-  return base;
+
+  return { packNow, addBefore };
 }
 
 // ── GENERATE PLAN ─────────────────────────────────────────────────────
@@ -726,9 +744,7 @@ function generatePlan() {
   if (S.needs.infant) needsList.push({icon:'👶',t:'Infant/young child: confirm school/childcare reunification procedure. Keep formula and nappies in emergency kit.'});
   if (S.needs.s8) needsList.push({icon:'🔒',t:'Controlled medication: emergency supply provisions (3-day rule) do NOT apply to S8. Maintain 2-week buffer.'});
 
-  const checkMid = Math.ceil(checklist.length/2);
-  const cl1 = checklist.slice(0,checkMid);
-  const cl2 = checklist.slice(checkMid);
+  const checklist = getChecklist();
 
   document.getElementById('plan-doc').innerHTML = `
     <div class="doc-header">
@@ -821,6 +837,157 @@ function generatePlan() {
         </div>
       </div>
 
+      <!-- DEPARTURE TRIGGER -->
+      <div class="doc-section">
+        <div class="doc-section-title">My Departure Trigger — Decide Now, Not Under Pressure</div>
+        <div style="background:#fff9f0;border:1.5px solid #f4d0a0;border-radius:3px;padding:16px 18px;margin-bottom:10px">
+          <div style="font-size:11px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#c85a00;margin-bottom:8px">I / We will leave when:</div>
+          <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:10px"></div>
+          <div style="height:28px;border-bottom:1px solid #ccc"></div>
+        </div>
+        <div style="font-size:11px;color:#888;font-style:italic">Research finding: The single most important preparedness decision is made in advance, not at 2am under a smoke alarm. Write your specific trigger above — e.g. "When a Watch and Act is issued for our area" or "When the gauge reaches 9.5m".</div>
+      </div>
+
+      <!-- BEFORE YOU LEAVE - HOME PREPARATION -->
+      <div class="doc-section">
+        <div class="doc-section-title">Before You Leave — Home Preparation</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          ${(S.hazard1==='Bushfire'||S.hazard2==='Bushfire')?`
+          <div>
+            <div style="font-family:monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#8B1A1A;margin-bottom:8px;font-weight:700">🔥 Bushfire — Before Leaving</div>
+            ${['Turn off gas mains or bottles','Turn off electricity at the switchboard','Turn off solar panels at the inverter','Move outdoor furniture inside or away from house','Close all windows, doors and vents','Wet down the lawn and garden if time permits','Fill gutters with water (do not go on the roof)','Soak towels/rugs and place across door gaps','Lock up and leave access gates unlocked for firefighters'].map(i=>`<div class="check-item"><div class="check-box"></div><span style="font-size:11px">${i}</span></div>`).join('')}
+          </div>`:``}
+          ${(S.hazard1==='Flood'||S.hazard2==='Flood')?`
+          <div>
+            <div style="font-family:monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#1A3A8B;margin-bottom:8px;font-weight:700">🌊 Flood — Before Leaving</div>
+            ${['Turn off power at the main switchboard','Lift electrical items off the floor','Move valuables and documents upstairs or to high ground','Block floor drains and toilet with plugs or sandbags','Secure loose items or move inside','Disconnect appliances from power points','Move vehicles to high ground','Record video/photos of contents for insurance','Lock the house and take your kit'].map(i=>`<div class="check-item"><div class="check-box"></div><span style="font-size:11px">${i}</span></div>`).join('')}
+          </div>`:``}
+          ${(S.hazard1==='Cyclone'||S.hazard2==='Cyclone')?`
+          <div>
+            <div style="font-family:monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#1A558B;margin-bottom:8px;font-weight:700">🌀 Cyclone — Before Leaving</div>
+            ${['Secure or bring inside all outdoor items','Turn off gas and electricity','Fill bath and containers with water','Charge all phones and devices fully','Board or tape windows if time permits','Record video/photos of contents for insurance','Take your go-kit and leave via your planned route'].map(i=>`<div class="check-item"><div class="check-box"></div><span style="font-size:11px">${i}</span></div>`).join('')}
+          </div>`:``}
+          ${(S.hazard1==='Severe Storm'||S.hazard2==='Severe Storm')?`
+          <div>
+            <div style="font-family:monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#3A1A8B;margin-bottom:8px;font-weight:700">⛈️ Storm — Before It Arrives</div>
+            ${['Bring all loose outdoor items inside','Clear gutters and drains of leaves and debris','Close all windows and external doors','Park vehicles under cover away from trees','Charge all phones and devices','Fill containers with water as backup'].map(i=>`<div class="check-item"><div class="check-box"></div><span style="font-size:11px">${i}</span></div>`).join('')}
+          </div>`:``}
+        </div>
+      </div>
+
+      <!-- SCHOOL / CHILDCARE PICKUP -->
+      ${S.children > 0 ? `
+      <div class="doc-section">
+        <div class="doc-section-title">School &amp; Childcare Pickup Plan</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div>
+            <div style="font-size:11px;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-bottom:5px">School / Childcare name</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:12px"></div>
+            <div style="font-size:11px;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-bottom:5px">Pickup procedure / reunification point</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:5px"></div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-bottom:5px">Authorised pickup person (if parents unavailable)</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:12px"></div>
+            <div style="font-size:11px;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-bottom:5px">School emergency phone</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+        </div>
+      </div>` : ``}
+
+      <!-- PETS -->
+      ${S.pets.length > 0 ? `
+      <div class="doc-section">
+        <div class="doc-section-title">Pet &amp; Animal Details</div>
+        <table class="contacts-table">
+          <thead><tr><th>Animal / Name</th><th>Vet name &amp; phone</th><th>Microchip / ID</th><th>How to transport</th></tr></thead>
+          <tbody>
+            <tr style="height:36px"><td></td><td></td><td></td><td></td></tr>
+            ${S.pets.length > 1 ? `<tr style="height:36px"><td></td><td></td><td></td><td></td></tr>` : ``}
+            ${S.pets.length > 2 ? `<tr style="height:36px"><td></td><td></td><td></td><td></td></tr>` : ``}
+          </tbody>
+        </table>
+      </div>` : ``}
+
+      <!-- MEDICAL SUMMARY -->
+      <div class="doc-section">
+        <div class="doc-section-title">Medical Summary — For Emergency Personnel</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:12px">
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Blood types</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Known allergies</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Critical conditions</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+        </div>
+        <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Regular medications (name, dose, person)</div>
+        <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:5px"></div>
+        <div style="height:28px;border-bottom:1px solid #ccc"></div>
+      </div>
+
+      <!-- NEAREST SERVICES -->
+      <div class="doc-section">
+        <div class="doc-section-title">Nearest Services</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Nearest evacuation centre</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:8px"></div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Address</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Nearest hospital</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:8px"></div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Address &amp; phone</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSURANCE -->
+      <div class="doc-section">
+        <div class="doc-section-title">Insurance &amp; Key Accounts</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Home insurer</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:8px"></div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Policy number</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Contents insurer</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:8px"></div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Policy number</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Insurer claims phone</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:8px"></div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Car insurer &amp; policy</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:#888;margin-top:8px;font-style:italic">Tip: photograph every room of your home and save to cloud storage now — insurance claims are significantly easier with pre-disaster photo evidence.</div>
+      </div>
+
+      <!-- AFTER THE EMERGENCY -->
+      <div class="doc-section">
+        <div class="doc-section-title">After the Emergency — Before You Return</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px">
+          ${['Do not return home until emergency services confirm it is safe','Check for structural damage before entering — look up, not just ahead','Do not use tap water until authorities confirm it is safe','Do not use flooded electrical equipment until inspected','Photograph all damage before cleaning up — for your insurance claim','Report damage to your council and energy provider','Register with Red Cross if you were evacuated: register.redcross.org.au','Contact Services Australia for disaster recovery payments: servicesaustralia.gov.au'].map(i=>`<div class="check-item"><div class="check-box"></div><span style="font-size:12px">${i}</span></div>`).join('')}
+        </div>
+      </div>
+
+      ${S.needs.length ? `
+      <!-- SPECIAL NEEDS -->` : `
+      <!-- SPECIAL NEEDS -->`}
       ${needsList.length ? `
       <!-- SPECIAL NEEDS -->
       <div class="doc-section">
@@ -832,10 +999,19 @@ function generatePlan() {
 
       <!-- GO-BAG CHECKLIST -->
       <div class="doc-section">
-        <div class="doc-section-title">Go-Bag Checklist — ${S.adults + S.children} Person${S.adults+S.children!==1?'s':''}, 72 Hours</div>
-        <div class="checklist-cols">
-          <div>${cl1.map(i=>`<div class="check-item"><div class="check-box"></div><span>${i}</span></div>`).join('')}</div>
-          <div>${cl2.map(i=>`<div class="check-item"><div class="check-box"></div><span>${i}</span></div>`).join('')}</div>
+        <div class="doc-section-title">Go-Bag Checklist — ${S.adults + S.children} Person${S.adults+S.children!==1?'s':''}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <div style="font-family:monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#c85a00;margin-bottom:8px;font-weight:700">Pack Now — Keep in the Kit</div>
+            ${checklist.packNow.map(i=>`<div class="check-item"><div class="check-box"></div><span>${i}</span></div>`).join('')}
+          </div>
+          <div>
+            <div style="font-family:monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#1a5c35;margin-bottom:8px;font-weight:700">Add Before Leaving</div>
+            ${checklist.addBefore.map(i=>`<div class="check-item" style="border-color:#d0f0e0"><div class="check-box" style="border-color:#52b788"></div><span>${i}</span></div>`).join('')}
+            <div style="height:20px;border-bottom:1px solid #e8e4dc;margin-bottom:0"></div>
+            <div style="height:20px;border-bottom:1px solid #e8e4dc;margin-bottom:0"></div>
+            <div style="height:20px"></div>
+          </div>
         </div>
       </div>
 
