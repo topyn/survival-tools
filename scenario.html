@@ -121,25 +121,25 @@ main{max-width:800px;margin:0 auto;padding:48px 24px 100px}
       <span class="card-icon">&#128293;</span>
       <div class="card-name">Bushfire</div>
       <div class="card-desc">2am. Summer. Central Coast NSW. Your daughter drew a picture of your house last week. Tonight the hills behind it are glowing orange.</div>
-      <span class="card-tag">Common &#xb7; 7 decisions</span>
+      <span class="card-tag" id="tag-bushfire">Common &#xb7; Branching story</span>
     </div>
     <div class="card" onclick="startScenario('cyclone')">
-      <span class="card-icon">&#127992;</span>
+      <span class="card-icon">&#127744;</span>
       <div class="card-name">Cyclone</div>
       <div class="card-desc">Category 3. Six hours to landfall at Cairns. Your neighbour knocks on your door with news you should have already known.</div>
-      <span class="card-tag high">Seasonal &#xb7; 7 decisions</span>
+      <span class="card-tag high" id="tag-cyclone">Seasonal &#xb7; Branching story</span>
     </div>
     <div class="card" onclick="startScenario('flood')">
       <span class="card-icon">&#127754;</span>
       <div class="card-name">Flash Flood</div>
       <div class="card-desc">Three days of rain. You've checked the Wilson River gauge every morning. This morning the numbers don't make sense.</div>
-      <span class="card-tag hard">High Risk &#xb7; 7 decisions</span>
+      <span class="card-tag hard" id="tag-flood">High Risk &#xb7; Branching story</span>
     </div>
     <div class="card" onclick="startScenario('blackout')">
       <span class="card-icon">&#9889;</span>
       <div class="card-name">Grid Failure</div>
       <div class="card-desc">3:20pm. Major outage, no ETA. Your mother-in-law takes a daily injection that lives in the fridge. The fridge is now off.</div>
-      <span class="card-tag high">Increasingly Common &#xb7; 7 decisions</span>
+      <span class="card-tag high" id="tag-blackout">Increasingly Common &#xb7; Branching story</span>
     </div>
   </div>
 </div>
@@ -147,6 +147,7 @@ main{max-width:800px;margin:0 auto;padding:48px 24px 100px}
   <div class="game-hdr">
     <div class="game-label" id="game-label">SCENARIO</div>
     <div class="game-progress">DECISION <span id="d-num">1</span> / <span id="d-tot">7</span></div>
+    <button onclick="resetGame()" style="background:transparent;border:1px solid var(--border);border-radius:3px;padding:4px 10px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);cursor:pointer;letter-spacing:.08em;transition:.2s" onmouseover="this.style.color='var(--gl)';this.style.borderColor='var(--gl)'" onmouseout="this.style.color='var(--dim)';this.style.borderColor='var(--border)'">&#8592; Exit</button>
   </div>
   <div class="atmo" id="atmo"></div>
   <div class="scene-loc" id="scene-loc"></div>
@@ -167,16 +168,19 @@ main{max-width:800px;margin:0 auto;padding:48px 24px 100px}
     <div class="out-title" id="out-title"></div>
     <div class="out-text" id="out-text"></div>
     <div class="score-row">
-      <div class="score-box"><div class="sbox-label">PREPAREDNESS SCORE</div><div class="sbox-val" id="out-score">0%</div><div class="sbox-sub" id="out-tier-sub"></div></div>
+      <div class="score-box"><div class="sbox-label">PREPAREDNESS SCORE</div><div class="sbox-val" id="out-score">0%</div><div class="sbox-sub" id="out-tier-sub"></div><div style="font-size:10px;color:var(--dim);margin-top:4px;font-family:'Share Tech Mono',monospace;letter-spacing:.04em">100% = optimal decisions</div></div>
       <div class="score-box"><div class="sbox-label">DECISIONS MADE</div><div class="sbox-val" style="color:var(--gl)" id="out-decisions">0</div><div class="sbox-sub">UNDER PRESSURE</div></div>
     </div>
   </div>
   <div class="hidden-badge" id="hidden-badge"><strong>&#9733; HIDDEN PATH DISCOVERED</strong><span id="hidden-text"></span></div>
   <div class="story-section"><div class="section-title">&#128214; Your Story &#8212; How It Unfolded</div><div id="story-log"></div></div>
   <div class="story-section"><div class="section-title">&#128161; Key Lessons From Your Decisions</div><div class="lessons-list" id="lessons-list"></div></div>
-  <div class="actions">
+  <div class="actions" id="outcome-actions">
+    <a href="https://tools.survivalstorehouse.com/plan_builder.html" class="btn-p" style="background:rgba(82,183,136,.15);border-color:rgba(82,183,136,.4);color:var(--gl)">&#128196; Build Your Emergency Plan</a>
+    <button class="btn-s" id="cta-share" onclick="shareResult()" style="display:none">&#128279; Share My Result</button>
     <a href="https://tools.survivalstorehouse.com/checklist.html" class="btn-p">Check Your 72-Hr Kit</a>
-    <a href="https://survivalstorehouse.com/shop-1" class="btn-p amber">Shop Survival Gear</a>
+    <a href="https://survivalstorehouse.com/shop-1" class="btn-p amber" id="cta-shop">Shop Survival Gear</a>
+    <button class="btn-s" id="cta-retry" onclick="resetGame()" style="display:none">&#9654; Try for Hidden Path</button>
     <button class="btn-s" onclick="resetGame()">Try Another Scenario</button>
   </div>
 </div>
@@ -478,7 +482,7 @@ The NSW Bushfire Inquiry found consistent warning about delays caused by overloa
 // ── HOSE ──────────────────────────────────────────────────────────────────
 s3_hose:{
   loc:"YOUR BACKYARD — 2:16AM",
-  atmo:"emergency",timer:12,
+  atmo:"emergency",timer:15,
   logTime:"2:16am",logSit:"You started the hose on the yard while embers fell around you.",
   prompt:"Your partner appears at the back door with both kids. Their faces say everything.",
   text:`You point the hose at the fence and the roof and the dry grass.
@@ -1201,7 +1205,7 @@ Your partner appears at the top of the stairs: how bad is it?`,
     {text:"Thirty more minutes — you are almost done moving everything important",next:"s3d",score:2,logQ:"bad",logEffect:"Thirty more minutes was thirty minutes too many. By then the car was compromised."}
   ]},
 
-s2c:{loc:"YOUR KITCHEN — 10:20AM",atmo:"emergency",timer:12,
+s2c:{loc:"YOUR KITCHEN — 10:20AM",atmo:"emergency",timer:15,
   logTime:"10:20am",logSit:"You dismissed the Minor warning. You woke to floodwater in your backyard.",
   prompt:"Your car is in the driveway. The water is at your front gate.",
   text:`You look out the back window at 10:20am.
@@ -1282,7 +1286,7 @@ The roads closed behind you. You were through before they did.`,
     {text:"Stay in Ballina until the all-clear",next:"out_prepared_b",score:16,logQ:"good",logEffect:"You made it with a narrow margin. Acting on the Emergency Alert — immediately — was the right call."}
   ]},
 
-s3b:{loc:"YOUR HOME — 10:10AM",atmo:"critical",timer:12,
+s3b:{loc:"YOUR HOME — 10:10AM",atmo:"critical",timer:15,
   logTime:"10:10am",logSit:"You monitored for two more hours. Emergency Alert arrived as water entered the street.",
   prompt:"The street has 40cm of moving water. Your car door sills are underwater.",
   text:`The gauge keeps climbing.
@@ -1937,7 +1941,71 @@ function showOutcome(id) {
     '<div class="lesson"><span class="lesson-arrow">&#9658;</span><span>' + l + '</span></div>'
   ).join('');
 
+  // ── Personalise CTAs based on outcome ─────────────────────────
+  const shopBtn = document.getElementById('cta-shop');
+  const retryBtn = document.getElementById('cta-retry');
+
+  // Show "Try for Hidden Path" on non-perfect outcomes
+  if (tier !== 'perfect') {
+    retryBtn.style.display = 'inline-flex';
+    retryBtn.textContent = '⭐ Try for the Hidden Path';
+    retryBtn.onclick = () => {
+      const key = Object.keys(SCENARIOS).find(k => SCENARIOS[k] === G.scenario);
+      resetGame();
+      if (key) setTimeout(() => startScenario(key), 100);
+    };
+  } else {
+    retryBtn.style.display = 'none';
+  }
+
+  // Personalise shop CTA to scenario
+  const scenKey = Object.keys(SCENARIOS).find(k => SCENARIOS[k] === G.scenario) || '';
+  const shopLinks = {
+    bushfire: { text: 'Shop Bushfire Kits', url: 'https://survivalstorehouse.com/shop-1' },
+    flood:    { text: 'Shop Emergency Kits', url: 'https://survivalstorehouse.com/shop-1' },
+    cyclone:  { text: 'Shop Cyclone Kits', url: 'https://survivalstorehouse.com/shop-1' },
+    blackout: { text: 'Shop Power Outage Kits', url: 'https://survivalstorehouse.com/shop-1' },
+  };
+  if (shopLinks[scenKey]) {
+    shopBtn.textContent = shopLinks[scenKey].text;
+    shopBtn.href = shopLinks[scenKey].url;
+  }
+
+  // ── Track completed scenarios in localStorage ───────────────────
+  try {
+    const completed = JSON.parse(localStorage.getItem('ss_completed') || '{}');
+    if (scenKey) {
+      completed[scenKey] = { tier, pct, date: new Date().toISOString().slice(0,10) };
+      localStorage.setItem('ss_completed', JSON.stringify(completed));
+    }
+    updateCardBadges(completed);
+  } catch(e) {}
+
+  // Show share button
+  const shareBtn = document.getElementById('cta-share');
+  if (shareBtn) shareBtn.style.display = 'inline-flex';
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Update scenario card completion badges ──────────────────────────
+function updateCardBadges(completed) {
+  const icons = { perfect:'⭐', prepared:'✅', survivable:'⚠️', critical:'🔄' };
+  const labels = { perfect:'Perfect!', prepared:'Completed', survivable:'Completed', critical:'Try again' };
+  ['bushfire','cyclone','flood','blackout'].forEach(key => {
+    const tag = document.getElementById('tag-' + key);
+    if (!tag) return;
+    if (completed[key]) {
+      const t = completed[key].tier;
+      tag.innerHTML = (icons[t]||'✓') + ' ' + (labels[t]||'Done') + ' &middot; Play again';
+      tag.style.borderColor = t === 'perfect' ? 'gold' :
+                              t === 'prepared' ? 'var(--gl)' :
+                              t === 'survivable' ? 'var(--amber)' : 'var(--red)';
+      tag.style.color = t === 'perfect' ? 'gold' :
+                        t === 'prepared' ? 'var(--gl)' :
+                        t === 'survivable' ? 'var(--amber)' : 'var(--red)';
+    }
+  });
 }
 
 function resetGame() {
@@ -1952,6 +2020,33 @@ function resetGame() {
   setTimeout(() => t.style.animation = 'fadein .7s ease', 10);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+
+// ── SHARE RESULT ───────────────────────────────────────────────────
+async function shareResult() {
+  if (!G || !G.scenario) return;
+  const scenKey = Object.keys(SCENARIOS).find(k => SCENARIOS[k] === G.scenario) || 'scenario';
+  const pct = document.getElementById('out-score').textContent;
+  const tier = document.getElementById('out-tier').textContent;
+  const text = `I just played the ${scenKey} scenario on the Survival Storehouse emergency simulator and got: ${tier} (${pct}). Find out how you'd handle a real Australian emergency — tools.survivalstorehouse.com`;
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: 'Survival Scenario Simulator', text, url: 'https://tools.survivalstorehouse.com/scenario.html' });
+    } else {
+      await navigator.clipboard.writeText(text);
+      const btn = document.getElementById('cta-share');
+      const orig = btn.innerHTML;
+      btn.textContent = '✓ Copied to clipboard';
+      setTimeout(() => { btn.innerHTML = orig; }, 2500);
+    }
+  } catch(e) {}
+}
+
+// ── RESTORE COMPLETION BADGES ON LOAD ─────────────────────────────
+try {
+  const completed = JSON.parse(localStorage.getItem('ss_completed') || '{}');
+  if (Object.keys(completed).length) updateCardBadges(completed);
+} catch(e) {}
 </script>
 
 <footer style="background:#0c1a0e;border-top:1px solid #1c3522;padding:32px 24px 24px;margin-top:0;">
