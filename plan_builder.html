@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Household Emergency Plan Builder — Survival Storehouse Australia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ── RESET ───────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07100a;--panel:#0c1a0e;--mid:#1a3a2a;--border:#1c3522;
+  --gl:#52b788;--or:#c85a00;--orl:#e07020;
+  --text:#c5d5c7;--dim:#567059;--white:#edf4ee;--red:#e63946;
+  --radius:4px;
+}
+html,body{min-height:100vh;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Source Sans 3',sans-serif;line-height:1.6}
+a{color:var(--gl);text-decoration:none}
+button{cursor:pointer;font-family:inherit}
+input,select,textarea{font-family:inherit}
+
+/* ── NAV ─────────────────────────────────────────────────────────── */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:rgba(7,16,10,.95);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-back{color:var(--gl);font-family:'Share Tech Mono',monospace;font-size:12px;opacity:.6;transition:.2s}.nav-back:hover{opacity:1}
+.nav-brand{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+
+/* ── WIZARD CONTAINER ────────────────────────────────────────────── */
+.wizard{max-width:680px;margin:0 auto;padding:48px 24px 120px}
+
+/* ── PROGRESS ────────────────────────────────────────────────────── */
+.progress{display:flex;align-items:center;gap:0;margin-bottom:48px}
+.prog-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
+.prog-step:not(:last-child)::after{content:'';position:absolute;top:14px;left:50%;width:100%;height:2px;background:var(--border);z-index:0}
+.prog-step.done::after{background:var(--gl)}
+.prog-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);z-index:1;transition:.3s}
+.prog-step.done .prog-dot{border-color:var(--gl);background:var(--gl);color:#07100a;font-weight:700}
+.prog-step.active .prog-dot{border-color:var(--or);background:var(--or);color:#fff;font-weight:700}
+.prog-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:6px;text-align:center}
+.prog-step.active .prog-label{color:var(--or)}
+.prog-step.done .prog-label{color:var(--gl)}
+
+/* ── STEP PANELS ─────────────────────────────────────────────────── */
+.step{display:none;animation:fadeup .35s ease}
+.step.active{display:block}
+@keyframes fadeup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.step-eyebrow{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gl);margin-bottom:10px}
+.step-title{font-family:'Oswald',sans-serif;font-size:clamp(28px,5vw,42px);font-weight:700;text-transform:uppercase;color:var(--white);line-height:1;margin-bottom:10px}
+.step-desc{font-size:15px;font-weight:300;color:var(--dim);line-height:1.65;margin-bottom:32px}
+
+/* ── FIELDS ──────────────────────────────────────────────────────── */
+.field{margin-bottom:20px}
+.field-label{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:6px;display:block}
+.field-input{width:100%;background:rgba(255,255,255,.04);border:1.5px solid var(--border);border-radius:var(--radius);padding:12px 14px;color:var(--white);font-size:15px;transition:.2s;outline:none}
+.field-input:focus{border-color:var(--gl);background:rgba(82,183,136,.04)}
+.field-input::placeholder{color:var(--dim)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:500px){.field-row{grid-template-columns:1fr}}
+
+/* ── COUNTER FIELDS ──────────────────────────────────────────────── */
+.counter-group{display:flex;flex-direction:column;gap:12px}
+.counter-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px}
+.counter-info{}
+.counter-name{font-size:15px;font-weight:600;color:var(--white)}
+.counter-hint{font-size:12px;color:var(--dim)}
+.counter-ctrl{display:flex;align-items:center;gap:12px}
+.counter-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:transparent;color:var(--text);font-size:18px;display:flex;align-items:center;justify-content:center;transition:.2s}
+.counter-btn:hover{border-color:var(--gl);color:var(--gl)}
+.counter-val{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--white);min-width:24px;text-align:center}
+
+/* ── HAZARD SELECTOR ─────────────────────────────────────────────── */
+.hazard-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+@media(max-width:480px){.hazard-grid{grid-template-columns:1fr}}
+.hazard-card{border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;cursor:pointer;transition:.2s;position:relative;display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.02)}
+.hazard-card:hover{border-color:rgba(82,183,136,.3);background:rgba(82,183,136,.04)}
+.hazard-card.selected{border-color:var(--or);background:rgba(200,90,0,.07)}
+.hazard-card.selected-2{border-color:var(--gl);background:rgba(82,183,136,.07)}
+.hazard-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.hazard-name{font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;color:var(--white);letter-spacing:.06em;margin-bottom:2px}
+.hazard-sub{font-size:11px;color:var(--dim);line-height:1.4}
+.hazard-badge{position:absolute;top:8px;right:8px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.1em;padding:2px 7px;border-radius:2px}
+.badge-1{background:rgba(200,90,0,.15);border:1px solid rgba(200,90,0,.3);color:var(--or)}
+.badge-2{background:rgba(82,183,136,.12);border:1px solid rgba(82,183,136,.25);color:var(--gl)}
+
+/* ── CHECKBOX TILES ──────────────────────────────────────────────── */
+.check-group{display:flex;flex-direction:column;gap:8px}
+.check-tile{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:.2s;background:rgba(255,255,255,.02)}
+.check-tile:hover{border-color:rgba(82,183,136,.25)}
+.check-tile input[type="checkbox"]{width:18px;height:18px;accent-color:var(--gl);flex-shrink:0;margin-top:2px;cursor:pointer}
+.check-tile-body{}
+.check-tile-name{font-size:14px;font-weight:600;color:var(--white)}
+.check-tile-hint{font-size:12px;color:var(--dim);line-height:1.45;margin-top:2px}
+.check-tile.checked{border-color:rgba(82,183,136,.3);background:rgba(82,183,136,.04)}
+
+/* ── CONTACT CARDS ───────────────────────────────────────────────── */
+.contact-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px}
+.contact-card-title{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--or);margin-bottom:14px}
+.contact-card .field{margin-bottom:12px}
+.contact-card .field:last-child{margin-bottom:0}
+
+/* ── PET TAGS ────────────────────────────────────────────────────── */
+.pet-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.pet-tag{padding:8px 14px;border:1.5px solid var(--border);border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:.08em;cursor:pointer;transition:.2s;color:var(--dim)}
+.pet-tag:hover,.pet-tag.on{border-color:var(--gl);color:var(--gl);background:rgba(82,183,136,.08)}
+
+/* ── BUTTONS ─────────────────────────────────────────────────────── */
+.btn-row{display:flex;gap:12px;margin-top:36px}
+.btn-next{flex:1;padding:16px;background:var(--or);border:none;border-radius:var(--radius);font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;transition:.2s}
+.btn-next:hover{background:var(--orl)}
+.btn-back{padding:16px 24px;background:transparent;border:1.5px solid var(--border);border-radius:var(--radius);font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);transition:.2s}
+.btn-back:hover{border-color:var(--gl);color:var(--gl)}
+.btn-generate{flex:1;padding:18px;background:var(--gl);border:none;border-radius:var(--radius);font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#07100a;transition:.2s}
+.btn-generate:hover{filter:brightness(1.1)}
+
+/* ── INFO BOX ────────────────────────────────────────────────────── */
+.info-box{background:rgba(82,183,136,.06);border:1px solid rgba(82,183,136,.2);border-radius:var(--radius);padding:14px 16px;margin-bottom:24px;font-size:13px;color:var(--dim);line-height:1.6}
+.info-box strong{color:var(--gl)}
+
+/* ── PLAN OUTPUT ─────────────────────────────────────────────────── */
+#plan-view{display:none}
+.plan-actions{max-width:680px;margin:32px auto 0;padding:0 24px;display:flex;gap:12px;flex-wrap:wrap}
+.btn-print{padding:14px 28px;background:var(--or);border:none;border-radius:var(--radius);font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;cursor:pointer;transition:.2s}
+.btn-print:hover{background:var(--orl)}
+.btn-edit{padding:14px 24px;background:transparent;border:1.5px solid var(--border);border-radius:var(--radius);font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);cursor:pointer;transition:.2s}
+.btn-edit:hover{border-color:var(--gl);color:var(--gl)}
+
+/* ── PRINT DOCUMENT ──────────────────────────────────────────────── */
+#plan-doc{max-width:800px;margin:24px auto;background:#fff;color:#1a1a1a;font-family:'Source Sans 3',Arial,sans-serif;padding:0;box-shadow:0 4px 32px rgba(0,0,0,.4)}
+
+.doc-header{background:#0d2318;color:#fff;padding:28px 36px;display:flex;justify-content:space-between;align-items:flex-start}
+.doc-header-left{}
+.doc-eyebrow{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#52b788;margin-bottom:6px}
+.doc-title{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;color:#fff;line-height:1;margin-bottom:4px}
+.doc-household{font-size:14px;color:rgba(255,255,255,.6);margin-top:4px}
+.doc-date{font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(255,255,255,.35);margin-top:6px}
+.doc-header-right{text-align:right}
+.doc-000{font-family:'Oswald',sans-serif;font-size:36px;font-weight:700;color:#c85a00;line-height:1}
+.doc-000-label{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase}
+
+.doc-body{padding:28px 36px}
+
+.doc-section{margin-bottom:24px}
+.doc-section-title{font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#c85a00;border-bottom:2px solid #c85a00;padding-bottom:4px;margin-bottom:14px}
+
+/* HAZARD CARDS */
+.hazard-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+@media(max-width:600px){.hazard-cards{grid-template-columns:1fr}}
+.doc-hazard{border:1.5px solid #0d2318;border-radius:3px;overflow:hidden}
+.doc-hazard-header{background:#0d2318;color:#fff;padding:10px 14px;display:flex;align-items:center;gap:8px}
+.doc-hazard-icon{font-size:16px}
+.doc-hazard-name{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.doc-hazard-body{padding:12px 14px;background:#f9f7f4}
+.doc-action{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;font-size:12px;line-height:1.45}
+.doc-action:last-child{margin-bottom:0}
+.doc-action-num{font-family:'Oswald',sans-serif;font-weight:700;font-size:14px;color:#c85a00;flex-shrink:0;width:18px}
+.doc-action strong{color:#0d2318}
+
+/* RALLY POINTS */
+.rally-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.rally-grid{grid-template-columns:1fr}}
+.rally-card{background:#f0ede8;border:1.5px solid #d0ccc4;border-radius:3px;padding:14px}
+.rally-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#888;margin-bottom:4px}
+.rally-name{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;color:#0d2318;text-transform:uppercase;margin-bottom:2px}
+.rally-address{font-size:12px;color:#444;line-height:1.4}
+
+/* CONTACTS TABLE */
+.contacts-table{width:100%;border-collapse:collapse;font-size:13px}
+.contacts-table th{background:#0d2318;color:#52b788;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:8px 12px;text-align:left}
+.contacts-table td{padding:9px 12px;border-bottom:1px solid #e8e4dc;color:#1a1a1a;vertical-align:top}
+.contacts-table tr:last-child td{border-bottom:none}
+.contacts-table tr:nth-child(even) td{background:#f9f7f4}
+
+/* OFFICIAL NUMBERS */
+.numbers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:560px){.numbers-grid{grid-template-columns:1fr 1fr}}
+.number-card{background:#f0ede8;border:1px solid #d0ccc4;border-radius:2px;padding:10px 12px}
+.number-name{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.08em;color:#666;margin-bottom:2px}
+.number-val{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:#0d2318}
+
+/* CHECKLIST */
+.checklist-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+@media(max-width:560px){.checklist-cols{grid-template-columns:1fr}}
+.check-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid #f0ede8;font-size:12px;color:#333;line-height:1.4}
+.check-box{width:14px;height:14px;border:1.5px solid #aaa;border-radius:2px;flex-shrink:0;margin-top:1px}
+
+/* SPECIAL NEEDS */
+.needs-list{display:flex;flex-direction:column;gap:6px}
+.needs-item{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#333;line-height:1.4}
+.needs-icon{font-size:14px;flex-shrink:0}
+
+/* COMMUNICATION PLAN */
+.comms-box{background:#0d2318;color:#fff;border-radius:3px;padding:16px 20px}
+.comms-title{font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#52b788;margin-bottom:12px}
+.comms-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:8px;font-size:13px;color:rgba(255,255,255,.8);line-height:1.5}
+.comms-step:last-child{margin-bottom:0}
+.comms-num{font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;color:#c85a00;flex-shrink:0;width:16px}
+
+.doc-footer{background:#f0ede8;border-top:2px solid #0d2318;padding:14px 36px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.doc-footer-brand{font-family:'Share Tech Mono',monospace;font-size:10px;color:#888;letter-spacing:.12em;text-transform:uppercase}
+.doc-footer-note{font-family:'Share Tech Mono',monospace;font-size:10px;color:#aaa}
+
+/* ── PRINT STYLES ────────────────────────────────────────────────── */
+@media print {
+  .nav,.wizard,.plan-actions{display:none!important}
+  #plan-view{display:block!important}
+  #plan-doc{box-shadow:none;margin:0;max-width:100%}
+  body{background:#fff!important}
+  @page{margin:10mm;size:A4}
+  .hazard-cards{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="https://tools.survivalstorehouse.com" class="nav-back">← All Tools</a>
+  <span class="nav-brand">Emergency Plan Builder</span>
+  <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim)" id="nav-step"></span>
+</nav>
+
+<!-- ═══ WIZARD ═══════════════════════════════════════════════════════ -->
+<div class="wizard" id="wizard-view">
+
+  <!-- PROGRESS BAR -->
+  <div class="progress" id="progress-bar">
+    <div class="prog-step active" data-step="1"><div class="prog-dot">1</div><div class="prog-label">Household</div></div>
+    <div class="prog-step" data-step="2"><div class="prog-dot">2</div><div class="prog-label">Hazards</div></div>
+    <div class="prog-step" data-step="3"><div class="prog-dot">3</div><div class="prog-label">Needs</div></div>
+    <div class="prog-step" data-step="4"><div class="prog-dot">4</div><div class="prog-label">Rally Points</div></div>
+    <div class="prog-step" data-step="5"><div class="prog-dot">5</div><div class="prog-label">Generate</div></div>
+  </div>
+
+  <!-- STEP 1: HOUSEHOLD -->
+  <div class="step active" id="step-1">
+    <div class="step-eyebrow">Step 1 of 6</div>
+    <h1 class="step-title">Your Household</h1>
+    <p class="step-desc">This information personalises your plan. It is stored only in your browser and never sent anywhere. No names, addresses or personal details are required.</p>
+
+    <div class="field">
+      <label class="field-label">Suburb or region</label>
+      <input class="field-input" id="suburb" type="text" placeholder="e.g. Erina NSW, Northern Rivers QLD, Cairns">
+      <div style="font-size:12px;color:var(--dim);margin-top:6px;">No street address or personal details are collected or stored anywhere outside your browser.</div>
+    </div>
+
+    <div class="field">
+      <label class="field-label" style="margin-bottom:12px">Household members</label>
+      <div class="counter-group">
+        <div class="counter-row">
+          <div class="counter-info">
+            <div class="counter-name">Adults</div>
+            <div class="counter-hint">Aged 18 and over</div>
+          </div>
+          <div class="counter-ctrl">
+            <button class="counter-btn" onclick="adjustCounter('adults',-1)">−</button>
+            <span class="counter-val" id="adults-val">1</span>
+            <button class="counter-btn" onclick="adjustCounter('adults',1)">+</button>
+          </div>
+        </div>
+        <div class="counter-row">
+          <div class="counter-info">
+            <div class="counter-name">Children</div>
+            <div class="counter-hint">Under 18</div>
+          </div>
+          <div class="counter-ctrl">
+            <button class="counter-btn" onclick="adjustCounter('children',-1)">−</button>
+            <span class="counter-val" id="children-val">0</span>
+            <button class="counter-btn" onclick="adjustCounter('children',1)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Pets (select all that apply)</label>
+      <div class="pet-group">
+        <div class="pet-tag" onclick="togglePet(this,'Dog')">🐕 Dog</div>
+        <div class="pet-tag" onclick="togglePet(this,'Cat')">🐈 Cat</div>
+        <div class="pet-tag" onclick="togglePet(this,'Birds')">🦜 Birds</div>
+        <div class="pet-tag" onclick="togglePet(this,'Livestock')">🐄 Livestock</div>
+        <div class="pet-tag" onclick="togglePet(this,'Other pets')">🐾 Other</div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-next" onclick="goStep(2)">Next → Hazards</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: HAZARDS -->
+  <div class="step" id="step-2">
+    <div class="step-eyebrow">Step 2 of 6</div>
+    <h1 class="step-title">Your Risks</h1>
+    <p class="step-desc">Select the two hazards most relevant to your location. Your plan will include specific action sequences for each, based on Australian Royal Commission research.</p>
+    <div class="info-box"><strong>Tip:</strong> Not sure? Check your My Area risk profile at tools.survivalstorehouse.com/my-area.html</div>
+
+    <div class="hazard-grid" id="hazard-grid">
+      <div class="hazard-card" data-hazard="Bushfire" onclick="selectHazard(this)">
+        <div class="hazard-icon">🔥</div>
+        <div><div class="hazard-name">Bushfire</div><div class="hazard-sub">Central Coast, NSW, VIC, SA, QLD</div></div>
+      </div>
+      <div class="hazard-card" data-hazard="Flood" onclick="selectHazard(this)">
+        <div class="hazard-icon">🌊</div>
+        <div><div class="hazard-name">Flash Flood</div><div class="hazard-sub">Northern Rivers, QLD, lowland areas</div></div>
+      </div>
+      <div class="hazard-card" data-hazard="Cyclone" onclick="selectHazard(this)">
+        <div class="hazard-icon">🌀</div>
+        <div><div class="hazard-name">Cyclone</div><div class="hazard-sub">QLD, NT, WA north of Geraldton</div></div>
+      </div>
+      <div class="hazard-card" data-hazard="Heatwave" onclick="selectHazard(this)">
+        <div class="hazard-icon">🌡️</div>
+        <div><div class="hazard-name">Heatwave</div><div class="hazard-sub">All of Australia — most lethal natural hazard</div></div>
+      </div>
+      <div class="hazard-card" data-hazard="Grid Failure" onclick="selectHazard(this)">
+        <div class="hazard-icon">⚡</div>
+        <div><div class="hazard-name">Grid Failure</div><div class="hazard-sub">Extended power outage — all areas</div></div>
+      </div>
+      <div class="hazard-card" data-hazard="Severe Storm" onclick="selectHazard(this)">
+        <div class="hazard-icon">⛈️</div>
+        <div><div class="hazard-name">Severe Storm</div><div class="hazard-sub">Hail, damaging winds, flash flooding</div></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep(1)">← Back</button>
+      <button class="btn-next" onclick="goStep(3)">Next → Special Needs</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: SPECIAL NEEDS -->
+  <div class="step" id="step-3">
+    <div class="step-eyebrow">Step 3 of 6</div>
+    <h1 class="step-title">Special Needs</h1>
+    <p class="step-desc">Tick anything that applies to anyone in your household. These items appear as specific reminders in your plan.</p>
+
+    <div class="check-group" id="needs-group">
+      <label class="check-tile">
+        <input type="checkbox" id="need-insulin" onchange="updateTile(this)">
+        <div class="check-tile-body">
+          <div class="check-tile-name">Refrigerated medication (e.g. insulin)</div>
+          <div class="check-tile-hint">Adds cooler bag + ice protocol to your plan. Insulin is stable below 25°C for 28 days — the risk is a summer outage.</div>
+        </div>
+      </label>
+      <label class="check-tile">
+        <input type="checkbox" id="need-device" onchange="updateTile(this)">
+        <div class="check-tile-body">
+          <div class="check-tile-name">Powered medical device (CPAP, home oxygen, insulin pump)</div>
+          <div class="check-tile-hint">Adds device-specific backup prompts. Home oxygen concentrators have no battery — your supplier has an emergency cylinder protocol.</div>
+        </div>
+      </label>
+      <label class="check-tile">
+        <input type="checkbox" id="need-mobility" onchange="updateTile(this)">
+        <div class="check-tile-body">
+          <div class="check-tile-name">Mobility limitations or wheelchair use</div>
+          <div class="check-tile-hint">Adds evacuation assistance contacts and accessible rally point reminders.</div>
+        </div>
+      </label>
+      <label class="check-tile">
+        <input type="checkbox" id="need-elderly" onchange="updateTile(this)">
+        <div class="check-tile-body">
+          <div class="check-tile-name">Elderly household member (65+)</div>
+          <div class="check-tile-hint">Adds heat vulnerability and medication reminders. Heatwave + power outage is a specific medical risk for elderly Australians.</div>
+        </div>
+      </label>
+      <label class="check-tile">
+        <input type="checkbox" id="need-infant" onchange="updateTile(this)">
+        <div class="check-tile-body">
+          <div class="check-tile-name">Infant or child under 5</div>
+          <div class="check-tile-hint">Adds formula/nappies to the go-bag checklist and school reunification reminder.</div>
+        </div>
+      </label>
+      <label class="check-tile">
+        <input type="checkbox" id="need-s8" onchange="updateTile(this)">
+        <div class="check-tile-body">
+          <div class="check-tile-name">Controlled medication (S8 — opioids, benzodiazepines)</div>
+          <div class="check-tile-hint">Emergency supply provisions largely don't apply to S8 medications. Plan adds a specific buffer reminder.</div>
+        </div>
+      </label>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep(2)">← Back</button>
+      <button class="btn-next" onclick="goStep(4)">Next → Contacts</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: RALLY POINTS -->
+
+  <div class="step" id="step-4">
+    <div class="step-eyebrow">Step 4 of 5</div>
+    <h1 class="step-title">Rally Points</h1>
+    <p class="step-desc">Two places your household will meet if you get separated. Choose them now — not during an emergency.</p>
+
+    <div class="info-box">
+      <strong>Local rally point:</strong> somewhere within 2–5km you can all walk to if needed — a neighbour's house, a local park, a school.<br>
+      <strong style="color:var(--or);margin-top:6px;display:block">Out-of-area rally point:</strong> somewhere you can all drive to if your area is evacuated — family home, friend's place, a town outside your hazard zone.
+    </div>
+
+    <div class="field">
+      <label class="field-label">📍 Local rally point — name</label>
+      <input class="field-input" id="rp1name" type="text" placeholder="e.g. Neighbour Karen's house / Erina Community Centre">
+    </div>
+    <div class="field">
+      <label class="field-label">Local rally point — address or description</label>
+      <input class="field-input" id="rp1addr" type="text" placeholder="e.g. 45 Example Rd, Erina NSW 2250">
+    </div>
+
+    <div class="field" style="margin-top:8px">
+      <label class="field-label">🏠 Out-of-area rally point — name</label>
+      <input class="field-input" id="rp2name" type="text" placeholder="e.g. Mum and Dad's place in Gosford">
+    </div>
+    <div class="field">
+      <label class="field-label">Out-of-area rally point — address</label>
+      <input class="field-input" id="rp2addr" type="text" placeholder="e.g. 12 Smith St, Gosford NSW 2250">
+    </div>
+
+    <div class="field" style="margin-top:8px">
+      <label class="field-label">Primary evacuation route</label>
+      <input class="field-input" id="route1" type="text" placeholder="e.g. Pacific Highway heading south to Gosford">
+    </div>
+    <div class="field">
+      <label class="field-label">Backup evacuation route</label>
+      <input class="field-input" id="route2" type="text" placeholder="e.g. Old Pacific Highway via Gosford if main route closed">
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep(3)">← Back</button>
+      <button class="btn-next" onclick="goStep(5)">Next → Review</button>
+    </div>
+  </div>
+
+  <!-- STEP 6: REVIEW -->
+  <div class="step" id="step-5">
+    <div class="step-eyebrow">Step 5 of 5</div>
+    <h1 class="step-title">Ready to Generate</h1>
+    <p class="step-desc">Your personalised emergency plan is ready. It includes hazard-specific action sequences, your contacts, rally points, go-bag checklist, and official numbers. Print it and put it on the fridge.</p>
+
+    <div class="info-box">
+      <strong>After printing:</strong> Give a copy to every adult in the household. Put one copy on the fridge and one in the emergency kit. Review the plan every 12 months or after any major emergency.
+    </div>
+
+    <div id="review-summary" style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:8px;font-size:14px;color:var(--dim);line-height:1.9"></div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep(4)">← Back</button>
+      <button class="btn-generate" onclick="generatePlan()">Generate My Plan →</button>
+    </div>
+  </div>
+
+</div><!-- end wizard -->
+
+<!-- ═══ PLAN VIEW ═════════════════════════════════════════════════════ -->
+<div id="plan-view">
+  <div class="plan-actions">
+    <button class="btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    <button class="btn-edit" onclick="backToWizard()">← Edit Plan</button>
+  </div>
+
+  <div id="plan-doc">
+    <!-- generated by JS -->
+  </div>
+</div>
+
+<script>
+// ── STATE ─────────────────────────────────────────────────────────────
+let S = {
+  step: 1,
+  suburb: '',
+  adults: 1, children: 0, pets: [],
+  hazard1: '', hazard2: '',
+  needs: { insulin:false, device:false, mobility:false, elderly:false, infant:false, s8:false },
+
+  rp1: {name:'',addr:''}, rp2: {name:'',addr:''},
+  route1:'', route2:''
+};
+
+// Load saved state
+try { const saved = localStorage.getItem('ss_ep_state'); if (saved) S = {...S,...JSON.parse(saved)}; } catch(e){}
+
+// ── COUNTER ───────────────────────────────────────────────────────────
+function adjustCounter(field, delta) {
+  const min = field === 'adults' ? 1 : 0;
+  S[field] = Math.max(min, (S[field]||0) + delta);
+  document.getElementById(field+'-val').textContent = S[field];
+  save();
+}
+
+// ── PETS ──────────────────────────────────────────────────────────────
+function togglePet(el, pet) {
+  el.classList.toggle('on');
+  if (S.pets.includes(pet)) S.pets = S.pets.filter(p=>p!==pet);
+  else S.pets.push(pet);
+  save();
+}
+
+// ── HAZARDS ───────────────────────────────────────────────────────────
+function selectHazard(el) {
+  const h = el.dataset.hazard;
+  const cards = document.querySelectorAll('.hazard-card');
+  // Deselect if already selected
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    const badge = el.querySelector('.hazard-badge'); if(badge) badge.remove();
+    if (S.hazard1 === h) S.hazard1 = '';
+    else if (S.hazard2 === h) S.hazard2 = '';
+    save(); return;
+  }
+  if (el.classList.contains('selected-2')) {
+    el.classList.remove('selected-2');
+    const badge = el.querySelector('.hazard-badge'); if(badge) badge.remove();
+    if (S.hazard2 === h) S.hazard2 = '';
+    save(); return;
+  }
+  // Select
+  if (!S.hazard1) {
+    S.hazard1 = h;
+    el.classList.add('selected');
+    el.insertAdjacentHTML('beforeend','<div class="hazard-badge badge-1">Primary</div>');
+  } else if (!S.hazard2) {
+    S.hazard2 = h;
+    el.classList.add('selected-2');
+    el.insertAdjacentHTML('beforeend','<div class="hazard-badge badge-2">Secondary</div>');
+  }
+  save();
+}
+
+// ── NEEDS ─────────────────────────────────────────────────────────────
+function updateTile(cb) {
+  const key = cb.id.replace('need-','');
+  S.needs[key] = cb.checked;
+  cb.closest('.check-tile').classList.toggle('checked', cb.checked);
+  save();
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────
+function goStep(n) {
+  collectCurrentStep();
+  save();
+  S.step = n;
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step-'+n).classList.add('active');
+  // Update progress
+  document.querySelectorAll('.prog-step').forEach(s=>{
+    const sn = parseInt(s.dataset.step);
+    s.classList.toggle('done', sn < n);
+    s.classList.toggle('active', sn === n);
+  });
+  document.getElementById('nav-step').textContent = `Step ${n} of 5`;
+  if (n === 6) buildReviewSummary();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function collectCurrentStep() {
+  const v = id => document.getElementById(id)?.value?.trim()||'';
+  S.suburb = v('suburb');
+
+  S.rp1 = {name:v('rp1name'),addr:v('rp1addr')};
+  S.rp2 = {name:v('rp2name'),addr:v('rp2addr')};
+  S.route1 = v('route1'); S.route2 = v('route2');
+}
+
+// ── SAVE ──────────────────────────────────────────────────────────────
+function save() {
+  try { localStorage.setItem('ss_ep_state', JSON.stringify(S)); } catch(e){}
+}
+
+// ── REVIEW SUMMARY ────────────────────────────────────────────────────
+function buildReviewSummary() {
+  collectCurrentStep();
+  const el = document.getElementById('review-summary');
+  const petsStr = S.pets.length ? S.pets.join(', ') : 'None';
+  const hazStr = [S.hazard1, S.hazard2].filter(Boolean).join(' + ') || 'None selected';
+  const needsArr = Object.entries(S.needs).filter(([,v])=>v).map(([k])=>({insulin:'Refrigerated medication',device:'Powered medical device',mobility:'Mobility needs',elderly:'Elderly member',infant:'Infant/young child',s8:'Controlled medication'}[k]));
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px">
+      <div>📍 Location: <strong style="color:var(--white)">${S.suburb||'Not set'}</strong></div>
+
+      <div>👥 ${S.adults} adult${S.adults!==1?'s':''}, ${S.children} child${S.children!==1?'ren':''}</div>
+      <div>🐾 Pets: ${petsStr}</div>
+      <div>⚠️ Hazards: <strong style="color:var(--white)">${hazStr}</strong></div>
+      <div>🏠 Rally point 1: ${S.rp1.name||'Not set'}</div>
+      ${needsArr.length?`<div style="grid-column:1/-1">💊 Special needs: ${needsArr.join(', ')}</div>`:''}
+    </div>
+  `;
+}
+
+// ── HAZARD ACTION DATA ────────────────────────────────────────────────
+const HAZARD_DATA = {
+  'Bushfire': {
+    icon:'🔥', color:'#8B1A1A',
+    actions:[
+      {n:'1',t:'<strong>Catastrophic/Extreme FDR day:</strong> Leave the night before or at first light. Do not wait for the alarm.'},
+      {n:'2',t:'<strong>Watch and Act warning issued:</strong> Leave NOW — don\'t wait for Emergency Warning. By Emergency Warning, roads may be compromised.'},
+      {n:'3',t:'<strong>Grab the pre-packed emergency bag</strong> from [its location]. Don\'t stop to pack — the bag should already be ready.'},
+      {n:'4',t:'<strong>Drive via primary route</strong> (see below). If road is affected by smoke or embers, use backup route.'},
+      {n:'5',t:'<strong>Do NOT shelter in a bathroom or interior room without a window.</strong> This is a documented fatal flaw. If you cannot leave safely, shelter in a room with a visible exit.'},
+    ]
+  },
+  'Flood': {
+    icon:'🌊', color:'#1A3A8B',
+    actions:[
+      {n:'1',t:'<strong>Monitor the BOM flood gauge</strong> for your local river daily during sustained rain events.'},
+      {n:'2',t:'<strong>"Consider leaving now" advisory = leave now.</strong> This is SES language for "go" — not a suggestion. Leave at Watch and Act, not Evacuation Order.'},
+      {n:'3',t:'<strong>NEVER drive through floodwater.</strong> A Toyota Yaris is moved by 15cm of water. A Nissan Patrol floats at 95cm. 43% of Australian flood deaths are vehicle-related.'},
+      {n:'4',t:'<strong>Vertical evacuation:</strong> If roads are flooded and you cannot leave, go to the highest point in the building. Call SES on 132 500 immediately.'},
+      {n:'5',t:'<strong>Store emergency supplies upstairs</strong> in a flood-prone home so they remain accessible if you cannot leave.'},
+    ]
+  },
+  'Cyclone': {
+    icon:'🌀', color:'#1A558B',
+    actions:[
+      {n:'1',t:'<strong>Know your cyclone zone</strong> (check council website before season). Zone B or above = mandatory evacuation for Category 3 and above.'},
+      {n:'2',t:'<strong>Leave when directed — do not wait.</strong> Category 3+ in warm Coral Sea water rarely weakens before landfall. "It will weaken" is documented dangerous reasoning.'},
+      {n:'3',t:'<strong>Low-set pre-1980 timber homes</strong> are not rated for Category 3+. The zone designation is an engineering assessment of your structure, not just the storm.'},
+      {n:'4',t:'<strong>If sheltering in place:</strong> interior room on a load-bearing wall, NOT a garage (roller door failure is documented) and NOT a bathroom with no escape window.'},
+      {n:'5',t:'<strong>Go to the designated Category 5 evacuation centre</strong> — not a friend\'s house in the outer bands. The centre is engineered for the event.'},
+    ]
+  },
+  'Heatwave': {
+    icon:'🌡️', color:'#8B5A1A',
+    actions:[
+      {n:'1',t:'<strong>Heatwaves kill more Australians than any other natural disaster.</strong> Most deaths occur on the 2nd and 3rd consecutive hot night — the house never cools down.'},
+      {n:'2',t:'<strong>Identify the coolest room now</strong> (lowest floor, north-facing). Know the nearest air-conditioned public space (library, shopping centre).'},
+      {n:'3',t:'<strong>Beta-blockers, diuretics, antipsychotics and some antidepressants</strong> impair heat regulation. Anyone on these medications is at elevated risk.'},
+      {n:'4',t:'<strong>Signs of heatstroke</strong> (not just heat exhaustion): hot DRY skin, confusion, loss of consciousness. Call 000 immediately — this is a medical emergency.'},
+      {n:'5',t:'<strong>Check on elderly neighbours daily</strong> during extreme heat. Never leave children or pets in vehicles.'},
+    ]
+  },
+  'Grid Failure': {
+    icon:'⚡', color:'#5A5A1A',
+    actions:[
+      {n:'1',t:'<strong>Identify refrigerated medications immediately</strong> and move to a cooler bag with ice. The fridge stays cold for ~2 hours when sealed. Act before that window closes.'},
+      {n:'2',t:'<strong>Phone towers have 2–8 hour backup batteries.</strong> Make all critical calls in the first 30 minutes while signal holds.'},
+      {n:'3',t:'<strong>EFTPOS and ATMs fail with extended outages.</strong> Cash is the only payment method that doesn\'t require network connectivity. Have $100+ at home.'},
+      {n:'4',t:'<strong>Hospital generators are not guaranteed.</strong> Flinders Medical Centre\'s generator failed after 1hr 45min during the 2016 SA blackout. Have the hospital direct number on paper.'},
+      {n:'5',t:'<strong>Extended summer outage = heatwave risk</strong> for elderly household members on medication. Have a plan for alternative cooling before the outage, not during it.'},
+    ]
+  },
+  'Severe Storm': {
+    icon:'⛈️', color:'#3A1A8B',
+    actions:[
+      {n:'1',t:'<strong>Before the storm:</strong> Bring all loose outdoor items inside — chairs, trampolines, umbrellas. Secure anything that cannot be moved.'},
+      {n:'2',t:'<strong>During the storm:</strong> Stay indoors and away from windows. If a window fails, move to an interior room immediately.'},
+      {n:'3',t:'<strong>If driving when a storm hits:</strong> Pull over under cover away from trees. Do NOT shelter under a highway overpass — wind tunnel effect increases debris risk.'},
+      {n:'4',t:'<strong>Fallen powerlines:</strong> Treat all fallen lines as live. Stay at least 8 metres away. Call Ausgrid (NSW), Energex (QLD), or United Energy (VIC) — NOT 000 unless someone is injured.'},
+      {n:'5',t:'<strong>After the storm:</strong> Do not approach fallen trees or damaged structures without checking above you. Chainsaw injuries spike in the 48 hours after major storms.'},
+    ]
+  }
+};
+
+// ── GO-BAG CHECKLIST ──────────────────────────────────────────────────
+function getChecklist() {
+  const total = S.adults + S.children;
+  const days = 3;
+  const water = total * 4 * days;
+
+  // PACK NOW — permanent kit items
+  const packNow = [
+    `Water — ${water} litres (4L/person/day for ${days} days)`,
+    `Non-perishable food — ${days}-day supply for ${total} people`,
+    'First aid kit — current and fully stocked',
+    'Battery radio — hand-crank or with spare batteries',
+    'Torch and spare batteries',
+    'Candles and waterproof matches or lighter',
+    'Cash — minimum $200 in small notes (EFTPOS fails in outages)',
+    'Spare keys for home and vehicles',
+    'Local printed maps (for if GPS and phone fail)',
+    'Whistle — for signalling if trapped or injured',
+    'Sturdy gloves and dust masks',
+    'Sunscreen, insect repellent, hand sanitiser',
+    'Soap, dental care, toilet paper, sanitary items',
+    'Change of clothes and underwear for each person',
+    'Sturdy shoes for everyone in the household',
+    'Blankets or sleeping bags for each person',
+    'Cooler bag with ice packs (for refrigerated medications)',
+    'Can opener (manual)',
+    'Important phone numbers printed on paper',
+  ];
+
+  // ADD BEFORE LEAVING — items to grab at departure
+  const addBefore = [
+    'All prescription medications — 5-day supply minimum',
+    'Medicare card and any health care cards',
+    'Phone, laptop and chargers',
+    'Portable battery/power bank — fully charged',
+    'Photos, jewellery and irreplaceable personal items',
+    'Hard drive or USB with important digital files',
+  ];
+
+  if (S.pets.length) {
+    packNow.push('Pet food and water — 3-day supply');
+    packNow.push('Pet carrier or lead for each animal');
+    addBefore.push('Pet vaccination and microchip records');
+  }
+  if (S.needs.infant) {
+    packNow.push('Formula, nappies and wipes — 3-day supply');
+    addBefore.push('Baby medications and thermometer');
+  }
+  if (S.needs.device) {
+    packNow.push('CPAP battery pack or 12V car adaptor');
+    packNow.push('Spare batteries for any powered medical device');
+  }
+  if (S.needs.s8) {
+    addBefore.push('Controlled medication — 2-week buffer supply');
+    addBefore.push('Prescriber after-hours contact number on paper');
+  }
+
+  return { packNow, addBefore };
+}
+
+// ── GENERATE PLAN ─────────────────────────────────────────────────────
+function generatePlan() {
+  collectCurrentStep();
+  save();
+
+  const h1 = HAZARD_DATA[S.hazard1];
+  const h2 = HAZARD_DATA[S.hazard2];
+  const checklist = getChecklist();
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
+  const reviewDate = new Date(now); reviewDate.setFullYear(reviewDate.getFullYear()+1);
+  const reviewStr = reviewDate.toLocaleDateString('en-AU',{month:'long',year:'numeric'});
+
+  const hazardCard = (h,label) => h ? `
+    <div class="doc-hazard">
+      <div class="doc-hazard-header" style="background:${h.color}">
+        <div class="doc-hazard-icon">${h.icon}</div>
+        <div class="doc-hazard-name">${label} Hazard: ${Object.keys(HAZARD_DATA).find(k=>HAZARD_DATA[k]===h)}</div>
+      </div>
+      <div class="doc-hazard-body">
+        ${h.actions.map(a=>`<div class="doc-action"><span class="doc-action-num">${a.n}</span><span>${a.t}</span></div>`).join('')}
+      </div>
+    </div>` : '';
+
+
+
+  const needsList = [];
+  if (S.needs.insulin) needsList.push({icon:'💊',t:'Refrigerated medication: move to cooler bag with ice immediately when power fails. 2-hour fridge window.'});
+  if (S.needs.device) needsList.push({icon:'🔌',t:'Powered medical device: contact supplier for emergency protocol. Home oxygen suppliers have emergency cylinders.'});
+  if (S.needs.mobility) needsList.push({icon:'♿',t:'Mobility assistance required for evacuation. Identify helpers and accessible vehicles in advance.'});
+  if (S.needs.elderly) needsList.push({icon:'👴',t:'Elderly member at elevated risk during heatwave + outage combination. Prioritise cooling and medication stability.'});
+  if (S.needs.infant) needsList.push({icon:'👶',t:'Infant/young child: confirm school/childcare reunification procedure. Keep formula and nappies in emergency kit.'});
+  if (S.needs.s8) needsList.push({icon:'🔒',t:'Controlled medication: emergency supply provisions (3-day rule) do NOT apply to S8. Maintain 2-week buffer.'});
+
+  document.getElementById('plan-doc').innerHTML = `
+    <div class="doc-header">
+      <div class="doc-header-left">
+        <div class="doc-eyebrow">Survival Storehouse Australia · survivalstorehouse.com</div>
+        <div class="doc-title">Household Emergency Plan</div>
+        <div class="doc-household">${S.suburb||''}</div>
+        <div class="doc-date">Created: ${dateStr} · Review by: ${reviewStr}</div>
+      </div>
+      <div class="doc-header-right">
+        <div class="doc-000">000</div>
+        <div class="doc-000-label">Emergency</div>
+      </div>
+    </div>
+
+    <div class="doc-body">
+
+      <!-- HAZARDS -->
+      <div class="doc-section">
+        <div class="doc-section-title">Emergency Action Sequences</div>
+        <div class="hazard-cards">
+          ${hazardCard(h1,'Primary')}
+          ${hazardCard(h2,'Secondary')}
+        </div>
+      </div>
+
+      <!-- ROUTES + RALLY POINTS -->
+      <div class="doc-section">
+        <div class="doc-section-title">Meeting Points &amp; Evacuation Routes</div>
+        <div class="rally-grid" style="margin-bottom:14px">
+          <div class="rally-card">
+            <div class="rally-label">Local Meeting Point</div>
+            <div class="rally-name">${S.rp1.name||'Not set'}</div>
+            <div class="rally-address">${S.rp1.addr||''}</div>
+          </div>
+          <div class="rally-card">
+            <div class="rally-label">Out-of-Area Rally Point</div>
+            <div class="rally-name">${S.rp2.name||'Not set'}</div>
+            <div class="rally-address">${S.rp2.addr||''}</div>
+          </div>
+        </div>
+        ${S.route1||S.route2?`
+        <div style="background:#f0ede8;border:1px solid #d0ccc4;border-radius:2px;padding:12px 14px;font-size:13px;color:#333">
+          ${S.route1?`<div style="margin-bottom:4px"><strong>Primary route:</strong> ${S.route1}</div>`:''}
+          ${S.route2?`<div><strong>Backup route:</strong> ${S.route2}</div>`:''}
+        </div>`:''}
+      </div>
+
+      <!-- IF SEPARATED -->
+      <div class="doc-section">
+        <div class="doc-section-title">If Separated — Communication Protocol</div>
+        <div class="comms-box">
+          <div class="comms-title">When you cannot reach each other directly:</div>
+          <div class="comms-step"><span class="comms-num">1</span><span>Each person calls the <strong style="color:#52b788">out-of-area coordinator</strong> (write their name and number in the contacts table above) to report their location and status.</span></div>
+          <div class="comms-step"><span class="comms-num">2</span><span>The coordinator relays information between household members. Everyone calls <em>them</em> — they call <em>each other</em>.</span></div>
+          <div class="comms-step"><span class="comms-num">3</span><span>If phone networks are down: go to the local meeting point (${S.rp1.name||'[local meeting point]'}) and wait. Leave a note on the door with your destination.</span></div>
+          <div class="comms-step"><span class="comms-num">4</span><span>Register on the <strong style="color:#52b788">National Registration and Inquiry System</strong> at register.redcross.org.au or 1800 REDCROSS so family can find you.</span></div>
+        </div>
+      </div>
+
+      <!-- CONTACTS - write-in -->
+      <div class="doc-section">
+        <div class="doc-section-title">Emergency Contacts — Write In</div>
+        <table class="contacts-table">
+          <thead><tr><th style="width:35%">Name</th><th style="width:30%">Phone</th><th>Relationship</th></tr></thead>
+          <tbody>
+            <tr style="height:36px"><td style="border-bottom:1px solid #ccc"></td><td style="border-bottom:1px solid #ccc"></td><td style="border-bottom:1px solid #ccc"></td></tr>
+            <tr style="height:36px"><td style="border-bottom:1px solid #ccc"></td><td style="border-bottom:1px solid #ccc"></td><td style="border-bottom:1px solid #ccc"></td></tr>
+            <tr style="height:36px"><td style="border-bottom:1px solid #ccc"></td><td style="border-bottom:1px solid #ccc"></td><td style="border-bottom:1px solid #ccc"></td></tr>
+            <tr style="background:#fff9f0;height:40px">
+              <td style="border-bottom:1px solid #ccc"><span style="font-size:10px;color:#c85a00;font-family:monospace;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:2px">Out-of-area coordinator</span></td>
+              <td style="border-bottom:1px solid #ccc"></td>
+              <td style="border-bottom:1px solid #ccc"><span style="font-size:10px;color:#888">Their location:</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="font-size:11px;color:#888;margin-top:6px;font-style:italic">Out-of-area coordinator: someone who lives outside your region. Everyone calls them first if separated — they relay messages between household members.</div>
+      </div>
+
+      <!-- OFFICIAL NUMBERS -->
+      <div class="doc-section">
+        <div class="doc-section-title">Official Numbers</div>
+        <div class="numbers-grid">
+          <div class="number-card"><div class="number-name">Emergency</div><div class="number-val">000</div></div>
+          <div class="number-card"><div class="number-name">SES (flood/storm)</div><div class="number-val">132 500</div></div>
+          <div class="number-card"><div class="number-name">HealthDirect</div><div class="number-val">1800 022 222</div></div>
+          <div class="number-card"><div class="number-name">Poisons Info</div><div class="number-val">13 11 26</div></div>
+          <div class="number-card"><div class="number-name">PBS Inquiry</div><div class="number-val">132 290</div></div>
+          <div class="number-card"><div class="number-name">Red Cross Register</div><div class="number-val">1800 733 276</div></div>
+        </div>
+      </div>
+
+      <!-- DEPARTURE TRIGGER -->
+      <div class="doc-section">
+        <div class="doc-section-title">My Departure Trigger — Decide Now, Not Under Pressure</div>
+        <div style="background:#fff9f0;border:1.5px solid #f4d0a0;border-radius:3px;padding:16px 18px;margin-bottom:10px">
+          <div style="font-size:11px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#c85a00;margin-bottom:8px">I / We will leave when:</div>
+          <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:10px"></div>
+          <div style="height:28px;border-bottom:1px solid #ccc"></div>
+        </div>
+        <div style="font-size:11px;color:#888;font-style:italic">Research finding: The single most important preparedness decision is made in advance, not at 2am under a smoke alarm. Write your specific trigger above — e.g. "When a Watch and Act is issued for our area" or "When the gauge reaches 9.5m".</div>
+      </div>
+
+      <!-- BEFORE YOU LEAVE - HOME PREPARATION -->
+      <div class="doc-section">
+        <div class="doc-section-title">Before You Leave — Home Preparation</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          ${(S.hazard1==='Bushfire'||S.hazard2==='Bushfire')?`
+          <div>
+            <div style="font-family:monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#8B1A1A;margin-bottom:8px;font-weight:700">🔥 Bushfire — Before Leaving</div>
+            ${['Turn off gas mains or bottles','Turn off electricity at the switchboard','Turn off solar panels at the inverter','Move outdoor furniture inside or away from house','Close all windows, doors and vents','Wet down the lawn and garden if time permits','Fill gutters with water (do not go on the roof)','Soak towels/rugs and place across door gaps','Lock up and leave access gates unlocked for firefighters'].map(i=>`<div class="check-item"><div class="check-box"></div><span style="font-size:11px">${i}</span></div>`).join('')}
+          </div>`:``}
+          ${(S.hazard1==='Flood'||S.hazard2==='Flood')?`
+          <div>
+            <div style="font-family:monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#1A3A8B;margin-bottom:8px;font-weight:700">🌊 Flood — Before Leaving</div>
+            ${['Turn off power at the main switchboard','Lift electrical items off the floor','Move valuables and documents upstairs or to high ground','Block floor drains and toilet with plugs or sandbags','Secure loose items or move inside','Disconnect appliances from power points','Move vehicles to high ground','Record video/photos of contents for insurance','Lock the house and take your kit'].map(i=>`<div class="check-item"><div class="check-box"></div><span style="font-size:11px">${i}</span></div>`).join('')}
+          </div>`:``}
+          ${(S.hazard1==='Cyclone'||S.hazard2==='Cyclone')?`
+          <div>
+            <div style="font-family:monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#1A558B;margin-bottom:8px;font-weight:700">🌀 Cyclone — Before Leaving</div>
+            ${['Secure or bring inside all outdoor items','Turn off gas and electricity','Fill bath and containers with water','Charge all phones and devices fully','Board or tape windows if time permits','Record video/photos of contents for insurance','Take your go-kit and leave via your planned route'].map(i=>`<div class="check-item"><div class="check-box"></div><span style="font-size:11px">${i}</span></div>`).join('')}
+          </div>`:``}
+          ${(S.hazard1==='Severe Storm'||S.hazard2==='Severe Storm')?`
+          <div>
+            <div style="font-family:monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#3A1A8B;margin-bottom:8px;font-weight:700">⛈️ Storm — Before It Arrives</div>
+            ${['Bring all loose outdoor items inside','Clear gutters and drains of leaves and debris','Close all windows and external doors','Park vehicles under cover away from trees','Charge all phones and devices','Fill containers with water as backup'].map(i=>`<div class="check-item"><div class="check-box"></div><span style="font-size:11px">${i}</span></div>`).join('')}
+          </div>`:``}
+        </div>
+      </div>
+
+      <!-- SCHOOL / CHILDCARE PICKUP -->
+      ${S.children > 0 ? `
+      <div class="doc-section">
+        <div class="doc-section-title">School &amp; Childcare Pickup Plan</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div>
+            <div style="font-size:11px;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-bottom:5px">School / Childcare name</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:12px"></div>
+            <div style="font-size:11px;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-bottom:5px">Pickup procedure / reunification point</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:5px"></div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-bottom:5px">Authorised pickup person (if parents unavailable)</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:12px"></div>
+            <div style="font-size:11px;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-bottom:5px">School emergency phone</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+        </div>
+      </div>` : ``}
+
+      <!-- PETS -->
+      ${S.pets.length > 0 ? `
+      <div class="doc-section">
+        <div class="doc-section-title">Pet &amp; Animal Details</div>
+        <table class="contacts-table">
+          <thead><tr><th>Animal / Name</th><th>Vet name &amp; phone</th><th>Microchip / ID</th><th>How to transport</th></tr></thead>
+          <tbody>
+            <tr style="height:36px"><td></td><td></td><td></td><td></td></tr>
+            ${S.pets.length > 1 ? `<tr style="height:36px"><td></td><td></td><td></td><td></td></tr>` : ``}
+            ${S.pets.length > 2 ? `<tr style="height:36px"><td></td><td></td><td></td><td></td></tr>` : ``}
+          </tbody>
+        </table>
+      </div>` : ``}
+
+      <!-- MEDICAL SUMMARY -->
+      <div class="doc-section">
+        <div class="doc-section-title">Medical Summary — For Emergency Personnel</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:12px">
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Blood types</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Known allergies</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Critical conditions</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+        </div>
+        <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Regular medications (name, dose, person)</div>
+        <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:5px"></div>
+        <div style="height:28px;border-bottom:1px solid #ccc"></div>
+      </div>
+
+      <!-- NEAREST SERVICES -->
+      <div class="doc-section">
+        <div class="doc-section-title">Nearest Services</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Nearest evacuation centre</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:8px"></div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Address</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Nearest hospital</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:8px"></div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Address &amp; phone</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSURANCE -->
+      <div class="doc-section">
+        <div class="doc-section-title">Insurance &amp; Key Accounts</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Home insurer</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:8px"></div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Policy number</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Contents insurer</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:8px"></div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Policy number</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+          <div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Insurer claims phone</div>
+            <div style="height:28px;border-bottom:1px solid #ccc;margin-bottom:8px"></div>
+            <div style="font-size:10px;font-family:monospace;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:5px">Car insurer &amp; policy</div>
+            <div style="height:28px;border-bottom:1px solid #ccc"></div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:#888;margin-top:8px;font-style:italic">Tip: photograph every room of your home and save to cloud storage now — insurance claims are significantly easier with pre-disaster photo evidence.</div>
+      </div>
+
+      <!-- AFTER THE EMERGENCY -->
+      <div class="doc-section">
+        <div class="doc-section-title">After the Emergency — Before You Return</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px">
+          ${['Do not return home until emergency services confirm it is safe','Check for structural damage before entering — look up, not just ahead','Do not use tap water until authorities confirm it is safe','Do not use flooded electrical equipment until inspected','Photograph all damage before cleaning up — for your insurance claim','Report damage to your council and energy provider','Register with Red Cross if you were evacuated: register.redcross.org.au','Contact Services Australia for disaster recovery payments: servicesaustralia.gov.au'].map(i=>`<div class="check-item"><div class="check-box"></div><span style="font-size:12px">${i}</span></div>`).join('')}
+        </div>
+      </div>
+
+      ${needsList.length ? `
+      <!-- SPECIAL NEEDS -->
+      <div class="doc-section">
+        <div class="doc-section-title">Special Needs — Critical Reminders</div>
+        <div class="needs-list">
+          ${needsList.map(n=>`<div class="needs-item"><span class="needs-icon">${n.icon}</span><span>${n.t}</span></div>`).join('')}
+        </div>
+      </div>` : ''}
+
+      <!-- GO-BAG CHECKLIST -->
+      <div class="doc-section">
+        <div class="doc-section-title">Go-Bag Checklist — ${S.adults + S.children} Person${S.adults+S.children!==1?'s':''}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <div style="font-family:monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#c85a00;margin-bottom:8px;font-weight:700">Pack Now — Keep in the Kit</div>
+            ${checklist.packNow.map(i=>`<div class="check-item"><div class="check-box"></div><span>${i}</span></div>`).join('')}
+          </div>
+          <div>
+            <div style="font-family:monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#1a5c35;margin-bottom:8px;font-weight:700">Add Before Leaving</div>
+            ${checklist.addBefore.map(i=>`<div class="check-item" style="border-color:#d0f0e0"><div class="check-box" style="border-color:#52b788"></div><span>${i}</span></div>`).join('')}
+            <div style="height:20px;border-bottom:1px solid #e8e4dc;margin-bottom:0"></div>
+            <div style="height:20px;border-bottom:1px solid #e8e4dc;margin-bottom:0"></div>
+            <div style="height:20px"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end doc-body -->
+
+    <div class="doc-footer">
+      <div class="doc-footer-brand">Survival Storehouse Australia · Erina NSW · survivalstorehouse.com · tools.survivalstorehouse.com</div>
+      <div class="doc-footer-note">Review annually · In an emergency call 000</div>
+    </div>
+  `;
+
+  document.getElementById('wizard-view').style.display = 'none';
+  document.getElementById('plan-view').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function backToWizard() {
+  document.getElementById('wizard-view').style.display = 'block';
+  document.getElementById('plan-view').style.display = 'none';
+  goStep(S.step||6);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+(function init() {
+  // Restore counter values
+  document.getElementById('adults-val').textContent = S.adults||1;
+  document.getElementById('children-val').textContent = S.children||0;
+  // Restore pets
+  document.querySelectorAll('.pet-tag').forEach(el=>{
+    const pet = el.textContent.trim().replace(/^.+\s/,'');
+    if (S.pets && S.pets.some(p=>el.textContent.includes(p.split(' ')[0]))) el.classList.add('on');
+  });
+  // Restore hazards
+  if (S.hazard1) {
+    const el = document.querySelector(`[data-hazard="${S.hazard1}"]`);
+    if (el) { el.classList.add('selected'); el.insertAdjacentHTML('beforeend','<div class="hazard-badge badge-1">Primary</div>'); }
+  }
+  if (S.hazard2) {
+    const el = document.querySelector(`[data-hazard="${S.hazard2}"]`);
+    if (el) { el.classList.add('selected-2'); el.insertAdjacentHTML('beforeend','<div class="hazard-badge badge-2">Secondary</div>'); }
+  }
+  // Restore needs checkboxes
+  Object.entries(S.needs||{}).forEach(([k,v])=>{
+    const cb = document.getElementById('need-'+k);
+    if (cb) { cb.checked = v; if(v) cb.closest('.check-tile').classList.add('checked'); }
+  });
+  // Restore text inputs
+  const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val||''; };
+  setVal('suburb', S.suburb);
+
+  if (S.rp1) { setVal('rp1name',S.rp1.name); setVal('rp1addr',S.rp1.addr); }
+  if (S.rp2) { setVal('rp2name',S.rp2.name); setVal('rp2addr',S.rp2.addr); }
+  setVal('route1',S.route1); setVal('route2',S.route2);
+  document.getElementById('nav-step').textContent = `Step 1 of 5`;
+})();
+</script>
+</body>
+</html>
