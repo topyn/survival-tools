@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free Emergency Preparedness Tools — Survival Storehouse Australia</title>
-<meta name="description" content="Free interactive emergency preparedness tools for Australians. Survival scenario simulator, 72-hour checklist, kit finder, live emergency dashboard, disaster history and location-based preparedness planner.">
+<meta name="description" content="Free interactive emergency preparedness tools for Australians. Emergency plan builder, survival scenario simulator, 72-hour checklist, kit finder, live emergency dashboard and disaster history timeline.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -60,6 +60,11 @@ body::before { content:''; position:fixed; inset:0; background:
 .tool-card.simulator { border-color:rgba(230,57,70,.3); background:rgba(230,57,70,.05); }
 .tool-card.simulator:hover { border-color:rgba(230,57,70,.6); transform:translateY(-3px); }
 .tool-card.simulator::before { background:radial-gradient(ellipse 300px 150px at 0% 0%, rgba(230,57,70,.06), transparent); opacity:1; }
+.tool-card.planner { border-color:rgba(82,183,136,.3); background:rgba(82,183,136,.04); }
+.tool-card.planner:hover { border-color:rgba(82,183,136,.6); transform:translateY(-3px); }
+.tool-card.planner::before { background:radial-gradient(ellipse 300px 150px at 0% 0%, rgba(82,183,136,.05), transparent); opacity:1; }
+.plan-pills { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+.plan-pill { font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:3px 10px; border-radius:100px; border:1px solid rgba(82,183,136,.25); background:rgba(82,183,136,.08); color:rgba(255,255,255,.6); }
 .card-tag { display:inline-flex; align-items:center; gap:6px; font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:16px; padding:4px 10px; border-radius:100px; }
 .tag-new { background:rgba(200,90,0,.15); border:1px solid rgba(200,90,0,.35); color:var(--or); }
 .tag-hot { background:rgba(230,57,70,.12); border:1px solid rgba(230,57,70,.3); color:#e63946; }
@@ -137,7 +142,7 @@ body::before { content:''; position:fixed; inset:0; background:
       Prepare.<br>
       <span class="line2">Not panic.</span>
     </h1>
-    <p class="hero-sub">Six free interactive tools to help ordinary Australians understand their risk, check their readiness and plan ahead. No account. No email. No purchase required.</p>
+    <p class="hero-sub">Seven free interactive tools to help ordinary Australians understand their risk, check their readiness and plan ahead. No account. No email. No purchase required.</p>
     <div class="hero-badges">
       <div class="badge"><div class="badge-dot"></div>100% free</div>
       <div class="badge"><div class="badge-dot"></div>No sign-up required</div>
@@ -214,7 +219,39 @@ body::before { content:''; position:fixed; inset:0; background:
     </a>
   </div>
 
-  <!-- Row 3: Kit Finder + Disaster History + Emergency Dashboard -->
+  <!-- Row 3: Emergency Plan Builder — full width featured -->
+  <div style="margin-bottom:16px">
+    <a href="plan_builder.html" class="tool-card planner">
+      <div class="card-tag tag-new">📋 New — Personalised &amp; Printable</div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:240px;">
+          <div class="card-icon">🏠</div>
+          <div class="card-title">Household Emergency Plan Builder</div>
+          <div class="card-desc">Answer five questions. Get a personalised, printable emergency plan — specific to your hazards, your household, and your location. Built from SES, Carers NSW and Royal Commission guidance. Put it on the fridge.</div>
+          <div class="plan-pills">
+            <span class="plan-pill">📍 Rally points</span>
+            <span class="plan-pill">⚠️ Departure trigger</span>
+            <span class="plan-pill">🏠 Before you leave checklist</span>
+            <span class="plan-pill">🎒 Go-bag checklist</span>
+            <span class="plan-pill">🐾 Pets &amp; school pickup</span>
+          </div>
+          <div class="card-cta" style="color:var(--gb);">Build my plan <span class="card-cta-arrow">→</span></div>
+        </div>
+        <div style="flex:1;min-width:200px;">
+          <div class="card-features" style="margin-bottom:0;">
+            <div class="card-feature">Hazard-specific action sequences — bushfire, flood, cyclone &amp; more</div>
+            <div class="card-feature">Departure trigger — the decision made in advance, not under pressure</div>
+            <div class="card-feature">Home preparation checklist for your specific hazards</div>
+            <div class="card-feature">School &amp; childcare pickup plan</div>
+            <div class="card-feature">Medical summary, insurance details, nearest services</div>
+            <div class="card-feature">No names or addresses collected — everything sensitive is written by hand</div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Row 4: Kit Finder + Disaster History + Emergency Dashboard -->
   <div class="tools-grid-3">
 
     <a href="kit_builder.html" class="tool-card">
@@ -284,7 +321,7 @@ body::before { content:''; position:fixed; inset:0; background:
         <div class="about-stat-label">Free survival<br>wiki guides</div>
       </div>
       <div class="about-stat">
-        <div class="about-stat-num">6</div>
+        <div class="about-stat-num">7</div>
         <div class="about-stat-label">Free interactive<br>tools</div>
       </div>
       <div class="about-stat">
