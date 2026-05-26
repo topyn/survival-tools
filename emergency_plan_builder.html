@@ -744,8 +744,6 @@ function generatePlan() {
   if (S.needs.infant) needsList.push({icon:'👶',t:'Infant/young child: confirm school/childcare reunification procedure. Keep formula and nappies in emergency kit.'});
   if (S.needs.s8) needsList.push({icon:'🔒',t:'Controlled medication: emergency supply provisions (3-day rule) do NOT apply to S8. Maintain 2-week buffer.'});
 
-  const checklist = getChecklist();
-
   document.getElementById('plan-doc').innerHTML = `
     <div class="doc-header">
       <div class="doc-header-left">
